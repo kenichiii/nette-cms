@@ -1,0 +1,7 @@
+{block content}
+
+<h1 n:block=title>{$pageService->getCurrentPage()->get('title')}</h1>
+
+{$pageService->getCurrentPage()->get('content')|noescape}
+
+<p>ID: {$id}</p>

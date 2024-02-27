@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+
+	<title>{ifset title}{include title|stripHtml}{/ifset}</title>
+</head>
+
+<body>
+	<ul>
+		<li><a n:href=":App:Admin:Main:Dashboard:Default:" target="_blank">Admin</a></li>
+	</ul>
+
+	<h4>INSTALL</h4>
+	<ul>
+		<li><a n:href=":App:Admin:Install:Default:">Home</a></li>
+		<li><a n:href=":App:Admin:Install:Database:">Database</a></li>
+	</ul>
+
+	<div n:foreach="$flashes as $flash" n:class="flash, $flash->type">{$flash->message}</div>
+
+	{include content}
+
+	<script src="https://unpkg.com/nette-forms@3/src/assets/netteForms.js"></script>
+	{block scripts}
+
+	{/block}
+</body>
+</html>

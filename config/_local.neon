@@ -1,0 +1,20 @@
+parameters:
+    appConfig:
+        subdir: nette-cms/www/
+        adminUri: admin123
+
+        langs: ['cz','en']
+        isoLangs:
+            cz: cs-CZ
+            en: en
+
+        adminEmail: test@test.cz
+        adminPassword: '12345'
+
+
+dibi:
+	host: localhost
+	username: root
+	password: ''
+	database: nette-cms
+	lazy: true

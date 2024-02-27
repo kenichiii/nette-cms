@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="{$pageService->getIsoLang()}">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+
+	<!-- START - Technical SEO Meta tags -->
+	<meta name="description" content="{$pageService->getCurrentPage()['description']}">
+
+	<meta name="robots" content="index, follow">
+
+	<meta property="og:url"           content="{$_SERVER['REQUEST_URI']}" />
+	<meta property="og:type"          content="article" />
+	<meta property="og:site_name"     content="{$settingsService['site_name']}" />
+	<meta property="og:title"         content="" />
+	<meta property="og:description"   content="" />
+	<meta property="og:image"         content="" />
+	<!-- END - Technical SEO Meta tags -->
+
+	<!-- START - Favicon -->
+	<link rel="icon" type="image/png" href="/assets/images/logo/logo.png" />
+	<!-- END - Favicon -->
+
+	<title>{ifset title}{include title|stripHtml} | {/ifset}{$settingsService['site_name']}</title>
+</head>
+
+<body>
+	<div n:foreach="$flashes as $flash" n:class="flash, 'alert-' . $flash->type">{$flash->message}</div>
+
+	{if $user->isLoggedIn()}
+		{$user->getIdentity()->email}
+	{else}
+		guest
+	{/if}
+
+	<ul>
+		<li n:foreach="$pageService->getLangs() as $lang"><a href="/{$pageService->getSubDir()}{$lang !== $pageService->getDefaultLang() ? $lang.'/' : ''}">{$lang}</a></li>
+	</ul>
+
+	<em>{$settingsService['site_name']}</em>
+
+	<p>{$settingsService->get('contact_email')} | {$settingsService->get('contact_phone')}</p>
+
+	<ul>
+		{foreach $pageService->getActivePages() as $item}
+			{if $item->get('parent')->getValue() === 0 && $item->get('menu')->getValue()}
+				<li>
+					<a n:href="$item['pointer']->getValue()">{$item->get('menuName')}</a>
+					{include './_shared/menu.latte', pageService: $pageService, item: $item}
+				</li>
+			{/if}
+		{/foreach}
+	</ul>
+
+	{include content}
+
+	<p>&copy; {date('Y')} {$settingsService['site_name']}</p>
+
+	{block scripts}
+	<script src="https://unpkg.com/nette-forms@3/src/assets/netteForms.js"></script>
+	{/block}
+</body>
+</html>

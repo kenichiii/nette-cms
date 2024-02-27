@@ -1,0 +1,11 @@
+
+
+    		<ul>
+	            {foreach $pageService->getActivePages() as $subItem}
+					{if $subItem->get('parent')->getValue() === $item->get('id')->getValue() && $item->get('menu')->getValue()}
+					<li><a n:href="$subItem['pointer']->getValue()">{$subItem->get('menuName')}</a>
+                        {include 'menu.latte', pageService: $pageService, item: $subItem}
+                    </li>
+					{/if}
+				{/foreach}
+            </ul>

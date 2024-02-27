@@ -1,0 +1,23 @@
+services:
+	- App\Router\RouterFactory::createRouter(%appConfig%)
+
+	- App\AppModule\AdminModule\InstallModule\Service\InstallService(%appConfig%)
+
+	- App\AppModule\Forms\FormFactory
+	- App\AppModule\AdminModule\UserModule\Forms\SignInFormFactory
+
+	- App\Libs\Service\MailSender
+
+	- App\Libs\Service\App\Translator
+
+	- App\Libs\Facade\UserFacade
+
+	- App\Libs\Repository\App\PageRepository
+	- App\Libs\Repository\App\SettingsRepository
+	- App\Libs\Repository\App\UserRepository
+
+	- App\Libs\Service\App\PageService(%appConfig%)
+	- App\Libs\Service\App\SettingsService(%appConfig%)
+	- App\Libs\Service\App\UserService
+	- App\Libs\Service\App\TranslationsService
+
