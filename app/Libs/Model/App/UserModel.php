@@ -19,14 +19,14 @@ class UserModel extends Model
 	{
 		$this->modeladd(new Id());
 		$this->modeladd(new Email());
-
-		$photo = new Photo();
+		$this->modeladd('name', new Varchar());
+		$this->modeladd(new Photo());
 
 		$this->modeladd(new Password());
 		$roles = new Json();
 		$roles->setDefault('["user"]');
 		$this->modeladd('roles', $roles);
-
+		$this->modeladd('role', new Varchar());
 		$this->modeladd('forgottenPasswordToken', new Varchar());
 		$this->modeladd('forgottenPasswordTokenExpiration', new Number());
 

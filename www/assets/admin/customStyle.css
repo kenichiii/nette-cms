@@ -1,0 +1,10 @@
+.sidebar-brand {color:white;}
+.sidebar-brand:hover {text-decoration: none}
+
+.error li {color: red}
+
+.jstree-default.jstree-focused {background-color: #191c24 !important}
+.jstree-default a {color: lightgray !important;}
+.jstree-default a:hover {background-color: #000000 !important;}
+.jstree-default .jstree-clicked {background-color: #2a3038 !important;}
+.form-check-primary .form-check-input {background-color: #0090e7 !important; opacity: 0 !important;}

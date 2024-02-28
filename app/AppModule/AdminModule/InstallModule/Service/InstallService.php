@@ -195,9 +195,11 @@ class InstallService
 			$this->userRepository->getConn()->query($table);
 
 			$this->userRepository->insert([
-				'email' => $this->appConfig['adminEmail'],
+				'email' => $this->appConfig['install']['adminEmail'],
+				'name' => $this->appConfig['install']['adminName'],
 				'roles' => '["user","admin"]',
-				'password' => Password::encode($this->appConfig['adminPassword']),
+				'role' => 'webmaster',
+				'password' => Password::encode($this->appConfig['install']['adminPassword']),
 			]);
 
 			$meesage = '&bull; Users installed <br>';
@@ -207,7 +209,7 @@ class InstallService
 		}
 
 		try {
-			$this->user->login($this->appConfig['adminEmail'], $this->appConfig['adminPassword']);
+			$this->user->login($this->appConfig['install']['adminEmail'], $this->appConfig['install']['adminPassword']);
 			$message .= '&bull; User logged as admin <br>';
 
 		} catch (\Throwable $e) {

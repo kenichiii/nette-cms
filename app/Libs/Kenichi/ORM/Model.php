@@ -791,7 +791,7 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 	 */
 	public function insert(): int
 	{
-		$id = $this->getRepository($freshRepo, false)->insert(
+		$id = $this->getRepository()->insert(
 				$this->getColumnsValues()
 		);
 
@@ -820,7 +820,7 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 	 */
 	public function delete(): Model
 	{
-		$this->getRepository($freshRepo, $isTest)->deleteByPK(
+		$this->getRepository()->deleteByPK(
 			$this->getPrimaryKey()->getValue()
 		);
 

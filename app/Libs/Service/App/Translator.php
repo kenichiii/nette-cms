@@ -28,6 +28,9 @@ final class Translator implements NetteTranslator
 
 	public function translate(mixed $message, ...$params): string
 	{
+		if ($message === null) {
+			return '';
+		}
 
 		if (self::$repository === null) {
 			self::$repository = $this->translationsService->getTranslations($this->lang, $this->section);

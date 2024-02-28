@@ -4,9 +4,12 @@ services:
 	- App\AppModule\AdminModule\InstallModule\Service\InstallService(%appConfig%)
 
 	- App\AppModule\Forms\FormFactory
+
 	- App\AppModule\AdminModule\UserModule\Forms\SignInFormFactory
 	- App\AppModule\AdminModule\UserModule\Forms\SignRenewPasswordFormFactory
 	- App\AppModule\AdminModule\UserModule\Forms\SignForgottenPasswordFormFactory
+	- App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\BasicFormFactory
+	- App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\SystemFormFactory
 
 	- App\Libs\Service\MailSender
 

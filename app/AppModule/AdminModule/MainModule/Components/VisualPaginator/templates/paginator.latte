@@ -1,0 +1,41 @@
+{php $linkClass = $ajax ? 'page-link ajax' : 'page-link'}
+<div class="row">
+    <div class="col col-9">
+        <ul class="pagination">
+            <li n:class="$paginator->isFirst() ? 'page-item disabled' : 'page-item'">
+                <a n:href="paginate!, page => $paginator->page - 1" class="{$linkClass}">&laquo;</a>
+            </li>
+
+            {foreach $steps as $step}
+                <li n:class="$step === $paginator->page ? 'page-item active' : 'page-item'">
+                    <a n:href="paginate!, page => $step" class="{$linkClass}">{$step}</a>
+                </li>
+                {if $iterator->nextValue > $step + 1}
+                    <li class="page-item disabled">
+                        <span class="page-link">&hellip;</span>
+                    </li>
+                {/if}
+            {/foreach}
+
+            <li n:class="$paginator->isLast() ? 'page-item disabled' : 'page-item'">
+                <a n:href="paginate!, page => $paginator->page + 1" class="{$linkClass}">&raquo;</a>
+            </li>
+        </ul>
+    </div>
+    <div class="col col-3">
+        {if $itemsPerPage}
+            {form itemsPerPage, class => $ajax ? 'form-inline ajax' : 'form-inline'}
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">{label itemsPerPage /}</span>
+                    </div>
+
+                    {input itemsPerPage, class => "form-control paginatorItemsPerPage"}
+                    <div class="input-group-append" style="display:none">
+                        {input send, class => "btn btn-outline-secondary"}
+                    </div>
+                </div>
+            {/form}
+        {/if}
+    </div>
+</div>

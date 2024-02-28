@@ -27,3 +27,7 @@ Installation
 ------------
 
 Make directories `temp/` and `log/` writable.
+
+configure `config/local.neon`
+
+open link `/admin123/install.default/` and install database

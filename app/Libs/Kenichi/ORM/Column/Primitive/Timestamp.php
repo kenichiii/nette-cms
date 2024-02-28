@@ -18,4 +18,10 @@ class Timestamp extends Datetime
 
         return $this->value;
     }
+
+	public function setfromdb(mixed $value): Column
+	{
+		$this->value = (string) $value;
+		return $this;
+	}
 }

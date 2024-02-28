@@ -11,5 +11,6 @@ class Bit extends Column
     protected string $sqlName = 'TINYINT';
     protected int $max = 1;
     protected string $dibiModificator = '%i';
+	protected bool $sanitize = false;
 }
 

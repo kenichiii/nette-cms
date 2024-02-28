@@ -105,7 +105,7 @@ abstract class Column
 		if ($this->isSanitize()) {
 			$this->value = $this->sanitize($value);
 		} else {
-			$this->value = trim($value);
+			$this->value = is_string($value) ? trim($value) : $value;
 		}
 		return $this;
 	}
@@ -147,8 +147,9 @@ abstract class Column
 	{
 		foreach($data as $key=>$value)
 		{
-			if( $this->getColumn() == $key )
+			if ($this->getColumn() == $key) {
 				$this->setfromform($value);
+			}
 		}
 
 		return $this;

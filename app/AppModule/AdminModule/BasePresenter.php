@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\AppModule\AdminModule;
 
+use App\Libs\Service\App\LanguageDetector;
 use App\Libs\Service\App\Translator;
 use App\Libs\Service\App\SettingsService;
 use Nette;
@@ -11,7 +12,7 @@ use Nette;
 class BasePresenter extends  \App\AppModule\BasePresenter
 {
 	#[Nette\Application\Attributes\Persistent]
-	public string $lang = '';
+	public string $lang = 'en';
 
 	protected SettingsService $settingsService;
 	protected Translator $translator;
@@ -26,6 +27,7 @@ class BasePresenter extends  \App\AppModule\BasePresenter
 		$this->translator->setSection('admin');
 		$this->onStartup[] = function () use ($translator) {
 			$this->getTemplate()->setTranslator($translator);
+			$this->getTemplate()->lang = $this->lang;
 		};
 	}
 

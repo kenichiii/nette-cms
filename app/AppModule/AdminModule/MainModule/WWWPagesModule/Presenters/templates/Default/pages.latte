@@ -1,0 +1,145 @@
+{block scripts}
+    <script src="/{$settingsService->getAppConfig()['subdir']}assets/admin/vendor/tinymce/jquery.tinymce.min.js" type="text/javascript"></script>
+    <script src="/{$settingsService->getAppConfig()['subdir']}assets/admin/vendor/jstree/jquery.jstree.js"></script>"></script>
+
+    <script src="/{$settingsService->getAppConfig()['subdir']}assets/admin/pages/www-pages/control.js"></script>
+{/block}
+
+{block content}
+<input type='hidden' id='lang' value='{$lang}'>
+<input type='hidden' id='subdir' value='{$settingsService->getAppConfig()['subdir']}'>
+<input type='hidden' id='admin-pages-tree-url' value='{link pagesTree}'>
+<input type='hidden' id='admin-pages-page-url' value='{link pages}'>
+<input type='hidden' id='admin-pages-add-url' value='{link addPage}'>
+<input type='hidden' id='admin-pages-update-url' value='{link move}'>
+
+<input type='hidden' id='admin-pages-delete-url' value='{link delete}'>
+
+<div class="row">
+    <div class="col-md-12 col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{_'WWW Pages'}</h4>
+
+                <select id="view-lang" class="form-control">
+                    {foreach $settingsService->getAppConfig()['langs'] as $item}
+                        <option value="{$item}">{$item}</option>
+                    {/foreach}
+                </select>
+
+                <a href="#" id="newrootpage" class="btn-primary btn mt-2">
+                    {_'Add new Page'}
+                </a>
+
+                <div id="tree" class="mt-2">
+                    {_'Loading ...'}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-12 col-xl-8">
+        <div class="card">
+            <div class="card-body" id="page-window">
+                {snippet page}
+
+                    {if isset($page)}
+                        <h4 class="card-title" id="page-title">{$page['title']}</h4>
+                        <!-- Nav tabs -->
+                        <ul class="nav nav-tabs">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#basic">{_'Basic'}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#page-content">{_'Content'}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#system">{_'System'}</a>
+                            </li>
+                        </ul>
+
+                        <!-- Tab panes -->
+                        <div class="tab-content">
+                            <div class="tab-pane container active" id="basic">
+                                {form basicForm class => ajax}
+                                    <ul class=error n:ifcontent>
+                                        <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                                    </ul>
+                                    <div class="form-group d-flex">
+                                        <div class="form-check">
+                                            <label class="form-check-label form-check-flat form-check-primary">
+                                                 <input n:name=active type="checkbox" {$page['active']->getValue() ?'checked':''} class="form-check-input"> {_'Active'}
+                                            </label>
+                                        </div>
+                                        <div class="form-check ml-5">
+                                            <label class="form-check-label form-check-flat form-check-primary">
+                                                <input n:name=menu type="checkbox" {$page['menu']->getValue() ?'checked':''} class="form-check-input"> {_'In Menu'}
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{_'Title'}</label>
+                                        {input title class=>"form-control p_input"}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{_'Menu name'}</label>
+                                        {input menuName class=>"form-control p_input"}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{_'Uri'}</label>
+                                        {input uri class=>"form-control p_input"}
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>{_'Description'}</label>
+                                        {input description  class=>"form-control p_input"}
+                                    </div>
+                                    <div>
+                                        <button n:name=send type="submit" class="btn btn-primary">{_'Send'}</button>
+                                    </div>
+                                {/form}
+                            </div>
+                            <div class="tab-pane container fade" id="page-content">
+                                <form action="{link content}" method="post">
+                                    <input type="hidden" name="page" value="{$page['id']->getValue()}">
+                                    <textarea name="content" id="content">{$page['content']->getValue()}</textarea>
+                                    <div>
+                                        <button  type="submit" class="btn btn-primary">{_'Send'}</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="tab-pane container fade" id="system">
+                                {form systemForm class => ajax}
+                                    <ul class=error n:ifcontent>
+                                        <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                                    </ul>
+                                    <div class="form-group">
+                                        <label>{_'Pointer'}</label>
+                                        {input pointer class=>"form-control p_input"}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{_'Presenter'}</label>
+                                        {input presenter class=>"form-control p_input"}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{_'Action'}</label>
+                                        {input action class=>"form-control p_input"}
+                                    </div>
+                                    <div>
+                                        <button n:name=send type="submit" class="btn btn-primary">{_'Send'}</button>
+                                    </div>
+                                {/form}
+                            </div>
+                        </div>
+
+                    {else}
+                        {_'Choose page to edit'}
+                    {/if}
+
+                {/snippet}
+            </div>
+        </div>
+    </div>
+</div>
+

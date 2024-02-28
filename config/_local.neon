@@ -8,8 +8,10 @@ parameters:
             cz: cs-CZ
             en: en
 
-        adminEmail: test@test.cz
-        adminPassword: '12345'
+        install:
+            adminName: Default Admin
+            adminEmail: test@test.cz
+            adminPassword: '12345'
 
 
 dibi:

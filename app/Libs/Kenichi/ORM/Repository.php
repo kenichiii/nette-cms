@@ -672,6 +672,44 @@ abstract class Repository
 
 		return $collums;
 	}
+
+	public function getByPk($pk): ?Model
+	{
+
+		$data = $this->getSelect()
+			->andWhere($this->getAlias($this->getModel()->getPrimaryKey()->getColumnName()).'=%i', $pk)
+			->fetchSingle()
+		;
+
+		if ($data) {
+			$bean = $this->getModel();
+			$bean->setRepository($this);
+			$bean->fromdb($data);
+
+			return $bean;
+		}
+		else return null;
+
+	}
+
+	public function getByUri($uri): ?Model
+	{
+		$query []= 'SELECT '.implode(',',$this->getCollums()).' FROM '.$this->getTable().' '.$this->whereStart;
+
+		array_push($query, ' and '.$this->getAlias($this->getModel()->get('uri')->getCollumName()).'=%s',$uri);
+
+		$data = $this->getConn()->fetch($query);
+
+		if ($data) {
+			$bean = $this->getModel();
+			$bean->setRepository($this);
+			$bean->fromdb($data);
+
+			return $bean;
+		}
+		else return null;
+
+	}
 }
 
 
