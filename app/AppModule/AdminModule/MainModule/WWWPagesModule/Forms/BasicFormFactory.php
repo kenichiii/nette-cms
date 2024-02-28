@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms;
 
 use App\AppModule\AdminModule\Forms\FormFactory;
+use App\Libs\Model\App\PageModel;
 use App\Libs\Repository\App\PageRepository;
 use Nette;
 use Nette\Application\UI\Form;
@@ -47,7 +48,7 @@ final class BasicFormFactory
 
 			try {
 				$page->fromForm($data);
-				$validation = $page->validate();
+				$validation = $page->validate(PageModel::FORM_ACTION_EDIT);
 				if ($validation->isSucc()) {
 					$page->update();
 				} elseif (count($validation->getErrors())) {
