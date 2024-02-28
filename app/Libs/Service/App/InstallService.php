@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\AppModule\AdminModule\InstallModule\Service;
+namespace App\Libs\Service\App;
 
 use App\Libs\Kenichi\ORM\Column\Primary\Password;
 use App\Libs\Repository\App\PageRepository;

@@ -157,11 +157,12 @@ class SelectQuery
 		$data = $this->getRepository()->getConn()->fetch($query);
 
 		if ($data) {
-			$bean = clone $this->getModel();
-			$bean->setRepository($this->getRepository());
-			$bean->fromdb($data);
+			$bean = $this->getRepository()->getModelClassName();
+			$model = new $bean();
+			$model->setRepository($this->getRepository());
+			$model->fromdb($data);
 
-			return $bean;
+			return $model;
 		}
 
 		return null;
@@ -176,24 +177,25 @@ class SelectQuery
 	public function fetchByPk(int $pk): ?Model
 	{
 		$query []= 'SELECT '
-			. implode(',', $this->getColumns())
-			. ' FROM ' . $this->getTable() .' ' . $this->whereStart
+			. (is_array($this->getColumns()) ? implode(',', $this->getColumns()) : $this->getColumns())
+			. ' FROM ' . $this->getRepository()->getTable() .' ' . $this->whereStart
 		;
 
 		array_push(
 			$query,
-			' and ' . $this->getAlias($this->getModel()->getPrimaryKey()->getColumnName())
-			. '=' . $this->getModel()->getPrimaryKey()->getDibiModificator(),
+			' and ' . $this->getRepository()->getAlias($this->getRepository()->getModel()->getPrimaryKey()->getColumnName())
+			. '=' . $this->getRepository()->getModel()->getPrimaryKey()->getDibiModificator(),
 			$pk
 		);
 
 		$data = $this->getRepository()->getConn()->fetch($query);
 
 		if ($data) {
-			$bean = clone $this->getModel();
-			$bean->fromdb($data);
-
-			return $bean;
+			$bean = $this->getRepository()->getModelClassName();
+			$model = new $bean();
+			$model->fromdb($data);
+			$model->setRepository($this->getRepository());
+			return $model;
 		}
 
 		return null;

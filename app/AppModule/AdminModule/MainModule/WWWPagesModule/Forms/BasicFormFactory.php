@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms;
 
-use  App\AppModule\Forms\FormFactory;
+use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Repository\App\PageRepository;
 use Nette;
 use Nette\Application\UI\Form;
-use Tracy\Debugger;
 
 
 final class BasicFormFactory
@@ -31,7 +30,7 @@ final class BasicFormFactory
 		$form->addHidden('page', $id);
 		$form->addText('title')
 			->setDefaultValue($page['title']->getValue());
-		$form->addText('menuName')
+		$form->addText('menuname')
 			->setDefaultValue($page['menuName']->getValue());
 		$form->addTextArea('description')
 			->setDefaultValue($page['description']->getValue());

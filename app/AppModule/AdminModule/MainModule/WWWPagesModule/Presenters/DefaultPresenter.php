@@ -159,21 +159,27 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 
 	public function actionMove()
 	{
-		try {
+		//try {
 
 			$this->pageRepository->getConn()->query("SET AUTOCOMMIT=0");
 			$this->pageRepository->getConn()->query("START TRANSACTION");
 
+			$currId = $this->getParameter('currItemId');
 
-			$curr = clone $this->pageRepository->getByPk((int) $this->getParameter('currItemId'));
+
+
+			$curr = $this->pageRepository->getByPk((int) $currId);
+
+
 			$prevItemId = $this->getParameter('prevItemId');
 			$nextItemId = $this->getParameter('nextItemId');
 			if ($prevItemId !== 'none') {
-				$prev = clone $this->pageRepository->getByPk((int) $prevItemId);
+				$prev = $this->pageRepository->getByPk((int) $prevItemId);
 				$prev_rank = $prev->get('rank')->getValue();
 				$prev_parentid = $prev->get('parent')->getValue();
+
 			} elseif ($nextItemId !== 'none') {
-				$next = clone $this->pageRepository->getByPk((int) $nextItemId);
+				$next = $this->pageRepository->getByPk((int) $nextItemId);
 				$prev = true;
 				$prev_rank = 0;
 				$prev_parentid = $next->get('parent')->getValue();
@@ -187,11 +193,9 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 					$prev_rank, $prev_parentid
 				);
 
-				$this->pageRepository->getConn()->query(
-					"update " . $this->pageRepository->getTableRaw()
-					. " set rank=%i,parent=%i where id=%i",
-					$prev_rank + 1, $prev_parentid, $curr->get('id')->getValue()
-				);
+				$curr->set('rank', $prev_rank + 1)
+					->set('parent', $prev_parentid)
+					->update();
 			} else {
 
 				$this->pageRepository->getConn()->query(
@@ -208,14 +212,14 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 			$this->flashMessage('Page has been successfully moved', 'success');
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
-		} catch (\Throwable $e) {
+		/*} catch (\Throwable $e) {
 
 			$this->flashMessage('Server Error', 'danger');
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
 			$this->pageRepository->getConn()->query("ROLLBACK");
 			$this->pageRepository->getConn()->query("SET AUTOCOMMIT=1");
-		}
-		$this->redirect('pages', ['page' => $curr->get('id')->getValue()]);
+		}*/
+		$this->redirect('pages', ['page' => $curr ? $curr->get('id')->getValue():null]);
 	}
 }

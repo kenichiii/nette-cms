@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\AppModule\Forms;
+namespace App\AppModule\AdminModule\Forms;
 
 use App\Libs\Service\App\Translator;
 use Nette;

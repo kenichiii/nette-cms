@@ -4,13 +4,12 @@ declare(strict_types=1);
 
 namespace App\AppModule\AdminModule\UserModule\Forms;
 
-use App\AppModule\Forms\FormFactory;
+use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Exception\Service\App\User\UserNotFoundException;
 use App\Libs\Exception\Service\App\User\UserServiceException;
-use App\Libs\Facade\UserFacade;
 use App\Libs\Repository\App\UserRepository;
-use App\Libs\Service\App\Translator;
 use App\Libs\Service\App\SettingsService;
+use App\Libs\Service\App\Translator;
 use App\Libs\Service\App\UserService;
 use App\Libs\Service\MailSender;
 use Nette;

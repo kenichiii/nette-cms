@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace App\AppModule\AdminModule\UserModule\Forms;
 
-use App\AppModule\Forms\FormFactory;
-use App\Libs\Exception\Service\App\User\UserNotFoundException;
+use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Exception\Service\App\User\UserServiceException;
 use App\Libs\Repository\App\UserRepository;
 use Nette;

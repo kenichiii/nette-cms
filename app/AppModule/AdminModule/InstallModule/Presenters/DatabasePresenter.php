@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\AppModule\AdminModule\InstallModule\Presenters;
 
-use App\AppModule\AdminModule\InstallModule\Service\InstallService;
+use App\Libs\Service\App\InstallService;
 
 class DatabasePresenter extends BasePresenter
 {

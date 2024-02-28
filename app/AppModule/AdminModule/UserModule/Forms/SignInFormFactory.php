@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\AppModule\AdminModule\UserModule\Forms;
 
-use App\AppModule\Forms\FormFactory;
+use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Service\App\SettingsService;
 use Nette;
 use Nette\Application\UI\Form;

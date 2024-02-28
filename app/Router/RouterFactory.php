@@ -13,7 +13,12 @@ final class RouterFactory
 {
 	use Nette\StaticClass;
 
-	public static function createRouter(array $appConfig, PageService $pageService, Nette\Http\Session $session): RouteList
+	public static function createRouter(
+		array $appConfig,
+		PageService $pageService,
+		Nette\Http\Session $session,
+		Nette\Http\Request $request
+	): RouteList
 	{
 		$router = new RouteList;
 
@@ -32,21 +37,26 @@ final class RouterFactory
 							'action' => 'default',
 							'id' => null,
 						];
-					} elseif ($uri = str_replace($appConfig['subdir'],'', $params['uri'].'/')) {
-
-						$pageService->parseUrl($uri);
-
-						return [
-							'presenter' => $pageService->getCurrentPage()->get('presenter')->getValue(),
-							'action' => $pageService->getCurrentPage()->get('action')->getValue(),
-							'id' => $pageService->getSlug(),
-						];
 					} else {
-						return [
-							'presenter' => 'Homepage',
-							'action' => 'default',
-							'id' => null,
-						];
+
+						if ($uri = str_replace($appConfig['subdir'],'', $params['uri'].'/')) {
+
+							$pageService->parseUrl($uri);
+
+							return [
+								'presenter' => $pageService->getCurrentPage()->get('presenter')->getValue(),
+								'action' => $pageService->getCurrentPage()->get('action')->getValue(),
+								'id' => $pageService->getSlug(),
+							];
+
+						} else {
+							return [
+								'presenter' => 'Homepage',
+								'action' => 'default',
+								'id' => null,
+							];
+						}
+
 					}
 				},
 				Route::FILTER_OUT => function (array $params) use ($pageService, $appConfig) {
@@ -63,6 +73,10 @@ final class RouterFactory
 				},
 			],
 		]);
+
+		if($request->getUrl()->getPath() === '/') {
+			$router->withModule('App:Front')->addRoute('<presenter=Homepage>/<action=default>');
+		}
 
 		return $router;
 	}

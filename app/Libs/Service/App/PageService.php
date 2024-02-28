@@ -79,6 +79,7 @@ class PageService
 			$this->currentRootPage = $currentPage;
 		} else {
 			$result = $this->findCurrentPage($uri, 0, $level);
+
 			if (is_array($result)) {
 				$this->tree = $result[2];
 				$this->slug = $this->findSlug($result[1], $uri);

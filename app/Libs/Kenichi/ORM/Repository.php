@@ -675,21 +675,7 @@ abstract class Repository
 
 	public function getByPk($pk): ?Model
 	{
-
-		$data = $this->getSelect()
-			->andWhere($this->getAlias($this->getModel()->getPrimaryKey()->getColumnName()).'=%i', $pk)
-			->fetchSingle()
-		;
-
-		if ($data) {
-			$bean = $this->getModel();
-			$bean->setRepository($this);
-			$bean->fromdb($data);
-
-			return $bean;
-		}
-		else return null;
-
+		return $this->getSelect()->fetchByPk($pk);
 	}
 
 	public function getByUri($uri): ?Model

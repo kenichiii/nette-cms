@@ -25,6 +25,10 @@ Requirements
 
 Installation
 ------------
+The best way to install Web Project is using Composer. If you don't have Composer yet,
+download it following [the instructions](https://doc.nette.org/composer). Then use command:
+
+	composer update
 
 Make directories `temp/` and `log/` writable.
 
