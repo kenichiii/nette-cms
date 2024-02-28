@@ -49,6 +49,14 @@ class PageModel extends Model
 		$this->modeladd('title', new Varchar());
 		$this->modeladd('menuName', new Varchar());
 
+		$layout = new Varchar();
+		$layout->setDefault('layout');
+		$this->modeladd('layout', $layout);
+
+		$loggedUser = new Bit();
+		$loggedUser->setDefault('0');
+		$this->modeladd('loggedUser', $loggedUser);
+
 		$content = new Text();
 		$content->setSanitize(false);
 		$this->modeladd('content', $content);

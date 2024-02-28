@@ -147,7 +147,6 @@ class InstallService
 						'rank' => 2,
 					]);
 
-
 					$id = $this->pageRepository->insert([
 						'parent' => 0,
 						'lang' => $lang,

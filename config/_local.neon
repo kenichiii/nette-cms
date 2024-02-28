@@ -1,5 +1,9 @@
 parameters:
     appConfig:
+
+        devMode: 1
+        devModePwd: test
+
         subdir: nette-cms/www/
         adminUri: admin123
 

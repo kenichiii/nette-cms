@@ -7,6 +7,7 @@ namespace App\AppModule\FrontModule\Presenters;
 use App\Libs\Service\App\PageService;
 use App\Libs\Service\App\SettingsService;
 use App\Libs\Service\App\Translator;
+use Nette\Http\Session;
 
 class BasePresenter extends \App\AppModule\BasePresenter
 {
@@ -18,6 +19,7 @@ class BasePresenter extends \App\AppModule\BasePresenter
 	{
 		$this->pageService = $pageService;
 		$this->onStartup[] = function () {
+			$this->setLayout($this->pageService->getCurrentPage()['layout']->getValue());
 			$this->getTemplate()->pageService = $this->pageService;
 		};
 	}
@@ -41,4 +43,5 @@ class BasePresenter extends \App\AppModule\BasePresenter
 			$this->getTemplate()->setTranslator($translator);
 		};
 	}
+
 }

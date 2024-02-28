@@ -13,7 +13,7 @@ final class RouterFactory
 {
 	use Nette\StaticClass;
 
-	public static function createRouter(array $appConfig, PageService $pageService): RouteList
+	public static function createRouter(array $appConfig, PageService $pageService, Nette\Http\Session $session): RouteList
 	{
 		$router = new RouteList;
 
@@ -25,11 +25,17 @@ final class RouterFactory
 			->withModule('App:Front')
 			->addRoute('/<uri .+>', [
 			null => [
-				Route::FILTER_IN => function (array $params) use ($appConfig, $pageService) {
-					if ($uri = str_replace($appConfig['subdir'],'', $params['uri'].'/')) {
-						bdump($uri);
+				Route::FILTER_IN => function (array $params) use ($appConfig, $pageService, $session) {
+					if ($appConfig['devMode'] && !$session->getSection('_dev_mode')->get('pwd')) {
+						return [
+							'presenter' => 'DevMode',
+							'action' => 'default',
+							'id' => null,
+						];
+					} elseif ($uri = str_replace($appConfig['subdir'],'', $params['uri'].'/')) {
+
 						$pageService->parseUrl($uri);
-						bdump($pageService->getCurrentPage());
+
 						return [
 							'presenter' => $pageService->getCurrentPage()->get('presenter')->getValue(),
 							'action' => $pageService->getCurrentPage()->get('action')->getValue(),
