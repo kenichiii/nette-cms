@@ -225,7 +225,9 @@ class SelectQuery
 		} else {
 			array_push(
 				$query,
-				"GROUP BY " . $this->getAlias($this->getModel()->getPrimaryKey()->getColumnName())
+				"GROUP BY " . $this->getRepository()->getAlias(
+					$this->getModel()->getPrimaryKey()->getColumnName()
+				)
 			);
 		}
 

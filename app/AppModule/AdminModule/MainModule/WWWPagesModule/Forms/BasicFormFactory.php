@@ -8,6 +8,7 @@ use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Repository\App\PageRepository;
 use Nette;
 use Nette\Application\UI\Form;
+use Tracy\Debugger;
 
 
 final class BasicFormFactory
@@ -44,15 +45,23 @@ final class BasicFormFactory
 
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess, $page): void {
 
-			//try {
+			try {
 				$page->fromForm($data);
-				$page->update();
-			/*} catch (\Throwable $e) {
+				$validation = $page->validate();
+				if ($validation->isSucc()) {
+					$page->update();
+				} elseif (count($validation->getErrors())) {
+					foreach ($validation->getErrors() as $error) {
+						$form->addError($error['mess']);
+					}
+					return;
+				}
+			} catch (\Throwable $e) {
 				Debugger::log($e);
 				$form->addError('Server Error');
 				return;
 			}
-*/
+
 			$onSuccess();
 		};
 

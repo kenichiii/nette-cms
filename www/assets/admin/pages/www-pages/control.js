@@ -252,6 +252,10 @@ class PageFormExtension {
         if (payload === undefined || payload === null || !payload.hasOwnProperty('afterPageForm')) {
             return;
         }
+        if (payload.selectTab) {
+            $('a.nav-link[href="' + payload.selectTab + '"]').trigger('click');
+        }
+
         activate_page_listeners();
     }
 }

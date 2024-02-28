@@ -9,6 +9,7 @@ use App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\SystemFormFactory;
 use App\Libs\Repository\App\PageRepository;
 use App\Libs\Utils\Utils;
 use Nette\Application\UI\Form;
+use Tracy\Debugger;
 
 class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresenter
 {
@@ -30,6 +31,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 				'success'
 			);
 			$this->getPayload()->afterPageForm = true;
+			$this->getPayload()->selectTab = '#basic';
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
 		}, (int) ($_POST['page'] ?? $this->getParameter('page')));
@@ -44,6 +46,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 				'success'
 			);
 			$this->getPayload()->afterPageForm = true;
+			$this->getPayload()->selectTab = '#system';
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
 		}, (int) ($_POST['page'] ?? $this->getParameter('page')));
@@ -54,11 +57,13 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		if ($this->isAjax()) {
 			$id = (int) ($_POST['page'] ?? $this->getParameter('page'));
 			$this->getTemplate()->page = $this->pageRepository->getByPk((int) $id);
+			$this->getTemplate()->selectTab = $this->getParameter('selectTab') ?? 'basic';
 			$this->getPayload()->test = 'test';
 			$this->redrawControl('page');
 			$this->redrawControl('contentWrapper');
 		} elseif ($this->getParameter('page')) {
 			$this->getTemplate()->page = $this->pageRepository->getByPk((int) $this->getParameter('page'));
+			$this->getTemplate()->selectTab = $this->getParameter('selectTab') ?? 'basic';
 		}
 	}
 
@@ -82,8 +87,8 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 				->set('uri', Utils::nice_uri($title))
 				->set('presenter', 'Textpage')
 				->set('lang', $lang)
-				//->set('access',$parentPage->getAccess()->getValue())
-				//->set('layoutname',$parentPage->getLayoutname()->getValue())
+				->set('loggedUser',$parentPage->get('loggedUser')->getValue())
+				->set('layout',$parentPage->get('layout')->getValue())
 				->insert();
 
 		} else {
@@ -154,12 +159,12 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 			'Page has been successfully changed'),
 			'success'
 		);
-		$this->redirect('pages',['page' => $_POST['page']]);
+		$this->redirect('pages',['page' => $_POST['page'], 'selectTab' => '#page-content']);
 	}
 
 	public function actionMove()
 	{
-		//try {
+		try {
 
 			$this->pageRepository->getConn()->query("SET AUTOCOMMIT=0");
 			$this->pageRepository->getConn()->query("START TRANSACTION");
@@ -212,14 +217,16 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 			$this->flashMessage('Page has been successfully moved', 'success');
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
-		/*} catch (\Throwable $e) {
-
+		} catch (\Throwable $e) {
+			Debugger::log($e);
 			$this->flashMessage('Server Error', 'danger');
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
 			$this->pageRepository->getConn()->query("ROLLBACK");
 			$this->pageRepository->getConn()->query("SET AUTOCOMMIT=1");
-		}*/
-		$this->redirect('pages', ['page' => $curr ? $curr->get('id')->getValue():null]);
+		}
+		if (!$this->isAjax()) {
+			$this->redirect('pages');
+		}
 	}
 }

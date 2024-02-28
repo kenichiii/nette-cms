@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms;
 
 use App\AppModule\AdminModule\Forms\FormFactory;
+use App\Libs\Kenichi\ORM\Model;
 use App\Libs\Repository\App\PageRepository;
 use Nette;
 use Nette\Application\UI\Form;
+use Tracy\Debugger;
 
 
 final class SystemFormFactory
@@ -35,7 +37,10 @@ final class SystemFormFactory
 			->setDefaultValue($page['presenter']->getValue());
 		$form->addText('action')
 			->setDefaultValue($page['action']->getValue());
-
+		$form->addText('layout')
+			->setDefaultValue($page['layout']->getValue());
+		$form->addText('loggeduser')
+			->setDefaultValue((bool) $page['loggedUser']->getValue());
 
 		$form->addSubmit('send',);
 
@@ -43,14 +48,22 @@ final class SystemFormFactory
 
 			//try {
 				$page->fromForm($data);
-				$page->update();
+				$validation = $page->validate(Model::FORM_ACTION_EDIT);
+				if ($validation->isSucc()) {
+					$page->update();
+				} elseif (count($validation->getErrors())) {
+					foreach ($validation->getErrors() as $error) {
+						$form->addError($error['mess']);
+					}
+					return;
+				}
 /*
 			} catch (\Throwable $e) {
 				Debugger::log($e);
 				$form->addError('Server Error');
 				return;
-			}
-*/
+			}*/
+
 			$onSuccess();
 		};
 

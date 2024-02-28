@@ -706,9 +706,9 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 					);
 
 					if ($select->getCount() > 0) {
-						$val->addError('notunique', $collum->getColumn());
+						$val->addError('notunique', $column->getColumn());
 					}
-				} elseif ($column->isUnique() && $collum->getUniqueWith() === null)	{
+				} elseif ($column->isUnique() && $column->getUniqueWith() === null)	{
 					$repo = $this->getRepository();
 					$select = $repo->getSelect();
 					$select->where( " and " . $repo->getAlias().'.'.$column->getColumnName() . ' = %s', $column->getValue());
@@ -751,29 +751,29 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 						}
 					}
 				} elseif ($column->isUnique() && $column->getUniqueWith() !== null && is_string($column->getUniqueWith())) {
-					if ($old->get($column->getCollum())->getValue() !== $column->getValue()
+					if ($old->get($column->getColumn())->getValue() !== $column->getValue()
 						|| $old->get($column->getColumnName())->getValue() !== $this->get($column->getUniqueWith())->getValue()
 					) {
 						$repo = $this->getRepository();
 						$select = $repo->getSelect();
-						$select->where( " and ".$repo->getAlias().'.'.$column->getCollumName().' = %s', $column->getValue());
+						$select->where( " and ".$repo->getAlias().'.'.$column->getColumnName().' = %s', $column->getValue());
 						$select->where(
 							" and ".$repo->getAlias().'.'.$this->get($column->getUniqueWith())->getColumnName().' = %s',
 							$this->get($column->getUniqueWith())->getValue()
 						);
 
 						if ($select->getCount() > 0) {
-							$val->addError('notunique', $column->getCollum());
+							$val->addError('notunique', $column->getColumn());
 						}
 					}
 				} elseif ($column->isUnique() && $column->getUniqueWith() === null)	{
 					if ($old && $old->get($column->getColumn())->getValue() != $column->getValue())	{
 						$repo = $this->getRepository();
 						$select = $repo->getSelect();
-						$select->where( " and ".$repo->getAlias().'.'.$column->getCollumName().' = %s', $column->getValue());
+						$select->where( " and ".$repo->getAlias().'.'.$column->getColumnName().' = %s', $column->getValue());
 
 						if ($select->getCount() > 0) {
-							$val->addError ('notunique', $collum->getColumn());
+							$val->addError ('notunique', $column->getColumn());
 						}
 					}
 				}

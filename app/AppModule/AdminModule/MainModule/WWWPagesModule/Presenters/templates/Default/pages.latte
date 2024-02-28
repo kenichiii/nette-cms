@@ -49,19 +49,19 @@
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#basic">{_'Basic'}</a>
+                                <a class="nav-link {if $selectTab === '#basic'}active{/if}" data-toggle="tab" href="#basic">{_'Basic'}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#page-content">{_'Content'}</a>
+                                <a class="nav-link {if $selectTab === '#page-content'}active{/if}" data-toggle="tab" href="#page-content">{_'Content'}</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#system">{_'System'}</a>
+                                <a class="nav-link {if $selectTab === '#system'}active{/if}" data-toggle="tab" href="#system">{_'System'}</a>
                             </li>
                         </ul>
 
                         <!-- Tab panes -->
                         <div class="tab-content">
-                            <div class="tab-pane container active" id="basic">
+                            <div class="tab-pane container {$selectTab === '#basic' ? 'active' : 'fade'}" id="basic">
                                 {form basicForm class => ajax}
                                     <ul class=error n:ifcontent>
                                         <li n:foreach="$form->ownErrors as $error">{$error}</li>
@@ -100,7 +100,7 @@
                                     </div>
                                 {/form}
                             </div>
-                            <div class="tab-pane container fade" id="page-content">
+                            <div class="tab-pane container {$selectTab === '#page-content' ? 'active' : 'fade'}" id="page-content">
                                 <form action="{link content}" method="post">
                                     <input type="hidden" name="page" value="{$page['id']->getValue()}">
                                     <textarea name="content" id="content">{$page['content']->getValue()}</textarea>
@@ -109,7 +109,7 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="tab-pane container fade" id="system">
+                            <div class="tab-pane container {$selectTab === '#system' ? 'active' : 'fade'}" id="system">
                                 {form systemForm class => ajax}
                                     <ul class=error n:ifcontent>
                                         <li n:foreach="$form->ownErrors as $error">{$error}</li>
@@ -125,6 +125,17 @@
                                     <div class="form-group">
                                         <label>{_'Action'}</label>
                                         {input action class=>"form-control p_input"}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{_'Layout'}</label>
+                                        {input layout class=>"form-control p_input"}
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-check">
+                                            <label class="form-check-label form-check-flat form-check-primary">
+                                                <input n:name=loggeduser type="checkbox" {$page['loggedUser']->getValue() ?'checked':''} class="form-check-input"> {_'Require logged user'}
+                                            </label>
+                                        </div>
                                     </div>
                                     <div>
                                         <button n:name=send type="submit" class="btn btn-primary">{_'Send'}</button>
