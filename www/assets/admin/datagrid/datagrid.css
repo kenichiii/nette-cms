@@ -1,0 +1,134 @@
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+.datagrid .table-wrapper {
+  overflow-x: auto !important;
+  overflow-y: auto !important;
+}
+.datagrid .table th.column-name {
+  font-weight: 600 !important;
+  padding-top: 0.75rem !important;
+  padding-bottom: 0.75rem !important;
+  padding-right: 0.35rem !important;
+  padding-left: 0.75rem !important;
+}
+.datagrid .table td, .datagrid .table th {
+  font-family: Poppins, Helvetica, "sans-serif" !important;
+  font-size: 1.075rem !important;
+  color: #7E8299 !important;
+}
+.datagrid .table th.column-filter {
+  padding-top: 0 !important;
+  padding-bottom: 0.2em !important;
+  padding-left: 0.2em !important;
+  padding-right: 0.1em !important;
+}
+.datagrid .table th.column-filter input, .datagrid .table select {
+  border: 1px solid #F5F8FA;
+  width: 100%;
+}
+.datagrid .table td {
+  font-size: 1rem !important;
+  padding: 6px 4px 6px 4px !important;
+  vertical-align: middle;
+  font-weight: 500 !important;
+}
+.datagrid .table tr:nth-child(even) {
+  background: #f6f7f8;
+}
+.datagrid .table th {
+  background: #ecf0f1;
+}
+.datagrid .table tr:hover {
+  background: #ecf0f1 !important;
+}
+.datagrid .submit {
+  display: none;
+}
+.datagrid .perPageLabel {
+  vertical-align: middle;
+}
+.datagrid .paginator {
+  list-style: none;
+  margin-top: 20px;
+}
+.datagrid .paginator li {
+  display: inline-block;
+  padding: 6px;
+  background: #E4E6EF;
+  border-radius: 2px;
+  text-align: center;
+  vertical-align: center;
+  cursor: pointer;
+  width: 40px;
+  height: 20px;
+  line-height: 10px;
+}
+.datagrid .paginator li .selected {
+  background: #c4c9c9;
+}
+.datagrid .emptyRecordsText {
+  font-style: italic;
+  font-size: 135%;
+}
+.datagrid .sortArrow {
+  color: grey;
+}
+.datagrid .arrowActive {
+  color: blue;
+}
+.datagrid .type-text {
+  width: 120px;
+}
+.datagrid .type-select, .datagrid .type-relationSelect, .datagrid .type-nrelationSelect {
+  width: 120px;
+}
+.datagrid .loading:hover path {
+  fill: red;
+}
+.datagrid .datagrid-filter {
+  position: relative;
+}
+.datagrid .filter-on {
+  background-color: rgba(241, 196, 15, 0.65);
+}
+.datagrid .datagrid-filter-reset {
+  position: absolute;
+  color: #666;
+  right: 13px;
+  top: 13px;
+  cursor: pointer;
+}
+.datagrid .datagrid-filter-date {
+  position: relative;
+  display: block;
+}
+.datagrid .datagrid-filter-reset-date {
+  position: absolute;
+  color: #666;
+  right: 35px;
+  top: 18px;
+  cursor: pointer;
+}
+.datagrid .searchDate {
+  margin-bottom: 1px;
+}
+
+/*# sourceMappingURL=datagrid.css.map */

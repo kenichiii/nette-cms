@@ -1,8 +1,8 @@
 <?php declare(strict_types = 1);
 
-namespace App\Libs\Components\QMANDatagrid;
+namespace App\AppModule\AdminModule\MainModule\Components\Datagrid;
 
-class QMANDatagridColumn
+class DatagridColumn
 {
 	public function __construct(protected string $key, protected array $definition)
 	{

@@ -377,12 +377,13 @@ class SelectQuery
 	}
 
 	/**
+	 * @param string $name
 	 * @param string $orderby
 	 * @return $this
 	 */
-	public function orderBy(string $orderby): SelectQuery
+	public function orderBy(string $name, string $orderby): SelectQuery
 	{
-		$this->orderBy = ' ORDER BY '.$this->orderBy.' '.$orderby;
+		$this->orderBy = ' ORDER BY '.$this->getRepository()->getAlias($name).' '.$orderby;
 		return $this;
 	}
 
@@ -572,9 +573,8 @@ class SelectQuery
 	public function addRankOrderByCond(?string $direction = null): SelectQuery
 	{
 		$this->orderBy(
-			$this->getRepository()->getAlias('rank')
-			. " "
-			. ($direction ?: $this->getModel()->get('rank')->getSorting())
+			'rank',
+			$direction ?: $this->getModel()->get('rank')->getSorting()
 		);
 		return $this;
 	}

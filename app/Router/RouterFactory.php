@@ -74,7 +74,11 @@ final class RouterFactory
 			],
 		]);
 
-		if($request->getUrl()->getPath() === '/') {
+		if($request->getUrl()->getPath() === '/' && $appConfig['devMode']
+			&& !$session->getSection('_dev_mode')->get('pwd')
+		) {
+			$router->withModule('App:Front')->addRoute('<presenter=DevMode>/<action=default>');
+		} elseif ($request->getUrl()->getPath() === '/') {
 			$router->withModule('App:Front')->addRoute('<presenter=Homepage>/<action=default>');
 		}
 
