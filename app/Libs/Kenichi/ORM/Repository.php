@@ -46,6 +46,7 @@ abstract class Repository
 		if ($this->model === null) {
 			$class = $this->getModelClassName();
 			$this->model = new $class();
+			$this->model->setRepository($this);
 		}
 		return $this->model;
 	}
@@ -198,7 +199,7 @@ abstract class Repository
 	{
 		$query = array('UPDATE ['.$this->getTableRaw().'] SET ', $data,
 			'WHERE  ['.$this->getModel()->getPrimaryKey()->getColumnName().']='
-			.$this->getModel()->getPrimaryKey()->getModificator(), $pk)
+			.$this->getModel()->getPrimaryKey()->getDibiModificator(), $pk)
 		;
 
 		return $this->getConn()->query($query);

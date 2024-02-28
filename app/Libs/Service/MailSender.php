@@ -29,14 +29,17 @@ final class MailSender
 	}
 
 	/**
+	 * @param string $translatorSection
 	 * @param string|array $to
 	 * @param string $subject
 	 * @param string $latteFile
 	 * @param array $params
+	 * @param string|null $from
 	 * @return void
 	 */
-	public function sendEmail(string|array $to, string $subject, string $latteFile, array $params, ?string $from = null): void
+	public function sendEmail(string $translatorSection, string|array $to, string $subject, string $latteFile, array $params, ?string $from = null): void
 	{
+		$this->translator->setSection($translatorSection);
 		$template = $this->createTemplate();
 		$html = $template->renderToString($latteFile, $params);
 

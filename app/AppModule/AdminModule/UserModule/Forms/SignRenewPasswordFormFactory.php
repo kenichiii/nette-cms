@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace App\AppModule\AdminModule\UserModule\Forms;
 
-use App\Libs\Exception\User\UserNotFoundException;
-use App\Libs\Exception\User\UserServiceException;
-use App\Libs\Model;
-use App\Libs\Model\Service\Auth\ExternalAuth;
+use App\AppModule\Forms\FormFactory;
+use App\Libs\Exception\Service\App\User\UserNotFoundException;
+use App\Libs\Exception\Service\App\User\UserServiceException;
+use App\Libs\Repository\App\UserRepository;
 use Nette;
-use Nette\Application\UI\Form;
-
-
 
 final class SignRenewPasswordFormFactory
 {
@@ -19,34 +16,34 @@ final class SignRenewPasswordFormFactory
 
 	public function __construct(
 		private FormFactory $factory,
-		private Model\UserFacade $userFacade,
+		private UserRepository $userRepository,
 		private Nette\Http\Session $session,
 	)
 	{
 	}
 
 
-	public function create(callable $onSuccess): Form
+	public function create(callable $onSuccess): Nette\Application\UI\Form
 	{
 		$form = $this->factory->create();
 
-		$form->addPassword('password', 'sign.up.form.password.label')
+		$form->addPassword('password', )
 			->setOption('description', $form->getTranslator()->translate(
-				'sign.up.form.password.option',
-				minChars: $this->userFacade::PasswordMinLength
+				'at least [:minChars:] chars',
+				minChars: $this->userRepository->getModel()['password']->getMinLength()
 			))
 			->setRequired('sign.up.form.password.error')
-			->addRule($form::MIN_LENGTH, null, $this->userFacade::PasswordMinLength);
+			->addRule($form::MIN_LENGTH, null, $this->userRepository->getModel()['password']->getMinLength());
 
-		$form->addPassword('passwordagain', 'sign.up.form.passwordAgain.label')
+		$form->addPassword('passwordagain')
 			->setRequired('sign.up.form.passwordAgain.error');
 
-		$form->addSubmit('send', 'sign.renewPassword.form.submit');
+		$form->addSubmit('send');
 
-		$form->onSuccess[] = function (Form $form, \stdClass $data) use ($onSuccess): void {
+		$form->onSuccess[] = function (Nette\Application\UI\Form $form, \stdClass $data) use ($onSuccess): void {
 
 			if ($data->password !== $data->passwordagain) {
-				$form->addError('sign.up.form.error.diffrentPasswords');
+				$form->addError('Passwords are different.');
 				return;
 			}
 
@@ -54,18 +51,15 @@ final class SignRenewPasswordFormFactory
 				$session = $this->session->getSection('_renewPassword');
 				$token = $session->get('token');
 				$session->remove('token');
-				$user = $this->userFacade->getUserByForgottenPasswordToken($token);
-			} catch (UserNotFoundException | UserServiceException $e) {
-				$form->addError('exception.remoteServer');
-				return;
-			}
-
-			try {
-				$this->userFacade->update($user['uniqueHash'],[
-					'password' => $data->password,
-				]);
+				$user = $this->userRepository->getByForgottenPasswordToken($token);
+				if (!$user) {
+					$form->addError('Not valid token');
+					return;
+				}
+				$user->set('password', $data->password)
+					->update();
 			} catch (UserServiceException $e) {
-				$form->addError('exception.remoteServer');
+				$form->addError('Server Error');
 				return;
 			}
 

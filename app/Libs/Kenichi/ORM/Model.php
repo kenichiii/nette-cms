@@ -442,14 +442,9 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 	 * @param $local
 	 * @return $this
 	 */
-	public function setRepository(Repository $repo, $local = false): Model
+	public function setRepository(Repository $repo): Model
 	{
 		$this->repository = $repo;
-
-		if (!$local) {
-			$this->repositoryClass =  get_class($repo);
-		}
-
 		return $this;
 	}
 
@@ -568,24 +563,12 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 	{
 		if($this->repository === null)
 		{
-			$class = $this->getRepositoryClassName();
-			$this->repository = new $class();
+			throw new Exception('Repository is NULL');
 		}
 
 		return $this->repository;
 	}
 
-	/**
-	 * @return string
-	 */
-	public function getRepositoryClassName(): string
-	{
-		if ($this->repositoryClassName === null) {
-			$this->repositoryClassName = preg_replace('/(Model)$/', 'Repository', get_called_class());
-		}
-
-		return $this->repositoryClassName;
-	}
 
 	/**
 	 * @param $fromThisColumnName

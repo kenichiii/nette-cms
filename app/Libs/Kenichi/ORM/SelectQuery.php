@@ -102,6 +102,7 @@ class SelectQuery
 		foreach ($this->getRepository()->getConn()->fetchAll($query) as $key => $value) {
 			$bean = $this->getRepository()->getModelClassName();
 			$model = new $bean();
+			$model->setRepository($this->getRepository());
 			$data [$key]=  $model;
 			$data [$key]->fromDb($value);
 		}
@@ -157,6 +158,7 @@ class SelectQuery
 
 		if ($data) {
 			$bean = clone $this->getModel();
+			$bean->setRepository($this->getRepository());
 			$bean->fromdb($data);
 
 			return $bean;
