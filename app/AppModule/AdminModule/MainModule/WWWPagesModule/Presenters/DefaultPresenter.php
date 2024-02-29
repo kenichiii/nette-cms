@@ -121,7 +121,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 			->addDeletedCond()
 			->where(' and '.$this->pageRepository->getAlias('parent').'=%i',$parentid)
 			->where(' and ( '.$this->pageRepository->getAlias('lang').'=%s or '.$this->pageRepository->getAlias('lang')."='uni' )",$lang)
-			->orderBy($this->pageRepository->getAlias('rank').' ASC');
+			->orderBy('rank','ASC');
 
 		$return = [];
 		foreach ($select->fetchData() as $key => $page) {

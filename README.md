@@ -51,6 +51,7 @@ MISSING:
 
 Admin
 -----
+- add pfc alerts
 - pages
     - tree new page better background for input
     - files, gallery, photo
@@ -58,6 +59,9 @@ Admin
 - change password
 - to-do list
 - users
+  - new user form
+  - edit user form
+  - view user details
 - settings
 - gallery, files
 - notifications

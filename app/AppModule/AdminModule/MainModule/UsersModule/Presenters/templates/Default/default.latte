@@ -17,3 +17,49 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="addNewUserNewModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">{_'Add New User'}</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{_'Close'}"></button>
+            </div>
+            {form addNewUserForm}
+                <div class="modal-body">
+                    ADD NEW USER FORM
+                </div>
+                <div class="modal-footer">
+                    {input send class=>"btn btn-primary"}
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{_'Close'}</button>
+                </div>
+
+            {/form}
+        </div>
+    </div>
+</div>
+
+{snippet modal}
+    {if $user}
+        <div class="modal modal-ajax" id="editUserModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">{_'User edit'}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{_'Close'}"></button>
+                    </div>
+                    {form editUserForm class=>'ajax form-inline'}
+                        <div class="modal-body">
+                            EDIT USER FORM
+                        </div>
+
+                        <div class="modal-footer">
+                            {input send class=>"btn btn-primary"}
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{_'Close'}</button>
+                        </div>
+                    {/form}
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
+    {/if}
+{/snippet}
