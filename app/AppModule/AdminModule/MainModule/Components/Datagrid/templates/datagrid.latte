@@ -57,8 +57,8 @@
                         {$column->getTitle()}
                         {if $column->isSorting()}
                             <span class="text-nowrap">
-                                <a href="#" onclick='sorting({$column->getName()},"asc",{$grid->getId()})' class="{if $sortingColumn === $column->getName() && $sortingSort === 'asc'}arrowActive{/if} sortArrow"><span class="fa-arrow-up fa click"></span></a>
-                                <a href="#" onclick='sorting({$column->getName()},"desc",{$grid->getId()})' class="{if $sortingColumn === $column->getName() && $sortingSort === 'desc'}arrowActive{/if} sortArrow"><span class="fa-arrow-down fa click"></span></a>
+                                <a href="#" onclick='sorting({$column->getName()},"asc",{$grid->getId()})' class="{if $sortingColumn === $column->getName() && $sortingSort === 'asc'}arrowActive{/if} sortArrow"><span class="mdi mdi-sort-ascending click"></span></a>
+                                <a href="#" onclick='sorting({$column->getName()},"desc",{$grid->getId()})' class="{if $sortingColumn === $column->getName() && $sortingSort === 'desc'}arrowActive{/if} sortArrow"><span class="mdi mdi-sort-descending click"></span></a>
                             </span>
                         {/if}
                        </div>
@@ -132,7 +132,6 @@
                     </div>
             </div>
          </div>
-        </div>
 
 
 

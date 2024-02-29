@@ -6,8 +6,11 @@ namespace App\AppModule\AdminModule\MainModule\UsersModule\Presenters;
 
 use App\AppModule\AdminModule\MainModule\Components\Datagrid\Datagrid;
 use App\AppModule\AdminModule\MainModule\Components\Datagrid\DatagridFactory;
+use App\AppModule\AdminModule\MainModule\UsersModule\Forms\AddNewUserFormFactory;
+use App\AppModule\AdminModule\MainModule\UsersModule\Forms\EditUserFormFactory;
 use App\Libs\Repository\App\UserRepository;
 use App\Libs\Service\App\SettingsService;
+use Nette\Application\UI\Form;
 
 class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresenter
 {
@@ -15,6 +18,8 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		private UserRepository $userRepository,
 		private DatagridFactory $datagridFactory,
 		protected SettingsService $settingsService,
+		private AddNewUserFormFactory $addNewUserFormFactory,
+		private EditUserFormFactory $editUserFormFactory,
 	)
 	{
 	}
@@ -73,5 +78,39 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 				'deleted' => null,
 			]
 		);
+	}
+
+	/**
+	 * @return Form
+	 */
+	protected function createComponentEditUserForm(): Form
+	{
+		return $this->editUserFormFactory->create(function (): void {
+			$this->flashMessage($this->translator->translate(
+				'Page has been successfully changed'),
+				'success'
+			);
+			$this->getPayload()->afterPageForm = true;
+			$this->getPayload()->selectTab = '#basic';
+			$this->redrawControl('flashMessages');
+			$this->redrawControl('contentWrapper');
+		}, (int) ($_POST['page'] ?? $this->getParameter('page')));
+	}
+
+	/**
+	 * @return Form
+	 */
+	protected function createComponentAddNewUserForm(): Form
+	{
+		return $this->addNewUserFormFactory->create(function (): void {
+			$this->flashMessage($this->translator->translate(
+				'Page has been successfully changed'),
+				'success'
+			);
+			$this->getPayload()->afterPageForm = true;
+			$this->getPayload()->selectTab = '#basic';
+			$this->redrawControl('flashMessages');
+			$this->redrawControl('contentWrapper');
+		});
 	}
 }
