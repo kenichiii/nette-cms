@@ -186,10 +186,13 @@ function loadPage(id) {
     if ($('#content').tinymce() != null) {
         $('#content').tinymce().remove()
     }
-
+    $('.page-content-wrraper').hide();
+    $('.spinner').show();
     naja.makeRequest('GET', $("#admin-pages-page-url").val(),{page:id})
         .then((payload) => { /* process payload */
             activate_page_listeners();
+            $('.spinner').hide();
+            $('.page-content-wrraper').show();
         })
         .catch((error) => { /* handle error */
         });

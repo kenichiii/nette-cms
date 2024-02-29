@@ -52,7 +52,7 @@ class InstallService
 
 			$this->settingsRepository->insert([
 				'pointer' => 'contact_email',
-				'value' => 'conteact@example.org',
+				'value' => 'contact@example.org',
 			]);
 
 			$this->settingsRepository->insert([
@@ -209,7 +209,7 @@ class InstallService
 
 		try {
 			$this->user->login($this->appConfig['install']['adminEmail'], $this->appConfig['install']['adminPassword']);
-			$message .= '&bull; User logged as admin <br>';
+			$message .= '<br><h4>>User logged as admin</h4><br>';
 
 		} catch (\Throwable $e) {
 			$message .= '&bull; USER LOGIN ERROR:' . $e->getMessage() . '<br>';

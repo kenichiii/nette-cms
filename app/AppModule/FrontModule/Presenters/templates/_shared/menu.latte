@@ -1,5 +1,5 @@
 
-
+    {if $pageService->hasChildren($item)}
     		<ul>
 	            {foreach $pageService->getActivePages() as $subItem}
 					{if $subItem->get('parent')->getValue() === $item->get('id')->getValue() && $item->get('menu')->getValue()}
@@ -9,3 +9,4 @@
 					{/if}
 				{/foreach}
             </ul>
+    {/if}

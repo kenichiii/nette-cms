@@ -36,6 +36,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 				'columns' => [
 					'photo' => [
 						'type' => 'none',
+						'sorting' => false,
 						'title' => $this->translator->translate('Photo'),
 						'render' => function($record, $photo) {
 							return "<img class='img-xs rounded-circle' src='/"
@@ -46,14 +47,17 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 								)."'>";
 						},
 					],
-					'email' => [
-						'title' => $this->translator->translate('Email'),
+					'role' => [
+						'title' => $this->translator->translate('Role'),
 					],
 					'name' => [
 						'title' => $this->translator->translate('Name'),
 					],
-					'role' => [
-						'title' => $this->translator->translate('Role'),
+					'email' => [
+						'title' => $this->translator->translate('Email'),
+					],
+					'phone' => [
+						'title' => $this->translator->translate('Phone'),
 					],
 				],
 				'actions' => [

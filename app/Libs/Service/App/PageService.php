@@ -221,4 +221,16 @@ class PageService
 		}
 		return $tree;
 	}
+
+	public function hasChildren(PageModel $page): bool
+	{
+		foreach ($this->getActivePages() as $item) {
+			if ($item->get('menu')->getValue()
+				&& $item->get('parent')->getValue() === $page->get('id')->getValue()
+			) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

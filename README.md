@@ -51,10 +51,12 @@ MISSING:
 
 Admin
 -----
+- datagrid -> make responsible(buttons)
 - add pfc alerts
 - pages
     - tree new page better background for input
     - files, gallery, photo
+    - add loading
 - account settings
 - change password
 - to-do list

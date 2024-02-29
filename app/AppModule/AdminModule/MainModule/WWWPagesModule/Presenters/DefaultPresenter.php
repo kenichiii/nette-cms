@@ -63,8 +63,8 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 			$this->redrawControl('contentWrapper');
 		} elseif ($this->getParameter('page')) {
 			$this->getTemplate()->page = $this->pageRepository->getByPk((int) $this->getParameter('page'));
-			$this->getTemplate()->selectTab = $this->getParameter('selectTab') ?? 'basic';
 		}
+		$this->getTemplate()->selectTab = $this->getParameter('selectTab') ?? '#basic';
 	}
 
 	public function actionAddPage()
