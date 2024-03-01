@@ -94,7 +94,7 @@ final class NewUserFormFactory
 
 			} catch (\Throwable $e) {
 				Debugger::log($e);
-				$form->addError('Server Error: '.$e->getMessage());
+				$form->addError('Server Error');
 			}
 
 			$onSuccess($succ);
