@@ -79,6 +79,18 @@
         font-family: monospace;
     }
 </style>
+
+
+<div class="d-flex mb-3">
+    <div class="mr-4">
+        <img class="img-lg rounded-circle " src="/{$settingsService->getAppConfig()['subdir']}docs/users/{$user->getIdentity()->photo ? $user->getId() .'/' . $user->getIdentity()->photo : '_default/avatar.jpg'}" alt="">
+    </div>
+    <div class="profile-name">
+        <h4 class="mb-0 pt-3 font-weight-normal">{$user->getIdentity()->name ?: $user->getIdentity()->email}</h4>
+        <span>{$user->getIdentity()->role}</span>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-md-8 col-xl-4">
         <div class="card">

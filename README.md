@@ -64,6 +64,7 @@ Admin
 - pages
     - tree new page better background for input
     - files, gallery, photo
+    - required columns -> system
 - user
   - profile settings
   - to-do list
@@ -91,7 +92,7 @@ App
 ---
 - cache
 - translations
-    - front from database
+    - front from file
     - admin from file
 - pages list without content -> pageService->getPageContent(id)
 
