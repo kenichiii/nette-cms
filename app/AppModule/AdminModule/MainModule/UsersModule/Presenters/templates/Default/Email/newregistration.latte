@@ -1,0 +1,17 @@
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body>
+<p>{_'Hello,'}</p>
+
+<p>{_'You have been registred to [:sitename:] portal, Click the button below to complete the password set. The link is valid for [:expiration:].', sitename: $sitename, expiration: $expiration}</p>
+
+<p>
+    <a n:href="App:Admin:User:SignIn:renewPassword, id: $token, lang: $lang"
+            style="text-decoration:none;display:block;margin:20px;padding:10px;color:white;background-color: #0000BB;border-radius: 5px;text-align: center;width:200px;font-size: 125%;font-weight:bold"
+    >{_'Set Password'}</a>
+</p>
+
+</body>
+</html>

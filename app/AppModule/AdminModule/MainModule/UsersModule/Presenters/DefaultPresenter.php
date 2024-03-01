@@ -132,7 +132,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		return $this->addNewUserFormFactory->create(function (bool $succ): void {
 			if ($succ) {
 				$this->flashMessage($this->translator->translate(
-					'Page has been successfully changed'),
+					'User has been successfully created'),
 					'success'
 				);
 				$this->getPayload()->closeModal = '#addNewUserNewModal';

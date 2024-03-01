@@ -94,6 +94,12 @@ class InstallService
 				'value' => '25',
 			]);
 
+			$this->settingsRepository->insert([
+				'pointer' => 'admin_user_registration_password_token_expiration',
+				'info' => 'in days',
+				'value' => '3',
+			]);
+
 
 
 
