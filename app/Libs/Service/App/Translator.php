@@ -8,22 +8,40 @@ use Nette\Localization\Translator as NetteTranslator;
 
 final class Translator implements NetteTranslator
 {
-	private static array|null $repository = null;
+	private array|null $repository = null;
 
 	private string $lang;
-	private string $section = 'Front';
+	private string $section = 'front';
 
 	public function __construct(
 		private PageService $pageService,
+		private LanguageDetector $languageDetector,
 		private TranslationsService $translationsService,
 	)
 	{
-		$this->lang = $this->pageService->getLang();
+
 	}
 
-	public function setSection(string $section)
+	public function setSection(string $section): Translator
 	{
+		$this->section = $section;
+		return $this;
+	}
 
+	public function setLang(string $lang): Translator
+	{
+		$this->lang = $lang;
+		return $this;
+	}
+
+	public function getLang(): string
+	{
+		if (!isset($this->lang) && $this->section === 'front') {
+			$this->lang = $this->pageService->getLang();
+		} elseif (!isset($this->lang)) {
+			$this->lang = $this->languageDetector->getLang();
+		}
+		return $this->lang;
 	}
 
 	public function translate(mixed $message, ...$params): string
@@ -32,8 +50,8 @@ final class Translator implements NetteTranslator
 			return '';
 		}
 
-		if (self::$repository === null) {
-			self::$repository = $this->translationsService->getTranslations($this->lang, $this->section);
+		if ($this->repository === null) {
+			$this->repository = $this->translationsService->getTranslations($this->getLang(), $this->section);
 		}
 
 		$translation = array_key_exists($message, self::$repository) ? self::$repository[$message] : $message;
@@ -43,10 +61,5 @@ final class Translator implements NetteTranslator
 		}
 
 		return $translation ?: $message;
-	}
-
-	public function getLang(): string
-	{
-		return $this->lang;
 	}
 }

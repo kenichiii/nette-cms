@@ -55,7 +55,7 @@ final class SignRenewPasswordFormFactory
 					$form->addError('Not valid token');
 					return;
 				}
-				$user->set('password', $data->password)
+				$user->set('password', $user->get('password')::encode($data->password))
 					->update();
 			} catch (UserServiceException $e) {
 				$form->addError('Server Error');

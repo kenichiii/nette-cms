@@ -47,12 +47,13 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 					'pointer' => [
 						'title' => $this->translator->translate('Pointer'),
 					],
-					'info' => [
-						'title' => $this->translator->translate('Info'),
-					],
 					'value' => [
 						'title' => $this->translator->translate('Value'),
 					],
+					'info' => [
+						'title' => $this->translator->translate('Info'),
+					],
+
 				],
 				'actions' => [
 					'edit' => [

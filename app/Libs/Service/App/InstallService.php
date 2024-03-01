@@ -101,6 +101,21 @@ class InstallService
 			]);
 
 
+			$this->settingsRepository->insert([
+				'pointer' => 'dkim_selector',
+				'info' => 'YOUR-SELECTOR',
+				'value' => '3',
+			]);
+
+
+			$this->settingsRepository->insert([
+				'pointer' => 'dkim_password',
+				'info' => 'YOUR-PASSWORD',
+				'value' => '3',
+			]);
+
+
+
 
 
 			return '&bull; Settings installed <br>';

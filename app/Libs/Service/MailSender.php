@@ -52,8 +52,8 @@ final class MailSender
 		if (is_file('../private/key.private')) {
 			$mail->DKIM_domain = $_SERVER['HTTP_HOST'];
 			$mail->DKIM_private = '../private/key.private'; // Make sure to protect the key from being publicly accessible!
-			$mail->DKIM_selector = 'mails';
-			$mail->DKIM_passphrase = 'YOUR-PASSWORD';
+			$mail->DKIM_selector = $this->settings['dkim_selector'];
+			$mail->DKIM_passphrase = $this->settings['dkim_password'];
 			$mail->DKIM_identity = $mail->From;
 		}
 

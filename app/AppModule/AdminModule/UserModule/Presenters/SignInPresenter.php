@@ -24,6 +24,7 @@ class SignInPresenter extends BasePresenter
 		private SignRenewPasswordFormFactory $signRenewPasswordFormFactory,
 		private SignForgottenPasswordFormFactory $signForgottenPasswordFormFactory,
 		private UserRepository $userRepository,
+		private Nette\Http\Session $session,
 	)
 	{
 	}
@@ -46,6 +47,9 @@ class SignInPresenter extends BasePresenter
 				$this->getTemplate()->user_error = $this->translator->translate('Not valid token');
 			} elseif ($user['forgottenpasswordtokenexpiration']->getValue() < time()) {
 				$this->getTemplate()->user_error = $this->translator->translate('Token Expired');
+			} else {
+				$renewPasswordSession = $this->session->getSection('_renewPassword');
+				$renewPasswordSession->set('token', $id);
 			}
 	}
 
