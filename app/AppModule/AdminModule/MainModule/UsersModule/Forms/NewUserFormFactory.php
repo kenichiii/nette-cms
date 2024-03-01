@@ -57,7 +57,8 @@ final class NewUserFormFactory
 				//$validation = $user->validate(UserModel::FORM_ACTION_NEW);
 				//if ($validation->isSucc()) {
 				$token = bin2hex(random_bytes(10)) . $user['id'];
-				$expire = time() + (intval($this->settings['admin_user_registration_password_token_expiration']) * 60 * 24);
+				$expire = time() + (intval($this->settings['admin_user_registration_password_token_expiration'])
+						* 60 * 60 * 24);
 
 				$user->set('forgottenPasswordToken', $token)
 					->set('forgottenPasswordTokenExpiration', $expire)
