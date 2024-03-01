@@ -30,6 +30,7 @@ final class Datagrid extends Control
 	protected array $actions = [];
 	protected ?bool $deleted = null;
 	protected array $conditions = [];
+	protected array $defaultSorting = [];
 	protected SelectQuery $select;
 
 	/** @var array<int, string> */
@@ -67,6 +68,7 @@ final class Datagrid extends Control
 		$this->newRecordButton = $definition['newRecord'] ?? null;
 		$this->deleted = $definition['deleted'] ?? null;
 		$this->conditions = $definition['conditions'] ?? [];
+		$this->defaultSorting = $definition['defaultSorting'] ?? ['id','desc'];
 	}
 	public function getId()
 	{
@@ -118,7 +120,7 @@ final class Datagrid extends Control
 		//$result = call_user_func([$this->QMANService, $this->getData], $this->qmanFilters);
 		$select = $this->getSelect();
 		$this->records = $select->fetchData();
-		$this->recordsCount = $select->getCount();
+		$this->recordsCount = $select->clearLimit()->getCount();
 
 
 		$count = $this->recordsCount / $this->limit;
@@ -184,6 +186,8 @@ final class Datagrid extends Control
 
 		if ($this->filters['sortColumn']) {
 			$select->orderBy($this->filters['sortColumn'],strtolower($this->filters['sortSort']));
+		} else {
+			$select->orderBy($this->defaultSorting[0],$this->defaultSorting[1]);
 		}
 
 		foreach ($this->getColumns() as $column) {
@@ -360,7 +364,7 @@ final class Datagrid extends Control
 
 	public function render(): void
 	{
-		if (!$this->getPresenter()->isAjax()) {
+		if (!$this->getPresenter()->isAjax() || !$this->getParameter('fulltext')) {
 			$this->loadData($this->sessionSection->get('data') ?? []);
 		}
 		$this->getTemplate()->setTranslator($this->translator);

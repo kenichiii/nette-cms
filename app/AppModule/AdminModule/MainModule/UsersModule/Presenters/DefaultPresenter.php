@@ -28,6 +28,12 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 	{
 
 	}
+	public function actionDelete(int $id)
+	{
+		$this->userRepository->deleteByPK($id);
+		$this->flashMessage('User has been successfully deleted', 'success');
+		$this->redirect('default');
+	}
 	public function createComponentUsersAll(): Datagrid
 	{
 		return $this->datagridFactory->create(
@@ -47,14 +53,14 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 								)."'>";
 						},
 					],
+					'email' => [
+						'title' => $this->translator->translate('Email'),
+					],
 					'role' => [
 						'title' => $this->translator->translate('Role'),
 					],
 					'name' => [
 						'title' => $this->translator->translate('Name'),
-					],
-					'email' => [
-						'title' => $this->translator->translate('Email'),
 					],
 					'phone' => [
 						'title' => $this->translator->translate('Phone'),
@@ -89,16 +95,18 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 	 */
 	protected function createComponentEditUserForm(): Form
 	{
-		return $this->editUserFormFactory->create(function (): void {
-			$this->flashMessage($this->translator->translate(
-				'Page has been successfully changed'),
-				'success'
-			);
-			$this->getPayload()->afterPageForm = true;
-			$this->getPayload()->selectTab = '#basic';
+		return $this->editUserFormFactory->create(function (bool $succ): void {
+			if ($succ) {
+				$this->flashMessage($this->translator->translate(
+					'User data has been successfully changed'),
+					'success'
+				);
+			}
+			$this->getPresenter()->redrawControl('datagrid');
+			$this->getPresenter()->redrawControl('datagridWrapper');
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
-		}, (int) ($_POST['page'] ?? $this->getParameter('page')));
+		}, (int)$this->getParameter('user'));
 	}
 
 	/**
@@ -106,13 +114,20 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 	 */
 	protected function createComponentAddNewUserForm(): Form
 	{
-		return $this->addNewUserFormFactory->create(function (): void {
-			$this->flashMessage($this->translator->translate(
-				'Page has been successfully changed'),
-				'success'
-			);
-			$this->getPayload()->afterPageForm = true;
-			$this->getPayload()->selectTab = '#basic';
+		return $this->addNewUserFormFactory->create(function (bool $succ): void {
+			if ($succ) {
+				$this->flashMessage($this->translator->translate(
+					'Page has been successfully changed'),
+					'success'
+				);
+				$this->getPayload()->closeModal = '#addNewUserNewModal';
+				$this['addNewUserForm']->setDefaults([], true);
+			}
+			$this->getPayload()->afterForm = true;
+
+			$this->getPresenter()->redrawControl('datagrid');
+			$this->getPresenter()->redrawControl('datagridWrapper');
+			$this->redrawControl('addModal');
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
 		});

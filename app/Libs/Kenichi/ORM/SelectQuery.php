@@ -222,13 +222,6 @@ class SelectQuery
 
 		if ($this->groupBy) {
 			array_push($query, $this->groupBy);
-		} else {
-			array_push(
-				$query,
-				"GROUP BY " . $this->getRepository()->getAlias(
-					$this->getModel()->getPrimaryKey()->getColumnName()
-				)
-			);
 		}
 
 

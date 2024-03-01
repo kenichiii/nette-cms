@@ -30,40 +30,87 @@
                     <span aria-hidden="true" style="color: lightgray">&times;</span>
                 </button>
             </div>
-            {form addNewUserForm}
+            {snippet addModal}
+            {form addNewUserForm class=>ajax}
+                    <ul class=error n:ifcontent>
+                        <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                    </ul>
             <div class="modal-body">
-                ADD NEW USER FORM
+                <div class="form-group">
+                    <label>{_'Email'}</label>
+                    {input email  class=>"form-control p_input"}
+                </div>
+                <div class="form-group">
+                    <label>{_'Name'}</label>
+                    {input name  class=>"form-control p_input"}
+                </div>
+                <div class="form-group">
+                    <label>{_'Phone'}</label>
+                    {input phone  class=>"form-control p_input"}
+                </div>
+                <div class="form-group">
+                    <label>{_'Role'}</label>
+                    {input role  class=>"form-control p_input"}
+                </div>
+                <div class="form-group">
+                    <label>{_'Roles'}</label>
+                    {input roles  class=>"form-control p_input"}
+                </div>
             </div>
             <div class="modal-footer">
                 {input send class => "btn btn-primary"}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">{_'Close'}</button>
             </div>
             {/form}
+            {/snippet}
         </div>
     </div>
 </div>
 
-{snippet modal}
-    {if $user}
-        <div class="modal modal-ajax" id="editUserModal" tabindex="-1" role="dialog">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">{_'User edit'}</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{_'Close'}"></button>
+{snippet editmModal}
+    {if isset($userToEdit)}
+        <div id="editUserNewModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">{_'Edit User'}</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true" style="color: lightgray">&times;</span>
+                    </button>
+                </div>
+                {form editUserForm class=>ajax}
+                    <ul class=error n:ifcontent>
+                        <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                    </ul>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>{_'Email'}</label>
+                            {input email  class=>"form-control p_input"}
+                        </div>
+                        <div class="form-group">
+                            <label>{_'Name'}</label>
+                            {input name  class=>"form-control p_input"}
+                        </div>
+                        <div class="form-group">
+                            <label>{_'Phone'}</label>
+                            {input phone  class=>"form-control p_input"}
+                        </div>
+                        <div class="form-group">
+                            <label>{_'Role'}</label>
+                            {input role  class=>"form-control p_input"}
+                        </div>
+                        <div class="form-group">
+                            <label>{_'Roles'}</label>
+                            {input roles  class=>"form-control p_input"}
+                        </div>
                     </div>
-                    {form editUserForm class=>'ajax form-inline'}
-                        <div class="modal-body">
-                            EDIT USER FORM
-                        </div>
-
-                        <div class="modal-footer">
-                            {input send class=>"btn btn-primary"}
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">{_'Close'}</button>
-                        </div>
-                    {/form}
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div><!-- /.modal -->
+                    <div class="modal-footer">
+                        {input send class => "btn btn-primary"}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{_'Close'}</button>
+                    </div>
+                {/form}
+            </div>
+        </div>
+        </div>
     {/if}
 {/snippet}

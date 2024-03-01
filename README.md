@@ -51,26 +51,29 @@ MISSING:
 
 Admin
 -----
+- forms 
+  - with loader
+  - better error handling for ajax
 - better photo upload -> crop, naja
 - language detector
 - clear cache button
 - add pfc alerts
-- datagrid - active sorting
+- datagrid 
+  - active sorting
+  - paging styles
 - pages
     - tree new page better background for input
     - files, gallery, photo
-    - add loading
 - user
-  - account settings
-  - change password
   - profile settings
   - to-do list
   - notifications
   - messages
 - users
-  - new user form
+  - new user form -> clear, mail
   - edit user form
   - view user details
+  - better roles handling
 - settings
 - gallery, files
 - development
@@ -78,7 +81,7 @@ Admin
   - adminer.php
   - create, alter table
   - create model, repository, service, front presenter
-  
+  - image editor -> https://github.com/AyushmanSarkar/PocketPainter?tab=readme-ov-file
 Front
 -----
 - user -> sign(fb,google), profile

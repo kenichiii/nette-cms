@@ -207,7 +207,7 @@ abstract class Repository
 
 	public function deleteByPK($pk)
 	{
-		$query = array('DELETE FROM ['.$this->getTableRaw().'] WHERE ['.$this->getModel()->getPrimaryKey()->getCollumName().']
+		$query = array('DELETE FROM ['.$this->getTableRaw().'] WHERE ['.$this->getModel()->getPrimaryKey()->getColumnName().']
 		='.$this->getModel()->getPrimaryKey()->getDibiModificator(), $pk);
 		return $this->getConn()->query($query);
 	}
