@@ -195,7 +195,6 @@ class InstallService
 
 			$this->userRepository->insert([
 				'email' => $this->appConfig['install']['adminEmail'],
-				'name' => $this->appConfig['install']['adminName'],
 				'roles' => '["user","admin"]',
 				'role' => 'webmaster',
 				'password' => Password::encode($this->appConfig['install']['adminPassword']),

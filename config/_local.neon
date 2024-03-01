@@ -13,7 +13,6 @@ parameters:
             en: en
 
         install:
-            adminName: Default Admin
             adminEmail: test@test.cz
             adminPassword: '12345'
 
