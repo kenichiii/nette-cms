@@ -43,19 +43,39 @@ final class MailSender
 		$template = $this->createTemplate();
 		$html = $template->renderToString($latteFile, $params);
 
-		$mail = new Nette\Mail\Message;
-		$mail->setHtmlBody($html);
+		$mail = new \PHPMailer\PHPMailer\PHPMailer(true);
+
+		$mail->IsMail();
+		$mail->CharSet = 'UTF-8';
+		$mail->Encoding = 'base64';
+
+		if (is_file('../private/key.private')) {
+			$mail->DKIM_domain = $_SERVER['HTTP_HOST'];
+			$mail->DKIM_private = '../private/key.private'; // Make sure to protect the key from being publicly accessible!
+			$mail->DKIM_selector = 'mails';
+			$mail->DKIM_passphrase = 'YOUR-PASSWORD';
+			$mail->DKIM_identity = $mail->From;
+		}
+
 		$mail->setFrom($from ?: $this->settings['info_email']);
-		$mail->setSubject($subject);
+
 
 		if (is_array($to)) {
 			foreach ($to as $recipient) {
-				$mail->addTo($recipient);
+				$mail->addAddress($recipient);               //Name is optional
 			}
 		} else {
-			$mail->addTo($to);
+			$mail->addAddress($to);
 		}
-		$mailer = new Nette\Mail\SendmailMailer;
-		$mailer->send($mail);
+
+		$mail->addReplyTo($from ?: $this->settings['info_email']);
+
+		//Content
+		$mail->isHTML(true);                                  //Set email format to HTML
+		$mail->Subject = $subject;
+		$mail->Body    = $html;
+		//$mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
+
+		$mail->send();
 	}
 }

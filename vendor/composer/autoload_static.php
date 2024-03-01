@@ -11,9 +11,21 @@ class ComposerStaticInit371471726cf6a317441d14d0f1a8a245
     );
 
     public static $prefixLengthsPsr4 = array (
+        'W' => 
+        array (
+            'Webmozart\\Assert\\' => 17,
+        ),
         'S' => 
         array (
             'Symfony\\Thanks\\' => 15,
+        ),
+        'P' => 
+        array (
+            'PHPMailer\\PHPMailer\\' => 20,
+        ),
+        'C' => 
+        array (
+            'CbowOfRivia\\DmarcRecordBuilder\\' => 31,
         ),
         'A' => 
         array (
@@ -22,9 +34,21 @@ class ComposerStaticInit371471726cf6a317441d14d0f1a8a245
     );
 
     public static $prefixDirsPsr4 = array (
+        'Webmozart\\Assert\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/webmozart/assert/src',
+        ),
         'Symfony\\Thanks\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/thanks/src',
+        ),
+        'PHPMailer\\PHPMailer\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpmailer/phpmailer/src',
+        ),
+        'CbowOfRivia\\DmarcRecordBuilder\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/cbowofrivia/dmarc-record-builder/src',
         ),
         'App\\' => 
         array (

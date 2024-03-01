@@ -11,6 +11,7 @@ use App\AppModule\AdminModule\MainModule\UsersModule\Forms\EditSettingFormFactor
 use App\Libs\Repository\App\UserRepository;
 use App\Libs\Service\App\SettingsService;
 use App\Libs\Utils\Utils;
+use CbowOfRivia\DmarcRecordBuilder\DmarcRecord;
 use Nette\Application\UI\Form;
 
 class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresenter
@@ -18,6 +19,21 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 	public function __construct(
 	)
 	{
+	}
+	public function renderDefault() {
+
+		$record = new DmarcRecord();
+
+		$record->policy('none')
+			->subdomainPolicy('none')
+			->pct(100)
+			->rua('mailto:kena1@email.cz')
+			->ruf('mailto:kena1@email.cz')
+			->adkim('relaxed')
+			->aspf('relaxed')
+			->reporting('any')
+			->interval(604800);
+			$this->getTemplate()->status = $_SERVER['HTTP_HOST'];
 	}
 
 	public function actionDeleteCache()

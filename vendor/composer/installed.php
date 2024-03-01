@@ -1,15 +1,24 @@
 <?php return array(
     'root' => array(
-        'pretty_version' => 'v3.1.18',
-        'version' => '3.1.18.0',
+        'pretty_version' => 'dev-main',
+        'version' => 'dev-main',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '7305a060b7c819192214d906d102f683f1ec79d5',
+        'reference' => '10e150e96ee0d0d9790511b4c5f58318b853d925',
         'name' => 'nette/web-project',
         'dev' => true,
     ),
     'versions' => array(
+        'cbowofrivia/dmarc-record-builder' => array(
+            'pretty_version' => '1.0.1',
+            'version' => '1.0.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../cbowofrivia/dmarc-record-builder',
+            'aliases' => array(),
+            'reference' => '2e0cd13f23beb6906dd0fa680499a24af0f18dd1',
+            'dev_requirement' => false,
+        ),
         'dg/dibi' => array(
             'dev_requirement' => false,
             'replaced' => array(
@@ -197,12 +206,21 @@
             'dev_requirement' => false,
         ),
         'nette/web-project' => array(
-            'pretty_version' => 'v3.1.18',
-            'version' => '3.1.18.0',
+            'pretty_version' => 'dev-main',
+            'version' => 'dev-main',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '7305a060b7c819192214d906d102f683f1ec79d5',
+            'reference' => '10e150e96ee0d0d9790511b4c5f58318b853d925',
+            'dev_requirement' => false,
+        ),
+        'phpmailer/phpmailer' => array(
+            'pretty_version' => 'v6.9.1',
+            'version' => '6.9.1.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../phpmailer/phpmailer',
+            'aliases' => array(),
+            'reference' => '039de174cd9c17a8389754d3b877a2ed22743e18',
             'dev_requirement' => false,
         ),
         'symfony/thanks' => array(
@@ -221,6 +239,15 @@
             'install_path' => __DIR__ . '/../tracy/tracy',
             'aliases' => array(),
             'reference' => '86bdba4aa0f707d3f125933931d3df6e5c7aad79',
+            'dev_requirement' => false,
+        ),
+        'webmozart/assert' => array(
+            'pretty_version' => '1.11.0',
+            'version' => '1.11.0.0',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../webmozart/assert',
+            'aliases' => array(),
+            'reference' => '11cb2199493b2f8a3b53e7f19068fc6aac760991',
             'dev_requirement' => false,
         ),
     ),

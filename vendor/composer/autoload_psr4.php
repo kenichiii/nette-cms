@@ -6,6 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Webmozart\\Assert\\' => array($vendorDir . '/webmozart/assert/src'),
     'Symfony\\Thanks\\' => array($vendorDir . '/symfony/thanks/src'),
+    'PHPMailer\\PHPMailer\\' => array($vendorDir . '/phpmailer/phpmailer/src'),
+    'CbowOfRivia\\DmarcRecordBuilder\\' => array($vendorDir . '/cbowofrivia/dmarc-record-builder/src'),
     'App\\' => array($baseDir . '/app'),
 );

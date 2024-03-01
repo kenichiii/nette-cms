@@ -94,7 +94,7 @@ App
     - front from file
     - admin from file
 - pages list without content -> pageService->getPageContent(id)
-
+- https://medium.com/@djaho/how-to-create-dkim-keys-and-use-them-with-phpmailer-a6003449c718
 ORM
 ---
 - allow uppercase in column name
