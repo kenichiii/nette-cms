@@ -12,7 +12,7 @@ Features
 
 - support multiple layouts
 
-- users management
+- user management
 
 - easy install
 
@@ -51,37 +51,52 @@ MISSING:
 
 Admin
 -----
-- datagrid -> make responsible(buttons)
+- better photo upload -> crop, naja
+- language detector
+- clear cache button
 - add pfc alerts
+- datagrid - active sorting
 - pages
     - tree new page better background for input
     - files, gallery, photo
     - add loading
-- account settings
-- change password
-- to-do list
+- user
+  - account settings
+  - change password
+  - profile settings
+  - to-do list
+  - notifications
+  - messages
 - users
   - new user form
   - edit user form
   - view user details
 - settings
 - gallery, files
-- notifications
-- messages
-
+- development
+  - pfc editor
+  - adminer.php
+  - create, alter table
+  - create model, repository, service, front presenter
+  
 Front
 -----
 - user -> sign(fb,google), profile
+- breadcrumbs
 
 App
 ---
+- cache
 - translations
     - front from database
     - admin from file
+- pages list without content -> pageService->getPageContent(id)
 
 ORM
 ---
+- allow uppercase in column name
 - repository alter table
 - relations
 - model(group) __call -> getters, setters
 - automatic forms creation
+- validation function

@@ -7,7 +7,8 @@ services:
 	- App\AppModule\AdminModule\MainModule\Components\Datagrid\DatagridFactory
 	- App\AppModule\AdminModule\MainModule\UsersModule\Forms\AddNewUserFormFactory
 	- App\AppModule\AdminModule\MainModule\UsersModule\Forms\EditUserFormFactory
-
+	- App\AppModule\AdminModule\MainModule\UserModule\Forms\AccountSettingsFormFactory
+	- App\AppModule\AdminModule\MainModule\UserModule\Forms\ChangePasswordFormFactory
 	- App\AppModule\AdminModule\UserModule\Forms\SignInFormFactory
 	- App\AppModule\AdminModule\UserModule\Forms\SignRenewPasswordFormFactory
 	- App\AppModule\AdminModule\UserModule\Forms\SignForgottenPasswordFormFactory

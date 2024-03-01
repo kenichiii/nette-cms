@@ -49,7 +49,7 @@ class Password extends \App\Libs\Kenichi\ORM\Column\Primitive\Varchar
 	{
 		$val = new Validation();
 
-		$val->add(parent::validate($lang,$formAction,$data));
+		$val->add(parent::validate($formAction, $data, $model));
 
 		if( $val->isSucc() )
 		{

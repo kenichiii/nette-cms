@@ -4,14 +4,14 @@
 <div class="datagrid" id="{$grid->getId()}">
 
     <div class="row mb-1">
-        <div class="col-5 d-flex">
+        <div class="col-lg-5 col-sm-12 d-flex">
 
-        <div class="mr-5">{_'Total records'}: {$grid->recordsCount}</div>
-      <a onclick="refresh({$grid->getId()});" href="#" class="btn btn-primary ml-2 refreshButton"><i class="fa fa-refresh click"></i> Obnovit</a>
-      <a onclick="reset({$grid->getId()});" href="#" class="btn btn-danger ml-2 resetButton"><i class="fa fa-window-restore click"></i> Reset</a>
+                <div class="mr-5">{_'Total records'}: {$grid->recordsCount}</div>
+                <a onclick="refresh({$grid->getId()});" href="#" class="btn btn-primary ml-2 refreshButton"><i class="fa fa-refresh click"></i> Obnovit</a>
+                <a onclick="reset({$grid->getId()});" href="#" class="btn btn-danger ml-2 resetButton"><i class="fa fa-window-restore click"></i> Reset</a>
 
         </div>
-        <div class="col-6">
+        <div class="col-lg-6 col-sm-12">
             {if $grid->isNewRecordButton()}
                 <a class="btn btn-success newRecordButton" href="#">{_$grid->getNewRecordButton()['title']}</a>
             {/if}
@@ -118,18 +118,17 @@
                         {/if}
                     </ul>
             </div>
-            <div class="col-6">
-                <div class="row">
-                    <div class="col-10 justify-content-end perPageLabel d-flex">
-                        <label>{_'Per Page'}</label>
-                    </div>
-                    <div class="col-2 perPageSelect">
-                        <select name="perPage" class="paginatorItemsPerPage form-control">
+            <div class="col-6 justify-content-end perPageSelect d-flex">
+
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">{_'Per Page'}</span>
+                        </div>
+                        <select style="width:100px" name="perPage" class="paginatorItemsPerPage form-control">
                             {foreach $grid->getPerPageOptions() as $key => $option}
                                <option value="{$key}" {if $key == $grid->limit}selected{/if}>{$option}</option>
                             {/foreach}
                         </select>
-                    </div>
+
             </div>
          </div>
 

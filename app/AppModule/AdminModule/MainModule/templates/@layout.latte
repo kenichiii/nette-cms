@@ -40,7 +40,7 @@
 							<span class="count bg-success"></span>
 						</div>
 						<div class="profile-name">
-							<h5 class="mb-0 font-weight-normal">{$user->getIdentity()->name}</h5>
+							<h5 class="mb-0 font-weight-normal">{$user->getIdentity()->name ?: $user->getIdentity()->email}</h5>
 							<span>{$user->getIdentity()->role}</span>
 						</div>
 					</div>
@@ -134,7 +134,7 @@
 						<a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
 							<div class="navbar-profile">
 								<img class="img-xs rounded-circle" src="/{$settingsService->getAppConfig()['subdir']}docs/users/{$user->getIdentity()->photo ? $user->getId() .'/' . $user->getIdentity()->photo : '_default/avatar.jpg'}" alt="">
-								<p class="mb-0 d-none d-sm-block navbar-profile-name">{$user->getIdentity()->name}</p>
+								<p class="mb-0 d-none d-sm-block navbar-profile-name">{$user->getIdentity()->name ?: $user->getIdentity()->email}</p>
 								<i class="mdi mdi-menu-down d-none d-sm-block"></i>
 							</div>
 						</a>
@@ -212,6 +212,8 @@
 <!-- End custom js for this page -->
 <script src="https://unpkg.com/nette-forms@3/src/assets/netteForms.js"></script>
 <script src="https://unpkg.com/naja@3/dist/Naja.min.js"></script>
+
+<script src="/{$settingsService->getAppConfig()['subdir']}assets/admin/vendor/tinymce/jquery.tinymce.min.js" type="text/javascript"></script>
 
 <script src="/{$settingsService->getAppConfig()['subdir']}assets/admin/datagrid/datagrid.js"></script>
 

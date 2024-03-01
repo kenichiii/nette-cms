@@ -1,2 +1,129 @@
+{block scripts}
+    <script>
+        document.getElementById('file_to_upload').addEventListener('change', (event) => {
+            window.selectedFile = event.target.files[0];
+        });
+
+        document.getElementById('upload_file_button').addEventListener('click', () => {
+            uploadFile(window.selectedFile);
+        });
+
+        document.getElementById('file_to_upload').addEventListener('change', (event) => {
+            window.selectedFile = event.target.files[0];
+            //document.getElementById('file_name').innerHTML = window.selectedFile.name;
+        });
+
+        function uploadFile(file) {
+            var formData = new FormData();
+            formData.append('file_to_upload', file);
+
+            var ajax = new XMLHttpRequest();
+
+            ajax.onload = () => {
+                // Request finished. Do processing here.
+                //alert('uploaded')
+                window.location.reload();
+            };
+
+            ajax.upload.addEventListener('progress', progressHandler, false);
+
+            ajax.open('POST', $('#foto-upload-url').val());
+            ajax.send(formData);
+
+        }
+
+        function progressHandler(event) {
+            var percent = (event.loaded / event.total) * 100;
+            document.getElementById('progress_bar').value = Math.round(percent);
+            document.getElementById('progress_status').innerHTML = Math.round(percent) + '% uploaded';
+        }
+
+        // Getting our drop zone by ID
+        const dropZone = document.getElementById('drop_zone');
+
+        if (window.FileList && window.File) {
+            dropZone.addEventListener('dragover', event => {
+                event.stopPropagation();
+                event.preventDefault();
+
+                // Adding a visual hint that the file is being copied to the window
+                event.dataTransfer.dropEffect = 'copy';
+            });
+
+            dropZone.addEventListener('drop', event => {
+                event.stopPropagation();
+                event.preventDefault();
+
+                // Accessing the files that are being dropped to the window
+                const files = event.dataTransfer.files;
+
+                // Getting the file from uploaded files list (only one file in our case)
+                window.selectedFile = files[0];
+
+                // Assigning the name of file to our "file_name" element
+                //document.getElementById('file_name').innerHTML = window.selectedFile.name;
+            });
+        }
+    </script>
+{/block}
 {block content}
-<h1 n:block=title>Account Settings</h1>
+<style>
+    div#drop_zone {
+        height: 200px;
+        width: 200px;
+        border: 2px dotted black;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+        font-family: monospace;
+    }
+</style>
+<div class="row">
+    <div class="col-md-8 col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title" n:block=title>{_'Account Settings'}</h4>
+
+                {form accountSettingsForm}
+                    <ul class=error n:ifcontent>
+                        <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                    </ul>
+                    <div class="form-group">
+                        <label>{_'Email'}</label>
+                        {input email  class=>"form-control p_input"}
+                    </div>
+                    <div class="form-group">
+                        <label>{_'Name'}</label>
+                        {input name  class=>"form-control p_input"}
+                    </div>
+                    <div class="form-group">
+                        <label>{_'Phone'}</label>
+                        {input phone  class=>"form-control p_input"}
+                    </div>
+                    <div>
+                        <button n:name=send type="submit" class="btn btn-primary">{_'Send'}</button>
+                    </div>
+                {/form}
+
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 col-xl-4">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{_'Account Photo'}</h4>
+                <div id="drop_zone">
+                    DROP HERE
+                </div>
+                <input type="hidden" id="foto-upload-url" value="{link :App:Admin:Main:User:Default:upload}">
+                <input class="form-control" type="file" name="file_to_upload" id="file_to_upload" accept=".jpg,.png,.gif">
+
+                <progress id="progress_bar" value="0" max="100" style="width:100%;"></progress>
+                <p id="progress_status"></p>
+                <input class="btn btn-primary" type="button" value="Upload To Server" id="upload_file_button">
+            </div>
+        </div>
+    </div>
+</div>
