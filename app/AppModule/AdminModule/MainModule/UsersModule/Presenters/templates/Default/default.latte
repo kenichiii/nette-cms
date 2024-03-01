@@ -32,7 +32,7 @@
             </div>
             {snippet addModal}
             {form addNewUserForm class=>ajax}
-                    <ul class=error n:ifcontent>
+                    <ul class="error mt-3" n:ifcontent>
                         <li n:foreach="$form->ownErrors as $error">{$error}</li>
                     </ul>
             <div class="modal-body">
@@ -66,10 +66,57 @@
         </div>
     </div>
 </div>
+{snippet view}
+    {if isset($userModel) && $show === 'view'}
+        <div id="viewUserModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{_'View User'}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="color: lightgray">&times;</span>
+                        </button>
+                    </div>
 
-{snippet editmModal}
-    {if isset($userToEdit)}
-        <div id="editUserNewModal" class="modal fade" tabindex="-1" role="dialog">
+                    <div class="modal-body">
+
+                        <div class="d-flex mb-3">
+                            <div class="mr-4">
+                                <img class="img-lg rounded-circle " src="/{$settingsService->getAppConfig()['subdir']}docs/users/{$userModel->get('photo')->getValue() ? $userModel->get('id')->getValue() .'/' . $userModel->get('photo')->getValue() : '_default/avatar.jpg'}" alt="">
+                            </div>
+                            <div class="profile-name">
+                                <h4 class="mb-0 pt-3 font-weight-normal">{$userModel->get('name')->getValue() ?: $userModel->get('email')->getValue()}</h4>
+                                <span>{$userModel->get('role')->getValue()}</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+
+                            {$userModel->get('roles')->getValue()|noescape}
+                        </div>
+                        <div class="form-group">
+                            {$userModel->get('email')->getValue()}
+                        </div>
+                        <div class="form-group">
+                            {$userModel->get('name')->getValue()}
+                        </div>
+                        <div class="form-group">
+                            {$userModel->get('phone')->getValue()}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{_'Close'}</button>
+                    </div>
+
+                 </div>
+            </div>
+        </div>
+    {/if}
+{/snippet}
+
+
+<div id="editUserModal" class="modal fade" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -78,39 +125,45 @@
                         <span aria-hidden="true" style="color: lightgray">&times;</span>
                     </button>
                 </div>
-                {form editUserForm class=>ajax}
-                    <ul class=error n:ifcontent>
-                        <li n:foreach="$form->ownErrors as $error">{$error}</li>
-                    </ul>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>{_'Email'}</label>
-                            {input email  class=>"form-control p_input"}
-                        </div>
-                        <div class="form-group">
-                            <label>{_'Name'}</label>
-                            {input name  class=>"form-control p_input"}
-                        </div>
-                        <div class="form-group">
-                            <label>{_'Phone'}</label>
-                            {input phone  class=>"form-control p_input"}
-                        </div>
-                        <div class="form-group">
-                            <label>{_'Role'}</label>
-                            {input role  class=>"form-control p_input"}
-                        </div>
-                        <div class="form-group">
-                            <label>{_'Roles'}</label>
-                            {input roles  class=>"form-control p_input"}
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        {input send class => "btn btn-primary"}
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{_'Close'}</button>
-                    </div>
-                {/form}
+
+                {snippet edit}
+                    {if isset($userModel) && $show === 'edit'}
+                        {form editUserForm class=>ajax}
+                            <div class="modal-body">
+                                <input type="hidden" name="show" value="edit">
+                                <ul class="error mt-3" n:ifcontent>
+                                    <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                                </ul>
+
+                                <div class="form-group">
+                                    <label>{_'Email'}</label>
+                                    {input email  class=>"form-control p_input"}
+                                </div>
+                                <div class="form-group">
+                                    <label>{_'Name'}</label>
+                                    {input name  class=>"form-control p_input"}
+                                </div>
+                                <div class="form-group">
+                                    <label>{_'Phone'}</label>
+                                    {input phone  class=>"form-control p_input"}
+                                </div>
+                                <div class="form-group">
+                                    <label>{_'Role'}</label>
+                                    {input role  class=>"form-control p_input"}
+                                </div>
+                                <div class="form-group">
+                                    <label>{_'Roles'}</label>
+                                    {input roles  class=>"form-control p_input"}
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                {input send class => "btn btn-primary"}
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">{_'Close'}</button>
+                            </div>
+                        {/form}
+                    {/if}
+                {/snippet}
             </div>
         </div>
-        </div>
-    {/if}
-{/snippet}
+</div>
+

@@ -6,31 +6,41 @@ namespace App\AppModule\AdminModule\MainModule\UsersModule\Presenters;
 
 use App\AppModule\AdminModule\MainModule\Components\Datagrid\Datagrid;
 use App\AppModule\AdminModule\MainModule\Components\Datagrid\DatagridFactory;
-use App\AppModule\AdminModule\MainModule\UsersModule\Forms\AddNewUserFormFactory;
 use App\AppModule\AdminModule\MainModule\UsersModule\Forms\EditUserFormFactory;
+use App\AppModule\AdminModule\MainModule\UsersModule\Forms\NewUserFormFactory;
 use App\Libs\Repository\App\UserRepository;
 use App\Libs\Service\App\SettingsService;
+use App\Libs\Utils\Utils;
 use Nette\Application\UI\Form;
 
 class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresenter
 {
 	public function __construct(
-		private UserRepository $userRepository,
-		private DatagridFactory $datagridFactory,
-		protected SettingsService $settingsService,
-		private AddNewUserFormFactory $addNewUserFormFactory,
-		private EditUserFormFactory $editUserFormFactory,
+		private UserRepository           $userRepository,
+		private DatagridFactory          $datagridFactory,
+		protected SettingsService        $settingsService,
+		private NewUserFormFactory      $addNewUserFormFactory,
+		private EditUserFormFactory       $editUserFormFactory,
 	)
 	{
 	}
 
-	public function renderDefault()
+	public function renderDefault(?int $id)
 	{
-
+		if ($id) {
+			$this->getTemplate()->userModel = $this->userRepository->getByPk($id);
+			$this->getTemplate()->show = $this->getParameter('show') ?: $_POST['show'] ?? 'view';
+			$this->getPayload()->showModal = "#{$this->getParameter('show')}UserModal";
+			$this->redrawControl($this->getParameter('show'));
+		}
 	}
 	public function actionDelete(int $id)
 	{
 		$this->userRepository->deleteByPK($id);
+		$dir = "docs/users/{$id}";
+		if (is_dir($dir)) {
+			Utils::removeDir($dir);
+		}
 		$this->flashMessage('User has been successfully deleted', 'success');
 		$this->redirect('default');
 	}
@@ -69,11 +79,15 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 				'actions' => [
 					'view' => [
 						'title' => '<span class="mdi mdi-view-headline" title="'.$this->translator->translate('Show').'"></span>',
-						'link' => ':App:Admin:Main:Users:Default:viewUser',
+						'link' => ':App:Admin:Main:Users:Default:',
+						'args' => ['show' => 'view'],
+						'class' => 'ajax',
 					],
 					'edit' => [
 						'title' => '<span class="mdi mdi-table-edit" title="'.$this->translator->translate('Edit').'"></span>',
-						'link' => ':App:Admin:Main:Users:Default:editUser',
+						'link' => ':App:Admin:Main:Users:Default:',
+						'args' => ['show' => 'edit'],
+						'class' => 'ajax',
 					],
 					'delete' => [
 						'title' => '<span class="mdi mdi-delete" title="'.$this->translator->translate('Delete').'"></span>',
@@ -104,9 +118,10 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 			}
 			$this->getPresenter()->redrawControl('datagrid');
 			$this->getPresenter()->redrawControl('datagridWrapper');
+			$this->redrawControl('edit');
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
-		}, (int)$this->getParameter('user'));
+		}, (int)$this->getParameter('id'));
 	}
 
 	/**

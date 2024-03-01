@@ -2,23 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\AppModule\AdminModule\MainModule\UsersModule\Forms;
+namespace App\AppModule\AdminModule\MainModule\SettingsModule\Forms;
 
 use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Model\App\UserModel;
+use App\Libs\Repository\App\SettingsRepository;
 use App\Libs\Repository\App\UserRepository;
 use Nette;
 use Nette\Application\UI\Form;
 use Tracy\Debugger;
 
 
-final class EditUserFormFactory
+final class EditSettingFormFactory
 {
 	use Nette\SmartObject;
 
 	public function __construct(
 		private FormFactory    $factory,
-		private UserRepository $repository,
+		private SettingsRepository $repository,
 	)
 	{
 
@@ -27,36 +28,31 @@ final class EditUserFormFactory
 
 	public function create(callable $onSuccess, int $id): Form
 	{
-		$user = $this->repository->getByPk($id);
+		$model = $this->repository->getByPk($id);
 		$form = $this->factory->create();
 
-		$form->addEmail('email')
-			->setRequired('Email cant be empty')
-			->setDefaultValue($user->get('email')->getValue());
+		$form->addText('pointer')
+			->setRequired('Pointer cant be empty')
+			->setDefaultValue($model->get('pointer')->getValue());
 
-		$form->addText('name')
-			->setDefaultValue($user->get('name')->getValue());
+		$form->addText('info')
+			->setDefaultValue($model->get('info')->getValue());
 
-		$form->addText('phone')
-			->setDefaultValue($user->get('phone')->getValue());
 
-		$form->addText('role')
-			->setDefaultValue($user->get('role')->getValue());
-
-		$form->addText('roles')
-			->setDefaultValue($user->get('roles')->getValue());
+		$form->addText('value')
+			->setDefaultValue($model->get('value')->getValue());
 
 		$form->addSubmit('send',);
 
-		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess, $user): void {
+		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess, $model): void {
 			$succ = false;
 			try {
 
-				$user->fromForm($data);
+				$model->fromForm($data);
 
 				//$validation = $user->validate(UserModel::FORM_ACTION_EDIT);
 				//if ($validation->isSucc()) {
-					$user->update();
+					$model->update();
 					$succ = true;
 				/*} elseif (count($validation->getErrors())) {
 					foreach ($validation->getErrors() as $error) {

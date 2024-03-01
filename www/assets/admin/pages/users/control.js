@@ -20,15 +20,17 @@ class FormExtension {
       init_users();
       let payload = event.detail.payload;
 
-      if (payload === undefined || payload === null || !payload.hasOwnProperty('afterForm')) {
+      if (payload === undefined || payload === null) {
          return;
       }
-      if (payload.openModal) {
-         $(payload.openModal).modal();
+      if (payload.showModal) {
+         $(payload.showModal).modal();
       }
       if (payload.closeModal) {
          $(payload.closeModal).modal('hide');
       }
+      $('.datagrid').find('.datagridWrapper').show();
+      $('.datagrid').find('.spinner').hide();
    }
 }
 naja.registerExtension(new FormExtension());

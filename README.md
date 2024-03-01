@@ -56,9 +56,10 @@ Admin
   - better error handling for ajax
 - better photo upload -> crop, naja
 - language detector
-- clear cache button
 - add pfc alerts
+- add save button text to forms
 - datagrid 
+  - icons for buttons
   - active sorting
   - paging styles
 - pages
@@ -72,10 +73,7 @@ Admin
   - messages
 - users
   - new user form -> clear, mail
-  - edit user form
-  - view user details
   - better roles handling
-- settings
 - gallery, files
 - development
   - pfc editor
@@ -83,6 +81,7 @@ Admin
   - create, alter table
   - create model, repository, service, front presenter
   - image editor -> https://github.com/AyushmanSarkar/PocketPainter?tab=readme-ov-file
+
 Front
 -----
 - user -> sign(fb,google), profile
@@ -90,7 +89,7 @@ Front
 
 App
 ---
-- cache
+- add cache for pages, settings
 - translations
     - front from file
     - admin from file

@@ -124,7 +124,7 @@ final class Datagrid extends Control
 
 
 		$count = $this->recordsCount / $this->limit;
-        $this->pages = (int) round($count);
+        $this->pages = (int) ceil($count);
 
 
         // rozmezi -10 od page a +10 od page

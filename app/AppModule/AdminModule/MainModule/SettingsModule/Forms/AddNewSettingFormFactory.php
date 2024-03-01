@@ -2,23 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\AppModule\AdminModule\MainModule\UsersModule\Forms;
+namespace App\AppModule\AdminModule\MainModule\SettingsModule\Forms;
 
 use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Model\App\UserModel;
+use App\Libs\Repository\App\SettingsRepository;
 use App\Libs\Repository\App\UserRepository;
 use Nette;
 use Nette\Application\UI\Form;
 use Tracy\Debugger;
 
 
-final class AddNewUserFormFactory
+final class AddNewSettingFormFactory
 {
 	use Nette\SmartObject;
 
 	public function __construct(
 		private FormFactory    $factory,
-		private UserRepository $repository,
+		private SettingsRepository $repository,
 	)
 	{
 
@@ -29,28 +30,23 @@ final class AddNewUserFormFactory
 	{
 		$form = $this->factory->create();;
 
-		$form->addEmail('email')
-			->setRequired('Email cant be empty');
+		$form->addText('pointer')
+			->setRequired('Pointer cant be empty');
 
-		$form->addText('name');
+		$form->addText('info');
 
-		$form->addText('phone');
-
-		$form->addText('role');
-
-		$form->addText('roles')
-			->setDefaultValue('["user","admin"]');
+		$form->addText('value');;
 
 		$form->addSubmit('send',);
 
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess): void {
 			$succ = false;
 			try {
-				$user = $this->repository->getModel();
-				$user->fromForm($data);
+				$model = $this->repository->getModel();
+				$model->fromForm($data);
 				//$validation = $user->validate(UserModel::FORM_ACTION_NEW);
 				//if ($validation->isSucc()) {
-					$user->insert();
+					$model->insert();
 					$succ = true;
 
 			//	} elseif (count($validation->getErrors())) {
