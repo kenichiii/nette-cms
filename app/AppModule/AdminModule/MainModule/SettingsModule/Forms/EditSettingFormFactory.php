@@ -8,6 +8,7 @@ use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Model\App\UserModel;
 use App\Libs\Repository\App\SettingsRepository;
 use App\Libs\Repository\App\UserRepository;
+use App\Libs\Service\App\CacheService;
 use Nette;
 use Nette\Application\UI\Form;
 use Tracy\Debugger;
@@ -20,6 +21,7 @@ final class EditSettingFormFactory
 	public function __construct(
 		private FormFactory    $factory,
 		private SettingsRepository $repository,
+		private CacheService $cacheService,
 	)
 	{
 
@@ -54,6 +56,7 @@ final class EditSettingFormFactory
 				//if ($validation->isSucc()) {
 					$model->update();
 					$succ = true;
+					$this->cacheService->removeKey('settings');
 				/*} elseif (count($validation->getErrors())) {
 					foreach ($validation->getErrors() as $error) {
 						$form->addError($error['mess']);

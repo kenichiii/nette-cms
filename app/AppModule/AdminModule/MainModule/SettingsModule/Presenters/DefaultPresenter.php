@@ -85,10 +85,9 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 	{
 		return $this->editSettingFormFactory->create(function (bool $succ): void {
 			if ($succ) {
-				$this->flashMessage($this->translator->translate(
-					'Setting has been successfully changed'),
-					'success'
-				);
+				$this->getTemplate()->messages = [$this->translator->translate(
+					'Setting has been successfully changed'
+				)];
 			}
 			$this->getPresenter()->redrawControl('datagrid');
 			$this->getPresenter()->redrawControl('datagridWrapper');

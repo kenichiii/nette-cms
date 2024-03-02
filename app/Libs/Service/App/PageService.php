@@ -7,6 +7,7 @@ namespace App\Libs\Service\App;
 use App\Libs\Exception\Service\App\Page\PageServiceException;
 use App\Libs\Model\App\PageModel;
 use App\Libs\Repository\App\PageRepository;
+use Nette\Caching\Cache;
 
 class PageService
 {
@@ -16,7 +17,14 @@ class PageService
 	protected ?PageModel $currentRootPage = null;
 	protected array $tree = [];
 	protected string $slug = '';
-	public function __construct(protected array $appConfig, protected PageRepository $pageRepository)
+
+	public const  cacheExpiration = '5 hours';
+
+	public function __construct(
+		protected array $appConfig,
+		protected PageRepository $pageRepository,
+		protected CacheService $cacheService,
+	)
 	{
 
 	}
@@ -124,16 +132,35 @@ class PageService
 	 */
 	public function getActivePages(?string $lang = null): array
 	{
+		$key = "pages-active-{$lang}";
 		if ($this->activePages === null) {
-			$select = $this->pageRepository->getSelect();
-			$this->activePages = $select->addActiveCond()
-				->addDeletedCond()
-				->addLangCond($this->getLang())
-				->addRankOrderByCond('ASC')
-				->fetchData();
-		}
+			$this->activePages = $this->cacheService->getCache()->load($key, function (&$dependencies) use ($lang) {
+				$dependencies[Cache::Expire] = self::cacheExpiration;
+				$select = $this->pageRepository->getSelect();
+				$this->activePages = $select->addActiveCond()
+					->addDeletedCond()
+					->addLangCond($this->getLang())
+					->addRankOrderByCond('ASC')
+					->fetchData();
 
+				foreach ($this->activePages as $key => $page) {
+					$this->activePages[$key]->setRepository(null);
+				}
+
+				return $this->activePages;
+			});
+		}
 		return $this->activePages;
+	}
+
+	public function getPageContent(int $id): string
+	{
+		$key = "page-content-{$id}";
+		return $this->cacheService->getCache()->load($key, function (&$dependencies) use ($id) {
+			$dependencies[Cache::Expire] = self::cacheExpiration;
+			$page = $this->pageRepository->getByPk($id);
+			return $page->get('content')->getValue();
+		});
 	}
 
 	/**

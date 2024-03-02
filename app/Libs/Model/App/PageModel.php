@@ -58,7 +58,9 @@ class PageModel extends Model
 		$this->modeladd('loggedUser', $loggedUser);
 
 		$content = new Text();
-		$content->setSanitize(false);
+		$content->setSanitize(false)
+				->setIsInData(false)
+		;
 		$this->modeladd('content', $content);
 
 		$this->modeladd('description', new Text());

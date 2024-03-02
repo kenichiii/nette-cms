@@ -438,11 +438,10 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 
 
 	/**
-	 * @param Repository $repo
-	 * @param $local
+	 * @param Repository|null $repo
 	 * @return $this
 	 */
-	public function setRepository(Repository $repo): Model
+	public function setRepository(?Repository $repo): Model
 	{
 		$this->repository = $repo;
 		return $this;

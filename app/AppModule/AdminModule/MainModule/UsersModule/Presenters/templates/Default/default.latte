@@ -136,7 +136,9 @@
                                 <ul class="error mt-3" n:ifcontent>
                                     <li n:foreach="$form->ownErrors as $error">{$error}</li>
                                 </ul>
-
+                                {if isset($messages)}
+                                <div n:foreach="$messages as $message" n:class="flash, alert, 'alert-success'">{$message}</div>
+                                {/if}
                                 <div class="form-group">
                                     <label>{_'Email'} *</label>
                                     {input email  class=>"form-control p_input"}

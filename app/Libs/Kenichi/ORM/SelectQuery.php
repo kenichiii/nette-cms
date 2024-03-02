@@ -280,6 +280,7 @@ class SelectQuery
 	 */
 	public function orWhere(string $where, mixed $values = null): SelectQuery
 	{
+
 		if ($this->getModel()->hasColumnName($where)) {
 			return $this->where(' or ' . $this->getRepository()->getAlias() . '.[' . $where . '] = '
 				. $this->getModel()->getColumnName($where)->getDibiModificator(),

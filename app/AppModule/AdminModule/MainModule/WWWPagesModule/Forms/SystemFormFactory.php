@@ -7,6 +7,7 @@ namespace App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms;
 use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Kenichi\ORM\Model;
 use App\Libs\Repository\App\PageRepository;
+use App\Libs\Service\App\CacheService;
 use Nette;
 use Nette\Application\UI\Form;
 use Tracy\Debugger;
@@ -19,6 +20,7 @@ final class SystemFormFactory
 	public function __construct(
 		private FormFactory    $factory,
 		private PageRepository $pageRepository,
+		private CacheService $cacheService,
 	)
 	{
 
@@ -51,15 +53,17 @@ final class SystemFormFactory
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess, $page): void {
 
 			//try {
+			$succ = false;
 				$page->fromForm($data);
 				$validation = $page->validate(Model::FORM_ACTION_EDIT);
 				if ($validation->isSucc()) {
 					$page->update();
+					$this->cacheService->removeKey('pages-active-'.$page->get('lang')->getValue());
+					$succ = true;
 				} elseif (count($validation->getErrors())) {
 					foreach ($validation->getErrors() as $error) {
 						$form->addError($error['mess']);
 					}
-					return;
 				}
 /*
 			} catch (\Throwable $e) {
@@ -68,7 +72,7 @@ final class SystemFormFactory
 				return;
 			}*/
 
-			$onSuccess();
+			$onSuccess($succ);
 		};
 
 		return $form;

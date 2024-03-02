@@ -167,8 +167,13 @@ final class Datagrid extends Control
 
 		if ($this->filters['fulltext']) {
 			foreach ($this->repository->getModel()->getColumnsNames() as $key => $value) {
+				if ($key === array_key_first($this->repository->getModel()->getColumnsNames())) {
+					$select->andWhere('('.$key.' like %s','%'.$this->filters['fulltext'].'%');
+				}
 				$select->orWhere($key.' like %s','%'.$this->filters['fulltext'].'%');
-			}/*
+			}
+ 			$select->where(')');
+			/*
 			foreach ($this->getColumns() as $column) {
 				if ($column->getType() === 'text' || $column->getType() === 'select')  {
 					$select->andWhere($column->getName().' like %s','%'.$this->filters[$column->getName()].'%');

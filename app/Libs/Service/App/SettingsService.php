@@ -7,11 +7,18 @@ namespace App\Libs\Service\App;
 use App\Libs\Exception\Service\App\Settings\SettingsServiceException;
 use App\Libs\Model\App\SettingsModel;
 use App\Libs\Repository\App\SettingsRepository;
+use Nette\Caching\Cache;
 
 class SettingsService implements \ArrayAccess
 {
 	protected ?array $settings = null;
-	public function __construct(protected array $appConfig, protected SettingsRepository $settingsRepository)
+	public const  cacheExpiration = '5 hours';
+
+	public function __construct(
+		protected array $appConfig,
+		protected SettingsRepository $settingsRepository,
+		protected CacheService $cacheService,
+	)
 	{
 
 	}
@@ -52,8 +59,16 @@ class SettingsService implements \ArrayAccess
 	 */
 	public function getSettings(): array
 	{
+		$key = "settings";
 		if ($this->settings === null) {
-			$this->settings = $this->settingsRepository->getSelect()->fetchData();
+			$this->settings = $this->cacheService->getCache()->load($key, function (&$dependencies) {
+				$dependencies[Cache::Expire] = self::cacheExpiration;
+				$data = $this->settingsRepository->getSelect()->fetchData();
+				foreach ($data as $key => $setting) {
+					$data[$key]->setRepository(null);
+				}
+				return $data;
+			});
 		}
 		return $this->settings;
 	}

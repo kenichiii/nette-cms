@@ -7,6 +7,7 @@ namespace App\AppModule\AdminModule\MainModule\WWWPagesModule\Presenters;
 use App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\BasicFormFactory;
 use App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\SystemFormFactory;
 use App\Libs\Repository\App\PageRepository;
+use App\Libs\Service\App\CacheService;
 use App\Libs\Utils\Utils;
 use Nette\Application\UI\Form;
 use Tracy\Debugger;
@@ -17,6 +18,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		private PageRepository $pageRepository,
 		private BasicFormFactory $basicFormFactory,
 		private SystemFormFactory $systemFormFactory,
+		private CacheService $cacheService,
 	)
 	{
 	}
@@ -25,11 +27,13 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 	 */
 	protected function createComponentBasicForm(): Form
 	{
-		return $this->basicFormFactory->create(function (): void {
-			$this->flashMessage($this->translator->translate(
-				'Page has been successfully changed'),
-				'success'
-			);
+		return $this->basicFormFactory->create(function (bool $succ): void {
+			if ($succ) {
+				$this->flashMessage($this->translator->translate(
+					'Page has been successfully changed'),
+					'success'
+				);
+			}
 			$this->getPayload()->afterPageForm = true;
 			$this->getPayload()->selectTab = '#basic';
 			$this->redrawControl('flashMessages');
@@ -40,11 +44,13 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 
 	protected function createComponentSystemForm(): Form
 	{
-		return $this->systemFormFactory->create(function (): void {
-			$this->flashMessage($this->translator->translate(
-				'Page has been successfully changed'),
-				'success'
-			);
+		return $this->systemFormFactory->create(function (bool $succ): void {
+			if  ($succ) {
+				$this->flashMessage($this->translator->translate(
+					'Page has been successfully changed'),
+					'success'
+				);
+			}
 			$this->getPayload()->afterPageForm = true;
 			$this->getPayload()->selectTab = '#system';
 			$this->redrawControl('flashMessages');
@@ -143,6 +149,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		$id = (int) $this->getParameter('pageId');
 		$page = $this->pageRepository->getByPk($id);
 		$page->set('deleted', 1)->update();
+		$this->cacheService->removeKey('pages-active-'.$page->get('lang')->getValue());
 		$this->flashMessage('Page was successfully deleted', 'success');
 		$this->getPayload()->id = $id;
 		$this->redrawControl('flashMessages');
@@ -155,6 +162,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		$page = $this->pageRepository->getByPk((int)$_POST['page']);
 		$page->set('content', $_POST['content']);
 		$page->update();
+		$this->cacheService->removeKey('page-content'.$page->get('id')->getValue());
 		$this->flashMessage($this->translator->translate(
 			'Page has been successfully changed'),
 			'success'

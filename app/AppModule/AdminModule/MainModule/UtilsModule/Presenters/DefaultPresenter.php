@@ -40,14 +40,16 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 
 	public function actionDeleteCache()
 	{
-
+		if ($this->isAjax()) {
 			//Utils::removeDir('../temp/cache');
 			$this->cacheService->cleanCache();
 			$this->getPayload()->succ = true;
 			$this->flashMessage('Cache has been successfully removed', 'success');
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
-
+		} else {
+			$this->redirect(':App:Admin:Main:Dashboard:Default:');
+		}
 
 	}
 }
