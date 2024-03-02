@@ -105,7 +105,7 @@
                                     <input type="hidden" name="page" value="{$page['id']->getValue()}">
                                     <textarea name="content" id="content">{$page['content']->getValue()}</textarea>
                                     <div>
-                                        <button  type="submit" class="btn btn-primary">{_'Send'}</button>
+                                        <button  type="submit" class="btn btn-primary">{_'Save'}</button>
                                     </div>
                                 </form>
                             </div>
@@ -115,19 +115,19 @@
                                         <li n:foreach="$form->ownErrors as $error">{$error}</li>
                                     </ul>
                                     <div class="form-group">
-                                        <label>{_'Pointer'}</label>
+                                        <label>{_'Pointer'} *</label>
                                         {input pointer class=>"form-control p_input"}
                                     </div>
                                     <div class="form-group">
-                                        <label>{_'Presenter'}</label>
+                                        <label>{_'Presenter'} *</label>
                                         {input presenter class=>"form-control p_input"}
                                     </div>
                                     <div class="form-group">
-                                        <label>{_'Action'}</label>
+                                        <label>{_'Action'} *</label>
                                         {input action class=>"form-control p_input"}
                                     </div>
                                     <div class="form-group">
-                                        <label>{_'Layout'}</label>
+                                        <label>{_'Layout'} *</label>
                                         {input layout class=>"form-control p_input"}
                                     </div>
                                     <div class="form-group">

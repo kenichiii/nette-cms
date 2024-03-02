@@ -103,15 +103,15 @@ class InstallService
 
 			$this->settingsRepository->insert([
 				'pointer' => 'dkim_selector',
-				'info' => 'YOUR-SELECTOR',
-				'value' => '3',
+				'info' => 'https://medium.com/@djaho/how-to-create-dkim-keys-and-use-them-with-phpmailer-a6003449c718',
+				'value' => 'mails',
 			]);
 
 
 			$this->settingsRepository->insert([
 				'pointer' => 'dkim_password',
-				'info' => 'YOUR-PASSWORD',
-				'value' => '3',
+				'info' => '',
+				'value' => 'YOUR-PASSWORD',
 			]);
 
 

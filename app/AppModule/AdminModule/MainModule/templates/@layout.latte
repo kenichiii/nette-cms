@@ -13,6 +13,8 @@
 	<!-- End Plugin css for this page -->
 	<!-- inject:css -->
 	<!-- endinject -->
+
+
 	<!-- Layout styles -->
 	<link rel="stylesheet" href="/{$settingsService->getAppConfig()['subdir']}assets/admin/assets/css/style.css">
 	<link rel="stylesheet" href="/{$settingsService->getAppConfig()['subdir']}assets/admin/customStyle.css">
@@ -132,7 +134,9 @@
 				</button>
 				<ul class="navbar-nav ml-3">
 					<li class="nav-item">
-						<a n:href=":App:Admin:Main:Utils:Default:deleteCache"  class="btn btn-danger ajax">{_'Delete Cache'}</a>
+						<a n:href=":App:Admin:Main:Utils:Default:deleteCache, cleanCache:1"  class="btn btn-danger ajax">
+							<i class="mdi mdi-delete-variant"></i> {_'Delete Cache'}
+						</a>
 					</li>
 				</ul>
 				<ul class="navbar-nav navbar-nav-right">

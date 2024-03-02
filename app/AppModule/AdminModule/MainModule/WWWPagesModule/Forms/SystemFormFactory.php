@@ -32,17 +32,21 @@ final class SystemFormFactory
 		$form = $this->factory->create();
 		$form->addHidden('page', $id);
 		$form->addText('pointer')
-			->setDefaultValue($page['pointer']->getValue());
+			->setDefaultValue($page['pointer']->getValue())
+			->setRequired('Pointer cant be empty');
 		$form->addText('presenter')
-			->setDefaultValue($page['presenter']->getValue());
+			->setDefaultValue($page['presenter']->getValue())
+			->setRequired('Presenter cant be empty');;
 		$form->addText('action')
-			->setDefaultValue($page['action']->getValue());
+			->setDefaultValue($page['action']->getValue())
+			->setRequired('Action cant be empty');;
 		$form->addText('layout')
-			->setDefaultValue($page['layout']->getValue());
+			->setDefaultValue($page['layout']->getValue())
+			->setRequired('Layout cant be empty');;
 		$form->addText('loggeduser')
 			->setDefaultValue((bool) $page['loggedUser']->getValue());
 
-		$form->addSubmit('send',);
+		$form->addSubmit('send', 'Save',);
 
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess, $page): void {
 

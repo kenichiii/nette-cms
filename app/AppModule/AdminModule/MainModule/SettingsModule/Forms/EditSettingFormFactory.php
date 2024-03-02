@@ -42,7 +42,7 @@ final class EditSettingFormFactory
 		$form->addText('value')
 			->setDefaultValue($model->get('value')->getValue());
 
-		$form->addSubmit('send',);
+		$form->addSubmit('send','Save',);
 
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess, $model): void {
 			$succ = false;

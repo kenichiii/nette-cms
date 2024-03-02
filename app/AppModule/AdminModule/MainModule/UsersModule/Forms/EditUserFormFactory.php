@@ -44,9 +44,10 @@ final class EditUserFormFactory
 			->setDefaultValue($user->get('role')->getValue());
 
 		$form->addText('roles')
-			->setDefaultValue($user->get('roles')->getValue());
+			->setDefaultValue($user->get('roles')->getValue())
+			->setRequired('Roles cant be empty');
 
-		$form->addSubmit('send',);
+		$form->addSubmit('send', 'Save',);
 
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess, $user): void {
 			$succ = false;

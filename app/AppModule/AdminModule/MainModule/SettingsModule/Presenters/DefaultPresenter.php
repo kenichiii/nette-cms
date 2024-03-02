@@ -109,7 +109,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 					'Setting has been successfully created'),
 					'success'
 				);
-				$this->getPayload()->closeModal = '#addNewSettingNewModal';
+				$this->getPayload()->closeModal = '#addNewSettingModal';
 			}
 			$this->getPayload()->afterForm = true;
 

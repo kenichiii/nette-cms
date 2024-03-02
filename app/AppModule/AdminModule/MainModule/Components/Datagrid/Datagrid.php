@@ -166,11 +166,14 @@ final class Datagrid extends Control
 		$select->limit($this->limit, $this->offset);
 
 		if ($this->filters['fulltext']) {
+			foreach ($this->repository->getModel()->getColumnsNames() as $key => $value) {
+				$select->orWhere($key.' like %s','%'.$this->filters['fulltext'].'%');
+			}/*
 			foreach ($this->getColumns() as $column) {
 				if ($column->getType() === 'text' || $column->getType() === 'select')  {
 					$select->andWhere($column->getName().' like %s','%'.$this->filters[$column->getName()].'%');
 				}
-			}
+			}*/
 			//$query ['fulltext'] = $this->filters['fulltext'];
 		}
 

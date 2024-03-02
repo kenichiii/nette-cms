@@ -280,12 +280,20 @@ class SelectQuery
 	 */
 	public function orWhere(string $where, mixed $values = null): SelectQuery
 	{
-		if(in_array( $where, array_keys($this->getModel()->getCollumsNamesInArray())))
-			return $this->where(' or '.$this->getAlias().'.['.$where.']='.$this->getModel()->getCollumName($where)->getDibiMod(),$values);
-		elseif($this->getModel()->modelHas($where))
-			return $this->where(' or '.$this->getAlias().'.['.$this->getModel()->get($where)->getCollumName().']='.$this->getModel()->get($where)->getDibiMod(),$values);
-		else
-			return $this->where(' or '.$where,$values);
+		if ($this->getModel()->hasColumnName($where)) {
+			return $this->where(' or ' . $this->getRepository()->getAlias() . '.[' . $where . '] = '
+				. $this->getModel()->getColumnName($where)->getDibiModificator(),
+				$values
+			);
+		} elseif ($this->getModel()->modelHas($where)) {
+			return $this->where(' or ' . $this->getRepository()->getAlias() . '. ['
+				. $this->getModel()->get($where)->getColumnName() . '] = '
+				. $this->getModel()->get($where)->getDibiModificator(),
+				$values
+			);
+		} else {
+			return $this->where(' or ' . $where, $values);
+		}
 	}
 
 	/**

@@ -37,7 +37,7 @@ final class AddNewSettingFormFactory
 
 		$form->addText('value');;
 
-		$form->addSubmit('send',);
+		$form->addSubmit('send','Save',);
 
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess): void {
 			$succ = false;
@@ -55,7 +55,7 @@ final class AddNewSettingFormFactory
 			//		}
 
 			//	}
-
+					$form->setDefaults([], true);
 			} catch (\Throwable $e) {
 				Debugger::log($e);
 				$form->addError('Server Error');

@@ -17,18 +17,17 @@ services:
 	- App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\BasicFormFactory
 	- App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\SystemFormFactory
 
-	- App\Libs\Service\MailSender
-
-	- App\Libs\Service\App\Translator
-
 	- App\Libs\Facade\UserFacade
 
-	- App\Libs\Repository\App\PageRepository
-	- App\Libs\Repository\App\SettingsRepository
-	- App\Libs\Repository\App\UserRepository
-
+	- App\Libs\Service\MailSender
+	- App\Libs\Service\App\CacheService(Nette\Caching\Cache(namespace: 'default'))
+	- App\Libs\Service\App\LanguageDetector
+	- App\Libs\Service\App\Translator
 	- App\Libs\Service\App\PageService(%appConfig%)
 	- App\Libs\Service\App\SettingsService(%appConfig%)
 	- App\Libs\Service\App\UserService
 	- App\Libs\Service\App\TranslationsService
 
+	- App\Libs\Repository\App\PageRepository
+	- App\Libs\Repository\App\SettingsRepository
+	- App\Libs\Repository\App\UserRepository

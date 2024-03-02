@@ -42,7 +42,7 @@ final class BasicFormFactory
 			->setDefaultValue((bool) $page['menu']->getValue());
 		$form->addCheckbox('active')
 			->setDefaultValue((bool) $page['active']->getValue());
-		$form->addSubmit('send',);
+		$form->addSubmit('send','Save');
 
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess, $page): void {
 

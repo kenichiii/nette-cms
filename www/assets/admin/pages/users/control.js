@@ -1,6 +1,25 @@
 
 function init_users() {
    $('.newRecordButton').click(function() {
+      $('#addNewUserNewModal').find('input[name="email"]').each(function(){
+         $(this).val('');
+      })
+      $('#addNewUserNewModal').find('input[name="name"]').each(function(){
+         $(this).val('');
+      })
+      $('#addNewUserNewModal').find('input[name="phone"]').each(function(){
+         $(this).val('');
+      })
+      $('#addNewUserNewModal').find('input[name="role"]').each(function(){
+         $(this).val('');
+      })
+      $('#addNewUserNewModal').find('input[name="roles"]').each(function(){
+         $(this).val('["user","admin]');
+      })
+      $('#addNewUserNewModal').find('ul.error').each(function(){
+         $(this).html('');
+      })
+
       $('#addNewUserNewModal').modal();
 
       return false;

@@ -45,9 +45,10 @@ final class NewUserFormFactory
 		$form->addText('role');
 
 		$form->addText('roles')
-			->setDefaultValue('["user","admin"]');
+			->setDefaultValue('["user","admin"]')
+			->setRequired('Roles cant be empty');
 
-		$form->addSubmit('send',);
+		$form->addSubmit('send','Save');
 
 		$form->onSuccess[] = function (Form $form, array $data) use ($onSuccess): void {
 			$succ = false;
@@ -80,7 +81,7 @@ final class NewUserFormFactory
 					 ],
 				 );
 				 $succ = true;
-
+				 $form->setDefaults([], true);
 			 } catch (\Throwable $e) {
 				 $form->addError('Cant sent email. User has been created');
 			 }
