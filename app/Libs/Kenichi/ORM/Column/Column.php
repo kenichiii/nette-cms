@@ -159,9 +159,9 @@ abstract class Column
 	 * @param string $string
 	 * @return string
 	 */
-	public static function sanitize(string $string): string
+	public static function sanitize($string): string
 	{
-		return htmlspecialchars(trim($string));
+		return htmlspecialchars(trim((string)$string));
 	}
 
 	/**
