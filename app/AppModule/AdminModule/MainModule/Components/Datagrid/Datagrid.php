@@ -226,7 +226,10 @@ final class Datagrid extends Control
 
 				case 'select':
 					if ($this->filters[$column->getName()] && intval($this->filters[$column->getName()])) {
-						$select->andWhere($column->getName().'=%s', $this->filters[$column->getName()]);
+						$select->andWhere($column->getName()
+							.'='.$this->repository->getModel()[$column->getName()]->getDibiModificator(),
+							$this->filters[$column->getName()]
+						);
 					}
 					break;
 				case 'radio':
@@ -321,7 +324,7 @@ final class Datagrid extends Control
 			case 'nrelationSelect':
 			case 'relationSelect':
 			case 'select':
-				$html = "<div class='form-group'><select name='{$column->getName()}' class='searchSelect form-control 
+				$html = "<div class='form-group'><select name='{$column->getName()}' class='searchSelect form-control p_input
                          	".($this->filters[$column->getName()] ? 'filter-on' : '')."
                          '>";
 				foreach ($column->getOptions() as $key => $title) {
@@ -367,7 +370,7 @@ final class Datagrid extends Control
 					: '<span class="btn-secondary p-2">'.$this->translator->translate('No').'</span>';
 				break;
 			case 'select':
-				return htmlspecialchars($column->getOptions()[$record->get($column->getName())->getValue()] ?? '');
+				return htmlspecialchars((string)$column->getOptions()[$record->get($column->getName())->getValue()] ?? '');
 				break;
 
 			case 'text':
