@@ -29,12 +29,15 @@
 
 	{if $user->isLoggedIn()}
 		{$user->getIdentity()->email}
-	{else}
-		guest
 	{/if}
 
 	<ul>
-		<li n:foreach="$pageService->getLangs() as $lang"><a href="/{$pageService->getSubDir()}{$lang !== $pageService->getDefaultLang() ? $lang.'/' : ''}">{$lang}</a></li>
+		<li n:foreach="$pageService->getLangs() as $item">
+			<a {if $item === $lang}active{/if}
+			   href="/{$settingsService->getAppConfig()['subdir']}{first}{else}{$item.'/'}{/first}">
+				{$item}
+			</a>
+		</li>
 	</ul>
 
 	<em>{$settingsService['site_name']}</em>

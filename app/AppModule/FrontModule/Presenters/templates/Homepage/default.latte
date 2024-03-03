@@ -1,6 +1,8 @@
 {block scripts}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <script>
+$('.slider-height').css('height','400px');
+
 let activeSlider = 0;
 const count = $('.hp-slider').length;
 if (count > 1) {
@@ -18,23 +20,21 @@ if (count > 1) {
 </script>
 {/block}
 {block content}
-<h1 n:block=title>{$pageService->getCurrentPage()->get('title')}</h1>
-
 <div class="">
     <div class="">
         {foreach $sliders as $slider}
             <!-- Single Slider -->
             <div class="hp-slider" style="{first}{else}display:none{/first}">
-                <div class="slider-height d-flex align-items-center"style="background-repeat: no-repeat; background-size:100% 100%; background-image: url('/docs/homepage/sliders/{$slider->get('id')}/{$slider->get('photo')}');">
+                <div class="slider-height d-flex align-items-center" style="background-repeat: no-repeat; background-size:100% 100%; background-image: url('/{$settingsService->getAppConfig()['subdir']}docs/homepage/sliders/{$slider->get('id')}/{$slider->get('photo')}');">
                 <div class="container">
                     <div class="row">
                         <div class="col-xl-6 col-lg-6 col-md-8 col-sm-10">
                             <div class="hero__caption">
                                 {first}
-                                    <h1 n:block="title" data-animation="fadeInUp" data-delay=".6s">{$slider->get('title')}</h1>
+                                    <h1 data-animation="fadeInUp" data-delay=".6s">{$slider->get('title')}</h1>
                                 {else}
                                     <h2 data-animation="fadeInUp" data-delay=".6s">{$slider->get('title')}</h2>
-                                {/if}
+                                {/first}
                                 <p data-animation="fadeInUp" data-delay=".8s" >{$slider->get('perex')}</p>
                                 <!-- Hero-btn -->
                                 {if $slider['link']->getValue()}
