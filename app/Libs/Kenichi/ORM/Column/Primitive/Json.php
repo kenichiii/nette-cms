@@ -20,7 +20,9 @@ class Json extends Text
 	}
 	public function fromForm(mixed $data): Column
 	{
-		$this->value = htmlspecialchars_decode($data[$this->getColumn()]);
+		if ($data[$this->getColumn()] !== null) {
+			$this->value = htmlspecialchars_decode($data[$this->getColumn()]);
+		}
 		return $this;
 	}
 }

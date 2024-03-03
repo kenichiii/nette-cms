@@ -8,20 +8,28 @@ use App\Libs\Kenichi\ORM\Column\Primary\Password;
 use App\Libs\Repository\App\PageRepository;
 use App\Libs\Repository\App\SettingsRepository;
 use App\Libs\Repository\App\UserRepository;
+use App\Libs\Repository\SliderRepository;
 use App\Libs\Service\App\UserService;
 use Nette\Security\User;
 
 class InstallService
 {
 	public function __construct(
-		private array $appConfig,
-		private PageRepository $pageRepository,
+		private array              $appConfig,
+		private PageRepository     $pageRepository,
 		private SettingsRepository $settingsRepository,
-		private UserRepository $userRepository,
-		private User $user,
+		private UserRepository     $userRepository,
+		private User               $user,
+		private SliderRepository   $sliderRepository,
+		//private ClientInstallService $clientInstallService,
 	)
 	{
 
+	}
+
+	public function client()
+	{
+		return '';//$this->clientInstallService->install();
 	}
 
 	public function settings()
@@ -237,4 +245,26 @@ class InstallService
 
 		return $message;
 	}
+
+	public function sliders()
+	{
+		try {
+			$this->sliderRepository->getConn()->query('DROP TABLE ' . $this->sliderRepository->getTableRaw());
+		} catch (\Throwable $e) {
+
+		}
+		$message = '';
+		try {
+			$table = $this->sliderRepository->createTable();
+			$this->sliderRepository->getConn()->query($table);
+
+			$meesage = '&bull; HP SLiders installed <br>';
+
+		} catch (\Throwable $e) {
+			$message = '&bull; HP SLIDERS ERROR:' . $e->getMessage() . '<br>';
+		}
+		return $meesage;
+	}
+
+
 }

@@ -1,4 +1,55 @@
+{block scripts}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script>
+let activeSlider = 0;
+const count = $('.hp-slider').length;
+if (count > 1) {
+    $('.hp-slider').first().show()
+    setInterval(function () {
+        $('.hp-slider').eq(activeSlider).fadeOut();
+        activeSlider++;
+        if (activeSlider === count) {
+            activeSlider = 0;
+        }
+
+        $('.hp-slider').eq(activeSlider).fadeIn();
+    }, 5000);
+}
+</script>
+{/block}
 {block content}
 <h1 n:block=title>{$pageService->getCurrentPage()->get('title')}</h1>
 
-{$pageService->getCurrentPage()->get('content')|noescape}
+<div class="">
+    <div class="">
+        {foreach $sliders as $slider}
+            <!-- Single Slider -->
+            <div class="hp-slider" style="{first}{else}display:none{/first}">
+                <div class="slider-height d-flex align-items-center"style="background-repeat: no-repeat; background-size:100% 100%; background-image: url('/docs/homepage/sliders/{$slider->get('id')}/{$slider->get('photo')}');">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xl-6 col-lg-6 col-md-8 col-sm-10">
+                            <div class="hero__caption">
+                                {first}
+                                    <h1 n:block="title" data-animation="fadeInUp" data-delay=".6s">{$slider->get('title')}</h1>
+                                {else}
+                                    <h2 data-animation="fadeInUp" data-delay=".6s">{$slider->get('title')}</h2>
+                                {/if}
+                                <p data-animation="fadeInUp" data-delay=".8s" >{$slider->get('perex')}</p>
+                                <!-- Hero-btn -->
+                                {if $slider['link']->getValue()}
+                                    <div class="hero__btn">
+                                        <a href="{$slider->get('link')}" class="btn hero-btn mb-10"  data-animation="fadeInLeft" data-delay=".8s">{$slider->get('linkText')}</a>
+                                    </div>
+                                {/if}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        {/foreach}
+    </div>
+</div>
+
+{$content|noescape}

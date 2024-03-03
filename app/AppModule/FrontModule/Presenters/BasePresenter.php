@@ -14,13 +14,16 @@ class BasePresenter extends \App\AppModule\BasePresenter
 	protected Translator $translator;
 	protected SettingsService $settingsService;
 	protected PageService $pageService;
+	protected string $lang;
 
 	public function injectPages(PageService $pageService)
 	{
 		$this->pageService = $pageService;
+		$this->lang = $this->pageService->getLang();
 		$this->onStartup[] = function () {
 			$this->setLayout($this->pageService->getCurrentPage()['layout']->getValue());
 			$this->getTemplate()->pageService = $this->pageService;
+			$this->getTemplate()->lang = $this->pageService->getLang();
 		};
 	}
 

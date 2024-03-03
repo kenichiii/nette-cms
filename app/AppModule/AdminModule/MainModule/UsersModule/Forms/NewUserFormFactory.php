@@ -6,13 +6,12 @@ namespace App\AppModule\AdminModule\MainModule\UsersModule\Forms;
 
 use App\AppModule\AdminModule\Forms\FormFactory;
 use App\Libs\Repository\App\UserRepository;
+use App\Libs\Service\App\MailSender;
 use App\Libs\Service\App\SettingsService;
 use App\Libs\Service\App\Translator;
-use App\Libs\Service\MailSender;
 use Nette;
 use Nette\Application\UI\Form;
 use Tracy\Debugger;
-
 
 
 final class NewUserFormFactory

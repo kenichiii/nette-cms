@@ -19,7 +19,7 @@ services:
 
 	- App\Libs\Facade\UserFacade
 
-	- App\Libs\Service\MailSender
+	- App\Libs\Service\App\MailSender
 	- App\Libs\Service\App\CacheService(Nette\Caching\Cache(namespace: 'default'))
 	- App\Libs\Service\App\LanguageDetector
 	- App\Libs\Service\App\Translator
@@ -28,6 +28,12 @@ services:
 	- App\Libs\Service\App\UserService
 	- App\Libs\Service\App\TranslationsService
 
-	- App\Libs\Repository\App\PageRepository
-	- App\Libs\Repository\App\SettingsRepository
-	- App\Libs\Repository\App\UserRepository
+	- App\Libs\Repository\App\PageRepository(%appConfig%)
+	- App\Libs\Repository\App\SettingsRepository(%appConfig%)
+	- App\Libs\Repository\App\UserRepository(%appConfig%)
+
+
+	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Slider\AddFormFactory
+	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Slider\EditFormFactory
+	- App\Libs\Repository\SliderRepository(%appConfig%)
+

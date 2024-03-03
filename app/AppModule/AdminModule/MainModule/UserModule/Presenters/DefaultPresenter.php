@@ -7,6 +7,7 @@ namespace App\AppModule\AdminModule\MainModule\UserModule\Presenters;
 use App\AppModule\AdminModule\MainModule\UserModule\Forms\AccountSettingsFormFactory;
 use App\AppModule\AdminModule\MainModule\UserModule\Forms\ChangePasswordFormFactory;
 use App\Libs\Repository\App\UserRepository;
+use App\Libs\Utils\Utils;
 use Nette\Application\UI\Form;
 use Nette;
 
@@ -45,9 +46,10 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 	public function actionUpload()
 	{
 		$file_name = $_FILES['file_to_upload']['name'] ?? null;
+		$file_name = Utils::nice_uri($file_name);
 		$file_temp_location = $_FILES['file_to_upload']['tmp_name'] ?? null;
 		if (!is_dir("docs/users/{$this->getUser()->getId()}")) {
-			mkdir("docs/users/{$this->getUser()->getId()}");
+			mkdir("docs/users/{$this->getUser()->getId()}",0777, true);
 		}
 		if (!$file_temp_location) {
 			$this->flashMessage('ERROR: No file has been selected', 'danger');

@@ -57,7 +57,7 @@ class SelectQuery
 	public function fetchData(): array
 	{
 		$query []= 'SELECT '
-			. implode(',',$this->getDataColumns())
+			. implode(' , ',$this->getDataColumns())
 			. ' FROM '.$this->getRepository()->getTable()
 			. ' ' . $this->whereStart
 		;
@@ -101,8 +101,7 @@ class SelectQuery
 
 		foreach ($this->getRepository()->getConn()->fetchAll($query) as $key => $value) {
 			$bean = $this->getRepository()->getModelClassName();
-			$model = new $bean();
-			$model->setRepository($this->getRepository());
+			$model = new $bean(null, $this->getRepository());
 			$data [$key]=  $model;
 			$data [$key]->fromDb($value);
 		}
@@ -158,8 +157,7 @@ class SelectQuery
 
 		if ($data) {
 			$bean = $this->getRepository()->getModelClassName();
-			$model = new $bean();
-			$model->setRepository($this->getRepository());
+			$model = new $bean(null, $this->getRepository());
 			$model->fromdb($data);
 
 			return $model;
@@ -192,9 +190,8 @@ class SelectQuery
 
 		if ($data) {
 			$bean = $this->getRepository()->getModelClassName();
-			$model = new $bean();
+			$model = new $bean(null, $this->getRepository());
 			$model->fromdb($data);
-			$model->setRepository($this->getRepository());
 			return $model;
 		}
 
@@ -385,7 +382,7 @@ class SelectQuery
 	 */
 	public function orderBy(string $name, string $orderby): SelectQuery
 	{
-		$this->orderBy = ' ORDER BY '.$this->getRepository()->getAlias($name).' '.$orderby;
+		$this->orderBy = ' ORDER BY '.$this->getRepository()->getAlias($name).' '.$orderby.' ';
 		return $this;
 	}
 
@@ -586,7 +583,7 @@ class SelectQuery
 		$columns = [];
 		foreach ($this->getModel()->getColumnsRaw() as $column) {
 			if ($column->isInData()) {
-				$columns []= $column->getColumnName();
+				$columns []= $this->getRepository()->getAlias($column->getColumnName());
 			}
 		}
 

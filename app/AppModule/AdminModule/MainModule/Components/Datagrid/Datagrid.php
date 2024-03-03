@@ -184,7 +184,8 @@ final class Datagrid extends Control
 
 		foreach ($this->conditions as $condition) {
 			$select->andWhere(
-				$condition['column'].$condition['op'].$this->repository->getModel()[$condition['column']]->getDibiModificator()
+				$condition['column'].$condition['op'].$this->repository->getModel()[$condition['column']]->getDibiModificator(),
+				$condition['value']
 			);
 		}
 
@@ -295,21 +296,27 @@ final class Datagrid extends Control
 					";
 				break;
 			case 'radio':
-				return "<input class='searchRadio' type='radio' name='{$column->getName()}' value='all' id='{$this->getId()}-{$column->getName()}-all'"
-							.('all' == $this->filters[$column->getName()] || !$this->filters[$column->getName()] ? 'checked' : '').">"
-						." <label for='{$this->getId()}-{$column->getName()}-all'>{$this->translator->translate('all')}</label>"
-						."<span class='".('yes' == $this->filters[$column->getName()] ? 'filter-on' : '')."'>
-						 	<input class='searchRadio' type='radio' name='{$column->getName()}' value='yes' 
-						 			id='{$this->getId()}-{$column->getName()}-yes' 
-						 			{('yes' == $this->filters[$column->getName()] ? 'checked' : '')}>"
-						." 	<label for='{$this->getId()}-{$column->getName()}-yes'>{$this->translator->translate('yes')}/label>
-						 </span>"
-						."<span class='".('no' == $this->filters[$column->getName()] ? 'filter-on' : '')."'>
-						 	<input class='searchRadio' type='radio' name='{$column->getName()}' value='no' 
+
+				return "<duv class='d-flex'><div class='form-check'> 
+ 						<label  class='form-check-label' for='{$this->getId()}-{$column->getName()}-all'>"
+					.	"<input class='searchRadio form-check-input' type='radio' name='{$column->getName()}' value='all' id='{$this->getId()}-{$column->getName()}-all'"
+					.('all' == $this->filters[$column->getName()] || !$this->filters[$column->getName()] ? 'checked' : '').">"
+					. "{$this->translator->translate('all')}</label></div>"
+					."<div class='form-check'> 
+						 	<label class='form-check-label' for='{$this->getId()}-{$column->getName()}-yes'>
+						 		<input class='searchRadio form-check-input' type='radio' name='{$column->getName()}' value='yes' 
+						 			id='{$this->getId()}-{$column->getName()}-yes'"
+					. ('yes' === $this->filters[$column->getName()] ? 'checked' : '').">"
+					." 	{$this->translator->translate('yes')}
+						 			</label></div>"
+					."<div class='form-check'> <label class='form-check-label' for='{$this->getId()}-{$column->getName()}-no'>
+						 	<input class='searchRadio form-check-input' type='radio' name='{$column->getName()}' value='no' 
 						 	 		id='{$this->getId()}-{$column->getName()}-no'"
-						.			('no' == $this->filters[$column->getName()] ? 'checked' : '').">"
-						." 	<label for='{$this->getId()}-{$column->getName()}-no'>{$this->translator->translate('no')}</label>
-						 </span>";
+					.  ('no' == $this->filters[$column->getName()] ? 'checked' : '').">"
+					." 	{$this->translator->translate('no')}
+						 	 		</label>
+						 </div>
+						 </div>";
 				break;
 			case 'nrelationSelect':
 			case 'relationSelect':
@@ -356,8 +363,8 @@ final class Datagrid extends Control
 				break;
 			case 'radio':
 				return $record->get($column->getName())->getValue() === 1
-					? '<span class="bg-primary">'.$this->translator->translate('Yes').'</span>'
-					: '<span class="bg-secondary">'.$this->translator->translate('No').'</span>';
+					? '<span class="btn-primary p-2">'.$this->translator->translate('Yes').'</span>'
+					: '<span class="btn-secondary p-2">'.$this->translator->translate('No').'</span>';
 				break;
 			case 'select':
 				return htmlspecialchars($column->getOptions()[$record->get($column->getName())->getValue()] ?? '');
@@ -372,6 +379,7 @@ final class Datagrid extends Control
 
 	public function render(): void
 	{
+
 		if (!$this->getPresenter()->isAjax() || !$this->getParameter('fulltext')) {
 			$this->loadData($this->sessionSection->get('data') ?? []);
 		}

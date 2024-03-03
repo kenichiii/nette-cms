@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App\Libs\Service;
+namespace App\Libs\Service\App;
 
-use App\Libs\Service\App\SettingsService;
-use App\Libs\Service\App\Translator;
 use Nette;
 
 final class MailSender
@@ -49,9 +47,9 @@ final class MailSender
 		$mail->CharSet = 'UTF-8';
 		$mail->Encoding = 'base64';
 
-		if (is_file('../private/key.private')) {
+		if (is_file('../private/DKIM/key.private')) {
 			$mail->DKIM_domain = $_SERVER['HTTP_HOST'];
-			$mail->DKIM_private = '../private/key.private'; // Make sure to protect the key from being publicly accessible!
+			$mail->DKIM_private = '../private/DKIM/key.private'; // Make sure to protect the key from being publicly accessible!
 			$mail->DKIM_selector = $this->settings['dkim_selector'];
 			$mail->DKIM_passphrase = $this->settings['dkim_password'];
 			$mail->DKIM_identity = $mail->From;

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Libs\Kenichi\ORM;
 
+use App\Libs\Service\App\SettingsService;
 use Dibi;
 
 abstract class Repository
@@ -14,7 +15,10 @@ abstract class Repository
 	protected ?string $table = null;
 	protected ?string $alias = null;
 
-	public function __construct(protected Dibi\Connection $database) {
+	public function __construct(
+		protected array $appConfig,
+		protected Dibi\Connection $database,
+	) {
 
 	}
 
@@ -45,8 +49,7 @@ abstract class Repository
 	{
 		if ($this->model === null) {
 			$class = $this->getModelClassName();
-			$this->model = new $class();
-			$this->model->setRepository($this);
+			$this->model = new $class(null, $this);
 		}
 		return $this->model;
 	}
@@ -185,11 +188,12 @@ abstract class Repository
 			$this->table = preg_replace('/(Repository)$/', '', end($class));
 		}
 
-		return $this->table;
+		return $this->appConfig['dbPrefix'].$this->table;
 	}
 
 	public function insert(array $data): int
 	{
+
 			$this->getConn()->insert($this->getTableRaw(), $data)->execute();
 
 			return $this->getConn()->getInsertId();
@@ -675,7 +679,7 @@ abstract class Repository
 
 	public function getByPk($pk): ?Model
 	{
-		return $this->getSelect()->fetchByPk($pk);
+		return $this->getSelect()->fetchByPk((int)$pk);
 	}
 
 	public function getByUri($uri): ?Model

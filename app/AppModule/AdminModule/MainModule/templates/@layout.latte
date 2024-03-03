@@ -39,7 +39,7 @@
 				<div class="profile-desc">
 					<div class="profile-pic">
 						<div class="count-indicator">
-							<img class="img-xs rounded-circle " src="/{$settingsService->getAppConfig()['subdir']}docs/users/{$user->getIdentity()->photo ? $user->getId() .'/' . $user->getIdentity()->photo : '_default/avatar.jpg'}" alt="">
+							<img class="img-xs rounded-circle " src="/{$settingsService->getAppConfig()['subdir']}{$user->getIdentity()->photo ? 'docs/users/'. $user->getId() .'/' . $user->getIdentity()->photo : 'assets/admin/images/users/avatar.jpg'}" alt="">
 							<span class="count bg-success"></span>
 						</div>
 						<div class="profile-name">
@@ -70,17 +70,6 @@
 								<p class="preview-subject ellipsis mb-1 text-small">{_'Change Password'}</p>
 							</div>
 						</a>
-						<!--div class="dropdown-divider"></div>
-						<a href="#" class="dropdown-item preview-item">
-							<div class="preview-thumbnail">
-								<div class="preview-icon bg-dark rounded-circle">
-									<i class="mdi mdi-calendar-today text-success"></i>
-								</div>
-							</div>
-							<div class="preview-item-content">
-								<p class="preview-subject ellipsis mb-1 text-small">{_'To-do list'}</p>
-							</div>
-						</a-->
 					</div>
 				</div>
 			</li>
@@ -102,6 +91,37 @@
               </span>
 					<span class="menu-title">{_'WWW Pages'}</span>
 				</a>
+			</li>
+			<li class="nav-item menu-items">
+				<a class="nav-link" data-toggle="collapse" href="#homepage" aria-expanded="true" aria-controls="homepage">
+              <span class="menu-icon">
+                <i class="mdi mdi-home"></i>
+              </span>
+					<span class="menu-title">{_'Homepage'}</span>
+					<i class="menu-arrow"></i>
+				</a>
+				<div class="collapse show" id="homepage">
+					<ul class="nav flex-column sub-menu">
+						<li class="nav-item"> <a class="nav-link" n:href=":App:Admin:Main:Homepage:Sliders:, sliderSection:'sliders'">{_'HP Sliders'}</a></li>
+						<!--li class="nav-item"> <a class="nav-link" n:href=":App:Admin:Main:Homepage:Sliders:, sliderSection:'panels'">{_'HP Panels'}</a></li-->
+					</ul>
+				</div>
+			</li>
+			<li class="nav-item menu-items">
+				<a class="nav-link" data-toggle="collapse" href="#na" aria-expanded="true" aria-controls="na">
+              <span class="menu-icon">
+                <i class="mdi mdi-factory"></i>
+              </span>
+					<span class="menu-title">{_'Narcotics Anonymous'}</span>
+					<i class="menu-arrow"></i>
+				</a>
+				<div class="collapse show" id="na">
+					<ul class="nav flex-column sub-menu">
+						<li class="nav-item"> <a class="nav-link" n:href=":App:Admin:Main:NA:Group:">{_'Groups'}</a></li>
+						<li class="nav-item"> <a class="nav-link" n:href=":App:Admin:Main:NA:Meeting:">{_'Meetings'}</a></li>
+						<li class="nav-item"> <a class="nav-link" n:href=":App:Admin:Main:NA:DailyThough:">{_'Daily Thoughs'}</a></li>
+					</ul>
+				</div>
 			</li>
 			<li class="nav-item menu-items">
 				<a class="nav-link" n:href=":App:Admin:Main:Users:Default:">
@@ -153,7 +173,7 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link" id="profileDropdown" href="#" data-toggle="dropdown">
 							<div class="navbar-profile">
-								<img class="img-xs rounded-circle" src="/{$settingsService->getAppConfig()['subdir']}docs/users/{$user->getIdentity()->photo ? $user->getId() .'/' . $user->getIdentity()->photo : '_default/avatar.jpg'}" alt="">
+								<img class="img-xs rounded-circle" src="/{$settingsService->getAppConfig()['subdir']}{$user->getIdentity()->photo ? 'docs/users/'. $user->getId() .'/' . $user->getIdentity()->photo : 'assets/admin/images/users/avatar.jpg'}" alt="">
 								<p class="mb-0 d-none d-sm-block navbar-profile-name">{$user->getIdentity()->name ?: $user->getIdentity()->email}</p>
 								<i class="mdi mdi-menu-down d-none d-sm-block"></i>
 							</div>

@@ -84,10 +84,10 @@ class PageModel extends Model
 		$this->set($col->getColumn(),
 			(
 				$this->getRepository()->getConn()->fetchSingle(
-					"select max({$col->getColumnName()}) 
-                                 from ".$this->getRepository()->getTableRaw()." 
-                                where {$parent->getColumnName()}=".$parent->getDibiModificator()
-								." group by ".$this->getPrimaryKey()->getColumnName(),
+					"select max([{$col->getColumnName()}]) 
+                                 from [".$this->getRepository()->getTableRaw()."] 
+                                where [{$parent->getColumnName()}]=".$parent->getDibiModificator()
+								." group by [".$this->getPrimaryKey()->getColumnName().']',
 					$parent->getValue() )
 				+ 1
 			)

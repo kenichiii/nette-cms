@@ -8,7 +8,11 @@ class TextpagePresenter extends BasePresenter
 {
 	public function renderDefault(string $id)
 	{
-		if (!$this->pageService->getCurrentPage()['content']->getValue()) {
+		$content = $this->pageService->getPageContent(
+			$this->pageService->getCurrentPage()->get('id')->getValue()
+		);
+
+		if (!$content) {
 			$child = null;
 			foreach ($this->pageService->getActivePages() as $page) {
 				if ($page['parent']->getValue() === $this->pageService->getCurrentPage()['id']->getValue()) {
@@ -21,6 +25,6 @@ class TextpagePresenter extends BasePresenter
 			}
 		}
 
-		$this->getTemplate()->id = $id;
+		$this->getTemplate()->content = $content;
 	}
 }

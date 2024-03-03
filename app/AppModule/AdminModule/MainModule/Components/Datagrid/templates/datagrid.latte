@@ -98,7 +98,7 @@
             </table>
         </div>
             {if !count($grid->getRecords())}
-                <h4 class="mt-5">{_'There are cureently no records.'}</h4>
+                <h4 class="mt-5 error">{_'There are cureently no records.'}</h4>
             {/if}
 
         <div class="row mt-3 mb-5">
@@ -117,7 +117,7 @@
                                 <a class="page-link" href="#">{$i}</a>
                             </li>
                         {/for}
-                        {if $grid->maxPage < $grid->pages && $grid->maxPage > 1}
+                        {if $grid->maxPage < $grid->pages}
                             <li class="disabled page-item" onclick="return false">
                                 <a class="page-link" href="#">..</a>
                             </li>&nbsp;

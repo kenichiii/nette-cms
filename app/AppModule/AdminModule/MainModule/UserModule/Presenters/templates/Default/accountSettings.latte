@@ -3,29 +3,9 @@
         document.getElementById('file_to_upload').addEventListener('change', (event) => {
             window.selectedFile = event.target.files[0];
             $('#image_preview').attr('src', URL.createObjectURL(window.selectedFile));
-            uploadFile(window.selectedFile);
-
-
+            uploadFile(window.selectedFile, $('#foto-upload-url').val());
         });
 
-
-        function uploadFile(file) {
-            $('.spinner').show();
-            var formData = new FormData();
-            formData.append('file_to_upload', file);
-            naja.makeRequest('POST', $('#foto-upload-url').val(),formData)
-                .then((payload) => { /* process payload */
-                    $('.spinner').hide();
-                    $('#image_preview').attr('src', '');
-                })
-                .catch((error) => { /* handle error */
-                    $('.spinner').hide();
-                    $('#image_preview').attr('src', '');
-                });
-        }
-
-
-        // Getting our drop zone by ID
         const dropZone = document.getElementById('drop_zone');
 
         if (window.FileList && window.File) {
@@ -47,7 +27,7 @@
                 // Getting the file from uploaded files list (only one file in our case)
                 window.selectedFile = files[0];
                 $('#image_preview').attr('src', URL.createObjectURL(window.selectedFile));
-                uploadFile(window.selectedFile);
+                uploadFile(window.selectedFile, $('#foto-upload-url').val());
                 // Assigning the name of file to our "file_name" element
                 //document.getElementById('file_name').innerHTML = window.selectedFile.name;
             });
@@ -72,7 +52,7 @@
 
 <div class="d-flex mb-3">
     <div class="mr-4">
-        <img class="img-lg rounded-circle " src="/{$settingsService->getAppConfig()['subdir']}docs/users/{$user->getIdentity()->photo ? $user->getId() .'/' . $user->getIdentity()->photo : '_default/avatar.jpg'}" alt="">
+        <img class="img-lg rounded-circle " src="/{$settingsService->getAppConfig()['subdir']}{$user->getIdentity()->photo ? 'docs/users/'. $user->getId() .'/' . $user->getIdentity()->photo : 'assets/admin/images/users/avatar.jpg'}" alt="">
     </div>
     <div class="profile-name">
         <h4 class="mb-0 pt-3 font-weight-normal">{$user->getIdentity()->name ?: $user->getIdentity()->email}</h4>
@@ -115,7 +95,7 @@
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">{_'Account Photo'}</h4>
-                <div class="justify-content-lg-center d-flex">
+                <div class="justify-content-lg-center d-flex file-upload">
                     <div class="spinner mt-5" style="display: none">
                         <div class="loading">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4335 4335" width="100" height="100">

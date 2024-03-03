@@ -12,7 +12,6 @@ use Nette\Caching\Cache;
 class SettingsService implements \ArrayAccess
 {
 	protected ?array $settings = null;
-	public const  cacheExpiration = '5 hours';
 
 	public function __construct(
 		protected array $appConfig,
@@ -61,8 +60,7 @@ class SettingsService implements \ArrayAccess
 	{
 		$key = "settings";
 		if ($this->settings === null) {
-			$this->settings = $this->cacheService->getCache()->load($key, function (&$dependencies) {
-				$dependencies[Cache::Expire] = self::cacheExpiration;
+			$this->settings = $this->cacheService->getCache()->load($key, function () {
 				$data = $this->settingsRepository->getSelect()->fetchData();
 				foreach ($data as $key => $setting) {
 					$data[$key]->setRepository(null);

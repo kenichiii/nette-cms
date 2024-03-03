@@ -49,23 +49,31 @@ after install delete `app/AdminModule/InstallModule`
 DEVELOPMENT
 -------
 
+Phase 0 [COMPLETED]
+--------
+- basic admin 
+
 Phase 1
 ------
+- user
+  - add created
+  - add lastlogin
+- page
+  - add updated, created
 - Admin
+  - www pages move code from presenter to service
   - forms
     - with loader
     - better error handling for ajax
     - form-body render
   - language detector
-- App
-  - add cache for pages, settings
-  - pages list without content -> pageService->getPageContent(id)
+  - grid
+    - better paging
 - ORM
   - allow uppercase in column name
   - repository alter table
   - relations
   - model(group) __call -> getters, setters
-  - automatic forms creation
   - validation function
 
 Phase 2 
@@ -82,7 +90,8 @@ Phase 2
  - Front
    - user -> sign(fb,google), profile
    - breadcrumbs
-
+ - ORM
+   - automatic forms creation
  - App
    - translations
        - front from file

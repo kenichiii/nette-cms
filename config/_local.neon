@@ -16,6 +16,8 @@ parameters:
             adminEmail: test@test.cz
             adminPassword: '12345'
 
+        dbPrefix: 'cms_'
+
 
 dibi:
 	host: localhost

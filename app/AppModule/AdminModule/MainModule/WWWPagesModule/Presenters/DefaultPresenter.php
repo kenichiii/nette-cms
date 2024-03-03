@@ -73,8 +73,9 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		$this->getTemplate()->selectTab = $this->getParameter('selectTab') ?? '#basic';
 	}
 
-	public function actionAddPage()
+	public function renderAddPage()
 	{
+
 		$parent = (int) $this->getParameter('parent');
 		$title = $this->getParameter('title');
 		$lang = $this->getParameter('lang');
@@ -111,7 +112,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 
 		if ($this->isAjax()) {
 			$this->flashMessage('Page was successfully added', 'success');
-			$this->getPayload()->id = $id;
+			$this->getPayload()->id = $id??0;
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
 		}
@@ -201,8 +202,8 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 			if (isset($prev)) {
 
 				$this->pageRepository->getConn()->query(
-					"update " . $this->pageRepository->getTableRaw()
-					. " set rank=rank+1 where rank > %i and parent=%i",
+					"update [" . $this->pageRepository->getTableRaw()
+					. "] set [rank]=[rank]+1 where [rank] > %i and [parent]=%i",
 					$prev_rank, $prev_parentid
 				);
 
@@ -213,7 +214,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 
 				$this->pageRepository->getConn()->query(
 					"update " . $this->pageRepository->getTableRaw()
-					. " set rank=%i,parent=%i where id=%i",
+					. " set [rank]=%i,[parent]=%i where [id]=%i",
 					1, $this->getParameter('parentId'), $curr->get('id')->getValue()
 				);
 			}

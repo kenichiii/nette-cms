@@ -17,7 +17,7 @@ class DevModePresenter extends Presenter
 
 	public function renderDefault()
 	{
-		if ($_GET['basic_auth']
+		if (isset($_GET['basic_auth'])
 			&& $_GET['basic_auth'] === $this->settingsService->getAppConfig()['devModePwd']
 		) {
 			$this->session->getSection('_dev_mode')->set('pwd', true);

@@ -18,8 +18,6 @@ class PageService
 	protected array $tree = [];
 	protected string $slug = '';
 
-	public const  cacheExpiration = '5 hours';
-
 	public function __construct(
 		protected array $appConfig,
 		protected PageRepository $pageRepository,
@@ -130,12 +128,12 @@ class PageService
 	 * @throws \App\Libs\Kenichi\ORM\Exception
 	 * @throws \Dibi\Exception
 	 */
-	public function getActivePages(?string $lang = null): array
+	public function getActivePages(): array
 	{
+		$lang = $this->getLang();
 		$key = "pages-active-{$lang}";
 		if ($this->activePages === null) {
-			$this->activePages = $this->cacheService->getCache()->load($key, function (&$dependencies) use ($lang) {
-				$dependencies[Cache::Expire] = self::cacheExpiration;
+			$this->activePages = $this->cacheService->getCache()->load($key, function () use ($lang) {
 				$select = $this->pageRepository->getSelect();
 				$this->activePages = $select->addActiveCond()
 					->addDeletedCond()
@@ -156,8 +154,7 @@ class PageService
 	public function getPageContent(int $id): string
 	{
 		$key = "page-content-{$id}";
-		return $this->cacheService->getCache()->load($key, function (&$dependencies) use ($id) {
-			$dependencies[Cache::Expire] = self::cacheExpiration;
+		return $this->cacheService->getCache()->load($key, function () use ($id) {
 			$page = $this->pageRepository->getByPk($id);
 			return $page->get('content')->getValue();
 		});

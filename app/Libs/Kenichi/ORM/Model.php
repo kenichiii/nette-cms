@@ -15,7 +15,7 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 	const FORM_ACTION_EDIT = 'edit';
 
 	protected ?string $repositoryClassName = null;
-	protected ?Repository $repository = null;
+	protected ?Repository $repository;
 
 	protected array $relations = [];
 
@@ -27,7 +27,13 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 	protected string $relationFromThisColumnName;
 	protected string $relationToAnotherModelColumnName;
 
-	public function __construct(?Model $class = null) {
+
+
+	public function __construct(
+		?Model $class = null,
+		?Repository $repository = null,
+	) {
+		$this->repository = $repository;
 		$this->parentModel = $class;
 		$this->initModel();
 	}

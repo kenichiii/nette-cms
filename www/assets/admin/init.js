@@ -18,6 +18,7 @@ class NavbarExtension {
             return;
         }
         $('.navbar-nav').find('.spinner').hide();
+        $(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
     }
     before_event(event) {
         console.log(event.target)
@@ -32,3 +33,16 @@ class NavbarExtension {
 }
 naja.registerExtension(new NavbarExtension());
 
+function uploadFile(file, url) {
+    $('.file-upload .spinner').show();
+    var formData = new FormData();
+    formData.append('file_to_upload', file);
+    formData.append('action', 'fileUpload');
+    naja.makeRequest('POST', url,formData)
+        .then((payload) => { /* process payload */
+            $('.file-upload .spinner').hide();
+        })
+        .catch((error) => { /* handle error */
+            $('.file-upload .spinner').hide();
+        });
+}

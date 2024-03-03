@@ -25,7 +25,7 @@ class UserModel extends Model
 		$this->modeladd(new Phone());
 		$this->modeladd(new Password());
 		$roles = new Json();
-		$roles->setDefault('["user"]');
+		//$roles->setDefault('["user"]');
 		$this->modeladd('roles', $roles);
 		$this->modeladd('role', new Varchar());
 		$this->modeladd('forgottenPasswordToken', new Varchar());

@@ -56,10 +56,10 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 						'title' => $this->translator->translate('Photo'),
 						'render' => function($record, $photo) {
 							return "<img class='img-xs rounded-circle' src='/"
-								. ($this->settingsService->getAppConfig()['subdir']."docs/users/"
+								. ($this->settingsService->getAppConfig()['subdir']
 								. ($record->get($photo->getName())->getValue()
-										? $record->get('id')->getValue() ."/" .$record->get($photo->getName())->getValue()
-										: "_default/avatar.jpg")
+										? "docs/users/".$record->get('id')->getValue() ."/" .$record->get($photo->getName())->getValue()
+										: "assets/admin/images/users/avatar.jpg")
 								)."'>";
 						},
 					],
