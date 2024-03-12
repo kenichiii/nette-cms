@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\AppModule\AdminModule\MainModule\WWWPagesModule\Presenters;
 
 use App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\BasicFormFactory;
+use App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\ContentFormFactory;
 use App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\SystemFormFactory;
 use App\Libs\Repository\App\PageRepository;
 use App\Libs\Service\App\CacheService;
@@ -18,6 +19,7 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		private PageRepository $pageRepository,
 		private BasicFormFactory $basicFormFactory,
 		private SystemFormFactory $systemFormFactory,
+		private ContentFormFactory $contentFormFactory,
 		private CacheService $cacheService,
 	)
 	{
@@ -53,6 +55,22 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 			}
 			$this->getPayload()->afterPageForm = true;
 			$this->getPayload()->selectTab = '#system';
+			$this->redrawControl('flashMessages');
+			$this->redrawControl('contentWrapper');
+		}, (int) ($_POST['page'] ?? $this->getParameter('page')));
+	}
+
+	protected function createComponentContentForm(): Form
+	{
+		return $this->contentFormFactory->create(function (bool $succ): void {
+			if  ($succ) {
+				$this->flashMessage($this->translator->translate(
+					'Page content has been successfully changed'),
+					'success'
+				);
+			}
+			$this->getPayload()->afterPageForm = true;
+			$this->getPayload()->selectTab = '#page-content';
 			$this->redrawControl('flashMessages');
 			$this->redrawControl('contentWrapper');
 		}, (int) ($_POST['page'] ?? $this->getParameter('page')));
@@ -156,19 +174,6 @@ class DefaultPresenter extends \App\AppModule\AdminModule\MainModule\BasePresent
 		$this->redrawControl('flashMessages');
 		$this->redrawControl('contentWrapper');
 		$this->redirect('pages');
-	}
-
-	public function actionContent()
-	{
-		$page = $this->pageRepository->getByPk((int)$_POST['page']);
-		$page->set('content', $_POST['content']);
-		$page->update();
-		$this->cacheService->removeKey('page-content'.$page->get('id')->getValue());
-		$this->flashMessage($this->translator->translate(
-			'Page has been successfully changed'),
-			'success'
-		);
-		$this->redirect('pages',['page' => $_POST['page'], 'selectTab' => '#page-content']);
 	}
 
 	public function actionMove()

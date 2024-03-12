@@ -84,10 +84,7 @@
                     <td class="actions text-nowrap">
                         <div class="d-flex">
                         {foreach $grid->getActions() as $name => $action}
-                            {first}<a class="{$name} {$action['class'] ?? ''}" href="{if $action['link']}{plink $action['link'], id: (string)$record->get('id')->getValue(), ...$action['args']}{else}#{(string)$record->get('id')->getValue()}{/if}">{$action['title']|noescape}</a>
-                            {else}
-                                   <a class="{$name} {$action['class'] ?? ''}" href="{if $action['link']}{plink $action['link'], id: (string)$record->get('id')->getValue(), ...$action['args']}{else}#{(string)$record->get('id')->getValue()}{/if}">{$action['title']|noescape}</a>
-                            {/first}
+                            <a class="{$name} {$action['class'] ?? ''}" href="{plink $action['link'], id: (string)$record->get('id')->getValue(), ...$action['args']}">{$action['title']|noescape}</a>
                         {/foreach}
                         </div>
                     </td>

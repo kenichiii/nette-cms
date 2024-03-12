@@ -23,11 +23,20 @@ class Date extends Column
 
         return $this;
     }
-    
-    public function getToDate($f='j.n.Y')
+
+	public function getValue(): mixed
+	{
+		if (is_object($this->value)) {
+			return $this->value->__toString();
+		}
+
+		return $this->value;
+	}
+
+	public function getToDate($f='j.n.Y')
     {
         if(!$this->getValue()) return null;
-        return \Date( $f, $this->getToTime($this->getValue()));
+        return \Date( $f, $this->getToTime());
     }
     
     public function getToTime()

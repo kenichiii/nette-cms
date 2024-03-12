@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\AppModule\FrontModule\Presenters;
 
+use App\Libs\NA\Repository\DailyThoughRepository;
+use App\Libs\Service\App\CacheService;
 use App\Libs\Service\App\PageService;
 use App\Libs\Service\App\SettingsService;
 use App\Libs\Service\App\Translator;
@@ -15,6 +17,26 @@ class BasePresenter extends \App\AppModule\BasePresenter
 	protected SettingsService $settingsService;
 	protected PageService $pageService;
 	protected string $lang;
+
+	public function redirectByPointer(string $pointer, ?array $params = null): void
+	{
+		header(
+			'Location: ' . $this->pageService->getPageUrl($this->pageService->getPageByPointer($pointer), $params),
+			true,
+			301
+		);
+		exit;
+	}
+
+	public function getParam(string $name): ?string
+	{
+		$params = $this->getParameter('params');
+		if (isset($params[$name])) {
+			return $params[$name];
+		}
+
+		return null;
+	}
 
 	public function injectPages(PageService $pageService)
 	{

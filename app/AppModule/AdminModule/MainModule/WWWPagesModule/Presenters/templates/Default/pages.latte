@@ -6,7 +6,7 @@
 
 {block content}
 <input type='hidden' id='lang' value='{$lang}'>
-<input type='hidden' id='subdir' value='{$settingsService->getAppConfig()['subdir']}'>
+
 <input type='hidden' id='admin-pages-tree-url' value='{link pagesTree}'>
 <input type='hidden' id='admin-pages-page-url' value='{link pages}'>
 <input type='hidden' id='admin-pages-add-url' value='{link addPage}'>
@@ -43,7 +43,7 @@
             <div class="card-body" id="page-window">
                 <div class="page-content-wrraper">
                 {snippet page}
-
+                   <div id="page-detail">
                     {if isset($page)}
                         <h4 class="card-title" id="page-title">{$page['title']}</h4>
                         <!-- Nav tabs -->
@@ -101,13 +101,16 @@
                                 {/form}
                             </div>
                             <div class="tab-pane container {$selectTab === '#page-content' ? 'active' : 'fade'}" id="page-content">
-                                <form action="{link content}" method="post">
-                                    <input type="hidden" name="page" value="{$page['id']->getValue()}">
-                                    <textarea name="content" id="content">{$page['content']->getValue()}</textarea>
-                                    <div>
-                                        <button  type="submit" class="btn btn-primary">{_'Save'}</button>
+                                {form contentForm class => ajax}
+                                    <ul class=error n:ifcontent>
+                                        <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                                    </ul>
+                                    <textarea id="content">{$page['content']->getValue()}</textarea>
+                                    <textarea style="display: none;" n:name=content id="content_hidden">{$page['content']->getValue()}</textarea>
+                                    <div class="mt-3">
+                                        <button n:name=send type="submit" class="btn btn-primary">{_'Save'}</button>
                                     </div>
-                                </form>
+                                {/form}
                             </div>
                             <div class="tab-pane container {$selectTab === '#system' ? 'active' : 'fade'}" id="system">
                                 {form systemForm class => ajax}
@@ -147,7 +150,7 @@
                     {else}
                         {_'Choose page to edit'}
                     {/if}
-
+                   </div>
                 {/snippet}
                 </div>
                 <div class="justify-content-lg-center d-flex">

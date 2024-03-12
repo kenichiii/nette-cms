@@ -1,6 +1,9 @@
 {block content}
 
-<h1 n:block=title>{$pageService->getCurrentPage()->get('title')}</h1>
+<article  id="webapp-page-{$pageService->getCurrentPage()->get('pointer')}" class="webapp-main-content section-padding">
+    <div class="container">
+        <h1 class="" n:block=title>{$pageService->getCurrentPage()->get('title')}</h1>
 
-{$content|noescape}
-
+        {$content|noescape}
+    </div>
+</article>

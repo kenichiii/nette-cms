@@ -34,8 +34,9 @@ $(function(){
 
 
     $("#view-lang").change(function(){
+        clearInterval(contentInterval)
         $("#tree").jstree('refresh',-1);
-        $("#page-window").html('Choose page to edit');
+        $("#page-detail").html('Choose page to edit');
     });
 
 
@@ -158,7 +159,7 @@ $(function(){
 
                 naja.makeRequest('POST', $('#admin-pages-delete-url').val(),{"pageId" : this.id.replace("node_","")})
                     .then((payload) => { /* process payload */
-                        $("#page-window").html('Choose page to edit');
+                        $("#page-detail").html('Choose page to edit');
                     })
                     .catch((error) => { /* handle error */
                     });
@@ -172,7 +173,7 @@ $(function(){
             }
 
             if (data.rslt.obj.attr("id") == undefined) {
-                $("#page-window").html('Page not exists in database');
+                $("#page-detail").html('Page not exists in database');
             }
             else {
                 loadPage(data.rslt.obj.attr("id").replace("node_", ""));
@@ -197,7 +198,7 @@ function loadPage(id) {
         .catch((error) => { /* handle error */
         });
 }
-
+let contentInterval;
 function activate_page_listeners() {
     //activateFotoFormListener();
     //gallerypageadmin();
@@ -238,17 +239,28 @@ function activate_page_listeners() {
                                 */
     });
     $(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
+    setTimeout(function () {
+        contentInterval = setInterval(function () {
+            if ($("#content_hidden") && $('#content').tinymce() && $('#content').tinymce().getContent instanceof Function) {
+                $("#content_hidden").val($('#content').tinymce().getContent());
+            }
+        }, 100);
+    }, 1500);
 }
 
 if ($('#content')) {
     activate_page_listeners();
+
 }
 
 class PageFormExtension {
     initialize(naja) {
         naja.addEventListener('complete', this.form.bind(this));
+        naja.addEventListener('before', this.before.bind(this));
     }
-
+    before(event) {
+        clearInterval(contentInterval);
+    }
     form(event) {
         let payload = event.detail.payload;
 

@@ -1,11 +1,11 @@
-<!DOCTYPE html>
-<html lang="{$pageService->getIsoLang()}">
+<!doctype html>
+<html class="no-js" lang="{$pageService->getIsoLang()}">
 <head>
 	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width">
-
-	<!-- START - Technical SEO Meta tags -->
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
 	<meta name="description" content="{$pageService->getCurrentPage()['description']}">
+
+	<title>{ifset title}{include title|stripHtml} | {/ifset}{$settingsService['site_name']}</title>
 
 	<meta name="robots" content="index, follow">
 
@@ -17,51 +17,80 @@
 	<meta property="og:image"         content="" />
 	<!-- END - Technical SEO Meta tags -->
 
-	<!-- START - Favicon -->
-	<link rel="icon" type="image/png" href="/assets/images/logo/logo.png" />
-	<!-- END - Favicon -->
 
-	<title>{ifset title}{include title|stripHtml} | {/ifset}{$settingsService['site_name']}</title>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="shortcut icon" type="image/png" href="/{$settingsService->getAppConfig()['subdir']}assets/custom/logo.png">
+
+
+	<link rel="stylesheet" href="/{$settingsService->getAppConfig()['subdir']}assets/custom/styles.css">
+
+	{block head}
+
+	{/block}
 </head>
-
 <body>
-	<div n:foreach="$flashes as $flash" n:class="flash, 'alert-' . $flash->type">{$flash->message}</div>
+{snippetArea contentWrapper}
+								<ul>
+									<li>{_'Phone'}: <a href="tel: {$settingsService['contact_phone']}">{$settingsService['contact_phone']}</a></li>
+									<li>{_'Email'}: <a href="mailto: {$settingsService['contact_email']}">{$settingsService['contact_email']}</a></li>
+								</ul>
 
-	{if $user->isLoggedIn()}
-		{$user->getIdentity()->email}
-	{/if}
+									<ul>
+									{foreach $settingsService->getAppConfig()['langs'] as  $item}
+										{first}
+										<li><a href="/{$settingsService->getAppConfig()['subdir']}" class="langSwitcher mr-3">{$item}</a></li>
+										{else}
+										<li><a href="/{$settingsService->getAppConfig()['subdir']}{$item}/" class="langSwitcher mr-3">{$item}</a></li>
+										{/first}
+									{/foreach}
+									</ul>
 
-	<ul>
-		<li n:foreach="$pageService->getLangs() as $item">
-			<a {if $item === $lang}active{/if}
-			   href="/{$settingsService->getAppConfig()['subdir']}{first}{else}{$item.'/'}{/first}">
-				{$item}
-			</a>
-		</li>
-	</ul>
+<em>{$settingsService['site_name']}</em>
 
-	<em>{$settingsService['site_name']}</em>
 
-	<p>{$settingsService->get('contact_email')} | {$settingsService->get('contact_phone')}</p>
+									<nav>
+										<ul id="navigation">
+											{foreach $pageService->getActivePages() as $item}
+												{if $item['pointer']->getValue() === 'homepage'}
+													<li class="{$pageService->getCurrentRootPage()->get('id')->getValue() === $item->get('id')->getValue() ? "menu-active" : '' }">
+														<a href="/{$settingsService->getAppConfig()['subdir']}">{$item->get('menuName')->getValue()}</a>
+													</li>
+												{elseif $item->get('parent')->getValue() === 0 && $item->get('menu')->getValue()}
+													<li class="{$pageService->getCurrentRootPage()->get('id')->getValue() === $item->get('id')->getValue() ? "menu-active" : '' } menu-has-children">
+														<a href="{$pageService->getPageUrl($item)}">{$item->get('menuName')->getValue()}</a>
+														{include './_shared/menu.latte', pageService: $pageService, item: $item}
+													</li>
+												{/if}
+											{/foreach}
+										</ul>
+									</nav>
 
-	<ul>
-		{foreach $pageService->getActivePages() as $item}
-			{if $item->get('parent')->getValue() === 0 && $item->get('menu')->getValue()}
-				<li>
-					<a n:href="$item['pointer']->getValue()">{$item->get('menuName')}</a>
-					{include './_shared/menu.latte', pageService: $pageService, item: $item}
-				</li>
-			{/if}
-		{/foreach}
-	</ul>
+<main>
+	{snippet flashMessages}
+		<div n:foreach="$flashes as $flash" n:class="flash, alert, 'alert-' . $flash->type">{$flash->message}</div>
+	{/snippet}
 
 	{include content}
+</main>
 
-	<p>&copy; {date('Y')} {$settingsService['site_name']}</p>
+<p>
+	<!-- Link back to nette-cms can't be removed. CMS is licensed under CC BY 4.0 DEED -->
+	Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Powered by <a href="https://github.com/kenichiii/nette-cms" target="_blank">nette-cms</a>
+	<!-- Link back to nette-cms can't be removed. CMS is licensed under CC BY 4.0 DEED -->
+</p>
 
-	{block scripts}
-		<script src="https://unpkg.com/nette-forms@3/src/assets/netteForms.js"></script>
-		<script src="https://unpkg.com/naja@3/dist/Naja.min.js"></script>
-	{/block}
+{/snippetArea}
+
+<!-- JS here -->
+
+<script src="https://unpkg.com/nette-forms@3/src/assets/netteForms.js"></script>
+<script src="https://unpkg.com/naja@3/dist/Naja.min.js"></script>
+
+<script src="/{$settingsService->getAppConfig()['subdir']}assets/custom/control.js"></script>
+{block scripts}
+	{*    Some other scripts*}
+{/block}
 </body>
 </html>

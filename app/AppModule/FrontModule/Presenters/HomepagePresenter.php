@@ -37,5 +37,21 @@ class HomepagePresenter extends BasePresenter
 			}
 			return $data;
 		});
+
+
+		$key = 	'sliders-panels-'.$this->lang;
+		$this->getTemplate()->panels = $this->cacheService->getCache()->load($key, function () {
+			$data = $this->sliderRepository->getSelect()
+				->addLangCond($this->lang)
+				->addDeletedCond()
+				->addActiveCond()
+				->andWhere('section', 'panels')
+				->orderBy('rank', 'asc')
+				->fetchData() ?: [];
+			foreach ($data as $key => $value) {
+				$data[$key]->setRepository(null);
+			}
+			return $data;
+		});
 	}
 }

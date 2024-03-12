@@ -21,7 +21,12 @@ class DevModePresenter extends Presenter
 			&& $_GET['basic_auth'] === $this->settingsService->getAppConfig()['devModePwd']
 		) {
 			$this->session->getSection('_dev_mode')->set('pwd', true);
-			$this->redirect('Homepage:');
+			header(
+				'Location: /' . $this->settingsService->getAppConfig()['subdir'],
+				true,
+				302
+			);
+			exit;
 		}
 		$this->setLayout('emptyLayout');
 	}

@@ -15,6 +15,7 @@ services:
 	- App\AppModule\AdminModule\UserModule\Forms\SignRenewPasswordFormFactory
 	- App\AppModule\AdminModule\UserModule\Forms\SignForgottenPasswordFormFactory
 	- App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\BasicFormFactory
+	- App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\ContentFormFactory
 	- App\AppModule\AdminModule\MainModule\WWWPagesModule\Forms\SystemFormFactory
 
 	- App\Libs\Facade\UserFacade
@@ -36,4 +37,3 @@ services:
 	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Slider\AddFormFactory
 	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Slider\EditFormFactory
 	- App\Libs\Repository\SliderRepository(%appConfig%)
-

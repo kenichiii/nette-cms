@@ -39,7 +39,7 @@ final class RouterFactory
 						];
 					} else {
 
-						if ($uri = str_replace($appConfig['subdir'],'', $params['uri'].'/')) {
+						if ($uri = str_replace((string)$appConfig['subdir'],'', $params['uri'].'/')) {
 
 							$pageService->parseUrl($uri);
 
@@ -47,6 +47,7 @@ final class RouterFactory
 								'presenter' => $pageService->getCurrentPage()->get('presenter')->getValue(),
 								'action' => $pageService->getCurrentPage()->get('action')->getValue(),
 								'id' => $pageService->getSlug(),
+								'params' => $params,
 							];
 
 						} else {
@@ -58,7 +59,7 @@ final class RouterFactory
 						}
 
 					}
-				},
+				},/*
 				Route::FILTER_OUT => function (array $params) use ($pageService, $appConfig) {
 
 					try {
@@ -69,8 +70,9 @@ final class RouterFactory
 
 					return [
 						'uri' => $pageService->getPageUrl($page),
+						'params' => $params['params'],
 					];
-				},
+				},*/
 			],
 		]);
 

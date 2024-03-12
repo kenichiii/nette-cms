@@ -1,6 +1,10 @@
 # nette-cms
 CMS in Nette framework
 
+Whole CMS is licensed under Creative Commons Attribution 4.0 License  (CC BY 4.0 DEED). 
+If you like to use attribution-free websites, please purchase extended licence for a single website or for all your websites.
+Contact me on martinkonigsmark@gmail.com for more informations.
+
 not completed yet
 
 Features

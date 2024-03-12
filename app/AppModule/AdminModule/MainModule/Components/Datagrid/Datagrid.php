@@ -184,7 +184,7 @@ final class Datagrid extends Control
 
 		foreach ($this->conditions as $condition) {
 			$select->andWhere(
-				$condition['column'].$condition['op'].$this->repository->getModel()[$condition['column']]->getDibiModificator(),
+				$this->repository->getAlias($condition['column']).$condition['op'].$this->repository->getModel()[$condition['column']]->getDibiModificator(),
 				$condition['value']
 			);
 		}
@@ -200,33 +200,47 @@ final class Datagrid extends Control
 		}
 
 		foreach ($this->getColumns() as $column) {
+
+			$expl = explode('_', $column->getName());
+			if (count($expl) > 1 && $select->getModel()->get($expl[0])->isJoin()) {
+				$pieces = [];
+				for ($i = 1; $i < count($expl); $i++) {
+					$pieces []= $expl[$i];
+				}
+				$columnName = $select->getModel()->get($expl[0])->getRepository()->getAlias(
+					implode('_', $pieces)
+				);
+			} else {
+				$columnName = $select->getRepository()->getAlias($column->getName());
+			}
+
 			switch ($column->getType()) {
 				case 'date':
 					if ($this->filters[$column->getName().'_from'] || $this->filters[$column->getName().'_to']) {
 						if ($this->filters[$column->getName().'_from']) {
-							$select->andWhere($column->getName().' >  %s', $this->filters[$column->getName().'_from']);
+							$select->andWhere($columnName.' >  %s', $this->filters[$column->getName().'_from']);
 						}
 
 						if ($this->filters[$column->getName().'_to']) {
-							$select->andWhere($column->getName().' < %s ', $this->filters[$column->getName().'_to']);
+							$select->andWhere($columnName.' < %s ', $this->filters[$column->getName().'_to']);
 						}
 					}
 					break;
 				case 'datetime':
 					if ($this->filters[$column->getName().'_from'] || $this->filters[$column->getName().'_to']) {
 						if ($this->filters[$column->getName().'_from']) {
-							$select->andWhere($column->getName().' >  %s', date('Y-m-d H:i:s', strtotime($this->filters[$column->getName().'_from'])));
+							$select->andWhere($columnName.' >  %s', date('Y-m-d H:i:s', strtotime($this->filters[$column->getName().'_from'])));
 						}
 
 						if ($this->filters[$column->getName().'_to']) {
-							$select->andWhere($column->getName().' < %s ', date('Y-m-d H:i:s', strtotime($this->filters[$column->getName().'_to'])));
+							$select->andWhere($columnName.' < %s ', date('Y-m-d H:i:s', strtotime($this->filters[$column->getName().'_to'])));
 						}
 					}
 					break;
 
 				case 'select':
 					if ($this->filters[$column->getName()] && intval($this->filters[$column->getName()])) {
-						$select->andWhere($column->getName()
+						$select->andWhere($columnName
 							.'='.$this->repository->getModel()[$column->getName()]->getDibiModificator(),
 							$this->filters[$column->getName()]
 						);
@@ -234,12 +248,12 @@ final class Datagrid extends Control
 					break;
 				case 'radio':
 					if ($this->filters[$column->getName()] && $this->filters[$column->getName()] !== 'all') {
-						$select->andWhere($column->getName().'=%i', $this->filters[$column->getName()] === 'yes' ? 1 : 0 );
+						$select->andWhere($columnName.'=%i', $this->filters[$column->getName()] === 'yes' ? 1 : 0 );
 					}
 					break;
 				case 'text':
 					if ($this->filters[$column->getName()]) {
-						$select->andWhere($column->getName().' like %s','%'.$this->filters[$column->getName()].'%');
+						$select->andWhere($columnName.' like %s','%'.$this->filters[$column->getName()].'%');
 					}
 					break;
 				default:
@@ -355,7 +369,7 @@ final class Datagrid extends Control
 		}
 		switch ($column->getType())	{
 			case 'date':
-				return $record->{$column->getName()}
+				return $record->get($column->getName())->getValue()
 					? date('d.m.y', strtotime($record->get($column->getName())->getValue()))
 					: '-';
 				break;

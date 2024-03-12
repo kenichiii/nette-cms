@@ -57,18 +57,21 @@ class PageService
 	{
 		$slug = '';
 		for ($i = $level; $i < count($uri); $i++) {
-			$slug .= '/' . $uri[$i];
+			$slug .= $uri[$i] ?  $uri[$i] . '/' : '';
 		}
-		return $slug;
+		return (string) preg_replace('/(\/)$/', '', $slug);
 	}
+
 	public function getSlug(): string
 	{
 		return $this->slug;
 	}
+
 	public function getPageTree(): array
 	{
 		return $this->tree;
 	}
+
 	public function parseUrl(string $url): void
 	{
 		$uri = explode('/', $url);
@@ -121,6 +124,8 @@ class PageService
 		}
 		throw new PageServiceException("{$pointer} dont exists");
 	}
+
+
 
 	/**
 	 * @param string|null $lang
@@ -216,11 +221,19 @@ class PageService
 		return $this->getLang() === $this->appConfig['langs'][0] ? '': $this->getLang() . '/';
 	}
 
-	public function getPageUrl(PageModel $item): string
+	public function getPageUrl(PageModel $item, ?array $params = null): string
 	{
 		$prefix =  $this->getSubdir()  . $this->getLangPrefix();
 		if ($item->get('parent')->getValue() === 0) {
-			return $prefix . ($item->get('uri')->getValue() ? $item->get('uri')->getValue() . '/' : '');
+			$url = '/'. $prefix . ($item->get('uri')->getValue() ? $item->get('uri')->getValue() . '/' : '');
+			if (is_array($params) && isset($params['id'])) {
+				$url .= $params['id'] .'/';
+				unset($params['id']);
+			}
+			if (is_array($params) && count($params)) {
+				$url .= '?' . http_build_query($params);
+			}
+			return $url;
 		}
 		$tree = '';
 		foreach ($this->getActivePages() as $page) {
@@ -229,7 +242,15 @@ class PageService
 				$tree .= $page->get('uri')->getValue() . '/';
 			}
 		}
-		return $prefix . $tree . $item->get('uri')->getValue() . '/';
+		$url = '/'. $prefix . $tree . $item->get('uri')->getValue() . '/';
+		if (is_array($params) && isset($params['id'])) {
+			$url .= $params['id'] .'/';
+			unset($params['id']);
+		}
+		if (is_array($params) && count($params)) {
+			$url .= '?' . http_build_query($params);
+		}
+		return $url;
 	}
 
 	protected function getParentUri(PageModel $item): string
@@ -256,5 +277,10 @@ class PageService
 			}
 		}
 		return false;
+	}
+
+	public function getPageUrlByPointer(string $pointer, ?array $params): string
+	{
+		return $this->getPageUrl($this->getPageByPointer($pointer), $params);
 	}
 }

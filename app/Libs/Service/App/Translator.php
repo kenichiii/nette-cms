@@ -54,12 +54,12 @@ final class Translator implements NetteTranslator
 			$this->repository = $this->translationsService->getTranslations($this->getLang(), $this->section);
 		}
 
-		$translation = array_key_exists($message, $this->repository) ? $this->repository[$message] : $message;
+		$translation =  array_key_exists($message, $this->repository) ? $this->repository[$message] : $message;
 
 		foreach ($params as $key => $param) {
 			$translation = str_replace("[:{$key}:]", (string) $param, $translation);
 		}
 
-		return $translation ?: $message;
+		return (string)($translation ?: $message);
 	}
 }

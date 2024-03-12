@@ -21,7 +21,7 @@ class TextpagePresenter extends BasePresenter
 				}
 			}
 			if ($child) {
-				$this->redirect($child['pointer']->getValue());
+				$this->redirectByPointer($child->get('pointer')->getValue());
 			}
 		}
 

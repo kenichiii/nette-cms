@@ -30,6 +30,11 @@ abstract class Repository
 		return $this->database;
 	}
 
+	public function getAppConfig(): array
+	{
+		return $this->appConfig;
+	}
+
 	/**
 	 * @return string
 	 */
@@ -54,12 +59,23 @@ abstract class Repository
 		return $this->model;
 	}
 
+
 	/**
 	 * @return SelectQuery
 	 */
 	public function getSelect(): SelectQuery
 	{
-		return new SelectQuery($this);
+		$select = new SelectQuery($this);
+
+		if ($this->getModel()->isRelationN1()) {
+			$select->andWhere(
+				$this->getModel()->getRelationFromThisColumnName(),
+				$this->getModel()->getParentModel()->get(
+					$this->getModel()->getRelationToAnotherModelColumnName()
+				)->getValue()
+			);
+		}
+		return $select;
 	}
 
 	/**
@@ -85,72 +101,11 @@ abstract class Repository
 
 	public function getAliasRaw()
 	{
-		if($this->alias === null) {
-			$tbl = $this->getTablePure();
+		if ($this->alias === null) {
+			$tbl = str_replace((string)$this->appConfig['dbPrefix'], '', $this->getTableRaw());
 			$this->alias = $tbl[0].$tbl[2];
 		}
 		return $this->alias;
-	}
-
-	protected function getCollums($prefix='')
-	{
-		$collums = array();
-
-		foreach($this->getModel()->model() as $key=>$child)
-		{
-			if( $child->isMixed() && $child->isInData() )
-			{
-				foreach( $this->getCollumsMixed($child,$prefix) as $m=>$coll)
-				{
-					$collums []= $coll;
-				}
-			}
-			elseif( $child->isInnerSql() && $child->isInData() )
-			{
-				$collums []= "(".$child->getQuery($this).") AS [".$prefix.$child->getCollum()."]";
-			}
-			elseif( $child->isInData() ) //primitive
-				$collums []= $this->getAlias ($child->getCollumName()).' AS ['.$prefix.$child->getCollum().']';
-		}
-
-		foreach($this->getModel()->relations() as $rkey=>$rchild)
-		{
-
-			if( $rchild->isJoin() && $rchild->isInData() )
-			{
-				foreach( $rchild->repository()->getCollums($prefix.$rkey.'_') as $m=>$coll )
-				{
-					$collums []= $coll;
-				}
-			}
-
-		}
-
-		return $collums;
-	}
-
-	protected function getCollumsMixed($mixed,$prefix)
-	{
-		$collums = array();
-
-		foreach( $mixed->model() as $key => $child )
-		{
-			if( $child->isMixed() &&  $child->isInData() )
-			{
-				foreach( $this->getCollumsMixed($child,$prefix) as $m=>$coll)
-				{
-					$collums []= $coll;
-				}
-			}
-			elseif( $child->isInnerSql() && $child->isInData() )
-			{
-				$collums []= "(".$child->getQuery($this).") AS [".$prefix.$child->getCollum()."]";
-			}
-			elseif( $child->isInData() ) //primitive
-				$collums []= $this->getAlias ($child->getCollumName()).' AS ['.$prefix.$child->getCollum().']';
-		}
-
-		return $collums;
 	}
 
 	public function getTable(): string
@@ -170,7 +125,9 @@ abstract class Repository
 	{
 
 		$t = " LEFT JOIN [{$rchild->getRepository()->getTableRaw()}] as {$rchild->getRepository()->getAlias()} "
-			. " ON {$rchild->getRepository()->getAlias($rchild->getFromColumnName())}={$parentGrid->getAlias($rchild->getToColumnName())}";
+			. " ON {$rchild->getRepository()->getAlias(
+				$rchild->getRelationFromThisColumnName())
+		}={$parentRepo->getAlias($rchild->getRelationToAnotherModelColumnName())}";
 
 		foreach ($rchild->getRelations() as $rkey => $rrchild) {
 			if ($rrchild->isJoin()) {
@@ -219,8 +176,7 @@ abstract class Repository
 	public function getAlias(string $column = null): string
 	{
 		if ($this->alias === null) {
-			$this->alias = $this->getTableRaw()[0];
-			$this->alias.= $this->getTableRaw()[2];
+			$this->alias = $this->getAliasRaw();
 		}
 
 		if ($column === null) {
@@ -262,7 +218,7 @@ abstract class Repository
 					if ($column->isColumn() && $coumnn->getDefault() !== null ) {
 						$query .= " DEFAULT '{$column->getDefault()}'";
 					}
-					if ($column->isColumn() && $collum->isPrimaryKey())	{
+					if ($column->isColumn() && $column->isPrimaryKey())	{
 						$query .= " AUTO_INCREMENT ";
 						$indexes []= 'PRIMARY KEY ('.$collum->getColumnName().')'."\n";
 					}
@@ -316,7 +272,7 @@ abstract class Repository
 								. $column->getColumnName() . '])' . "\n";
 						} elseif (is_array($column->getUniqueWith())) {
 							$indexes [] = 'UNIQUE INDEX [uni-' . $column->getColumnName() . '_'
-								. implode('_', $column->getUniqueWith()) . '] ([' . $column->getCollumName()
+								. implode('_', $column->getUniqueWith()) . '] ([' . $column->getColumnName()
 								. '],[' . implode('],[', $column->getUniqueWith())
 								. '])' . "\n";
 						}
@@ -680,25 +636,6 @@ abstract class Repository
 	public function getByPk($pk): ?Model
 	{
 		return $this->getSelect()->fetchByPk((int)$pk);
-	}
-
-	public function getByUri($uri): ?Model
-	{
-		$query []= 'SELECT '.implode(',',$this->getCollums()).' FROM '.$this->getTable().' '.$this->whereStart;
-
-		array_push($query, ' and '.$this->getAlias($this->getModel()->get('uri')->getCollumName()).'=%s',$uri);
-
-		$data = $this->getConn()->fetch($query);
-
-		if ($data) {
-			$bean = $this->getModel();
-			$bean->setRepository($this);
-			$bean->fromdb($data);
-
-			return $bean;
-		}
-		else return null;
-
 	}
 }
 

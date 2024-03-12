@@ -17,10 +17,10 @@
 	<link rel="stylesheet" href="/{$settingsService->getAppConfig()['subdir']}assets/admin/assets/css/style.css">
 	<link rel="stylesheet" href="/{$settingsService->getAppConfig()['subdir']}assets/admin/customStyle.css">
 	<!-- End layout styles -->
-	<link rel="shortcut icon" href="/{$settingsService->getAppConfig()['subdir']}assets/admin/images/favicon.png" />
+	<link rel="shortcut icon" type="image/png" href="/{$settingsService->getAppConfig()['subdir']}assets/custom/logo.png" />
 
 
-	<title>{ifset title}{include title|stripHtml} | {/ifset}Admin</title>
+	<title>{ifset title}{include title|stripHtml} | {/ifset}{_'Admin'}</title>
 </head>
 <body>
 		<div class="container-scroller">
@@ -51,7 +51,9 @@
 
 
 		<script src="https://unpkg.com/nette-forms@3/src/assets/netteForms.js"></script>
-
+		<script>
+			$(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
+		</script>
 		{block scripts}
 
 		{/block}

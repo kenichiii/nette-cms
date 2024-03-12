@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Libs\Kenichi\ORM;
 
+use Dibi\Connection;
 use Nette\Utils\Json;
 use App\Libs\Kenichi\ORM\Column\Column;
 
@@ -38,6 +39,24 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 		$this->initModel();
 	}
 
+	public function repositoryFactory(array $appConfig, Connection $connection)
+	{
+		$class = $this->getRepositoryClassName();
+		$repository = new $class($appConfig, $connection);
+		$repository->setModel($this);
+		$this->setRepository($repository);
+		return $this;
+	}
+
+	public function getRepositoryClassName(): string
+	{
+		if($this->repositoryClassName === null) {
+			$this->repositoryClassName = preg_replace('/(Model)/', 'Repository',get_called_class());
+		}
+
+		return $this->repositoryClassName;
+	}
+
 	public function offsetUnset($offset): void
 	{
 		if ($this->modelHas($offset)) {
@@ -45,39 +64,6 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 		} else {
 			$this->removeRelation($offset);
 		}
-	}
-
-	/**
-	 * @param $id
-	 * @return Model
-	 */
-	public static function loadByPK(int $id): Model
-	{
-		$acc = get_called_class();
-		$ins = new $acc();
-		return $ins->getRepository()->getByPK($id);
-	}
-
-	/**
-	 * @param $uri
-	 * @return Model
-	 */
-	public static function loadByUri(string $uri): Model
-	{
-		$acc = get_called_class();
-		$ins = new $acc();
-		return $ins->getrepository()->getByUri($uri);
-	}
-
-	/**
-	 * @param $pointer
-	 * @return Model
-	 */
-	public static function loadByPointer(string $pointer): Model
-	{
-		$acc = get_called_class();
-		$ins = new $acc();
-		return $ins->getrepository()->getByPointer($pointer);
 	}
 
 	/**
@@ -104,6 +90,7 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 	 */
 	public function isNotParentModel(string|Model $class): bool
 	{
+
 		if (!$this->getParentModel()) {
 			return true;
 		} elseif (is_string($class)) {
@@ -249,7 +236,7 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 	 * @return $this
 	 * @throws Exception
 	 */
-	public function getParentModel(string $name): Model
+	public function getParent(string $name): Model
 	{
 		$name = strtolower($name);
 
@@ -275,7 +262,7 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 				if ($coll->isGroup()) {
 					return $this;
 				} elseif ($coll->isModel()) {
-					return $coll->getParentModel(implode ('_', $pieces));
+					return $coll->getParent(implode ('_', $pieces));
 				} else {
 					throw new Exception($name.' cant getParentModel');
 				}

@@ -6,8 +6,6 @@ namespace App\Libs\Kenichi\ORM;
 
 class SelectQuery
 {
-	protected string $columns = '*';
-
 	protected string $from;
 	protected string $joins;
 
@@ -36,9 +34,24 @@ class SelectQuery
 		return $this->repository;
 	}
 
-	public function getColumns(): string
+	public function getColumns(): array
 	{
-		return $this->columns;
+		$columns = [];
+		foreach ($this->getModel()->getModel() as $key => $column) {
+			$columns []= $this->getRepository()->getAlias($column->getColumnName())
+				. ' AS [' . $column->getColumn() .']';
+		}
+
+		foreach ($this->getModel()->getRelations() as $key => $model) {
+			if ($model->isJoin()) {
+				foreach ($model->getModel() as $column) {
+					$columns [] = $model->getRepository()->getAlias($column->getColumnName())
+						. ' AS [' . $key . '_' . $column->getColumn() . ']';
+				}
+			}
+		}
+
+		return $columns;
 	}
 
 	/**
@@ -57,7 +70,7 @@ class SelectQuery
 	public function fetchData(): array
 	{
 		$query []= 'SELECT '
-			. implode(' , ',$this->getDataColumns())
+			. implode(' , ', $this->getDataColumns())
 			. ' FROM '.$this->getRepository()->getTable()
 			. ' ' . $this->whereStart
 		;
@@ -117,7 +130,7 @@ class SelectQuery
 	public function fetchSingle(): ?Model
 	{
 		$query []= 'SELECT '
-			. $this->getColumns()
+			. implode(',', $this->getColumns())
 			. ' FROM '. $this->getRepository()->getTable()
 			. ' ' . $this->whereStart
 		;
@@ -158,7 +171,7 @@ class SelectQuery
 		if ($data) {
 			$bean = $this->getRepository()->getModelClassName();
 			$model = new $bean(null, $this->getRepository());
-			$model->fromdb($data);
+			$model->fromDb($data);
 
 			return $model;
 		}
@@ -382,7 +395,11 @@ class SelectQuery
 	 */
 	public function orderBy(string $name, string $orderby): SelectQuery
 	{
-		$this->orderBy = ' ORDER BY '.$this->getRepository()->getAlias($name).' '.$orderby.' ';
+		if ($this->getModel()->hasColumnName($name)) {
+			$this->orderBy = ' ORDER BY '.$this->getRepository()->getAlias($name).' '.$orderby.' ';
+		} else {
+			$this->orderBy = ' ORDER BY '.$name.' '.$orderby.' ';
+		}
 		return $this;
 	}
 
@@ -583,7 +600,19 @@ class SelectQuery
 		$columns = [];
 		foreach ($this->getModel()->getColumnsRaw() as $column) {
 			if ($column->isInData()) {
-				$columns []= $this->getRepository()->getAlias($column->getColumnName());
+				$columns []= $this->getRepository()->getAlias($column->getColumnName())
+					. ' AS [' . $column->getColumn() . ']';
+			}
+		}
+
+		foreach ($this->getModel()->getRelations() as $key => $child) {
+			if ($child->isJoin()) {
+				foreach ($child->getColumnsRaw() as $column) {
+					if ($column->isInData()) {
+						$columns [] = $child->getRepository()->getAlias($column->getColumnName())
+							. ' AS [' . $key . '_' . $column->getColumn() . ']';
+					}
+				}
 			}
 		}
 

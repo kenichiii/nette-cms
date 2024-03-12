@@ -21,7 +21,7 @@ class InstallService
 		private UserRepository     $userRepository,
 		private User               $user,
 		private SliderRepository   $sliderRepository,
-		//private ClientInstallService $clientInstallService,
+	//	private ClientInstallService $clientInstallService,
 	)
 	{
 
@@ -29,7 +29,8 @@ class InstallService
 
 	public function client()
 	{
-		return '';//$this->clientInstallService->install();
+		//return $this->clientInstallService->install();
+		return '';
 	}
 
 	public function settings()
@@ -217,7 +218,7 @@ class InstallService
 			$this->userRepository->getConn()->query('DROP TABLE ' . $this->userRepository->getTableRaw());
 		} catch (\Throwable $e) {
 		}
-		$message = '';
+		$message = '<br><br>'.$this->appConfig['install']['adminEmail'].'<br>';
 		try {
 			$table = $this->userRepository->createTable();
 			$this->userRepository->getConn()->query($table);
@@ -229,15 +230,19 @@ class InstallService
 				'password' => Password::encode($this->appConfig['install']['adminPassword']),
 			]);
 
-			$meesage = '&bull; Users installed <br>';
+			$message .= '&bull; Users installed <br>';
 
 		} catch (\Throwable $e) {
-			$message = '&bull; USERS ERROR:'. $e->getMessage() . '<br>';
+			$message .= '&bull; USERS ERROR:'. $e->getMessage() . '<br>';
 		}
 
 		try {
+			$this->user->logout();
+		} catch (\Throwable $e) {
+		}
+		try {
 			$this->user->login($this->appConfig['install']['adminEmail'], $this->appConfig['install']['adminPassword']);
-			$message .= '<br><h4>>User logged as admin</h4><br>';
+			$message .= '<h4>User logged as admin</h4>';
 
 		} catch (\Throwable $e) {
 			$message .= '&bull; USER LOGIN ERROR:' . $e->getMessage() . '<br>';

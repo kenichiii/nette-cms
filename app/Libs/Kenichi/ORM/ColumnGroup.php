@@ -196,7 +196,7 @@ abstract class ColumnGroup
 	/**
 	 * @return Model|null
 	 */
-	public function getParentModel(string $name): ?Model
+	public function getParentModel(): ?Model
 	{
 		return $this->parentModel;
 	}
