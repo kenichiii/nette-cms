@@ -1,0 +1,61 @@
+{block scripts}
+    <script src="/{$settingsService->getAppConfig()['subdir']}assets/admin/pages/contact-form/control.js"></script>
+{/block}
+
+
+{block content}
+<div class="row">
+    <div class="col-lg-12 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">
+                    {_'Contact Form Messages'}
+                </h4>
+
+                {snippetArea datagridWrapper}
+                    {snippet datagrid}
+                        {control grid}
+                    {/snippet}
+                {/snippetArea}
+
+            </div>
+        </div>
+    </div>
+</div>
+{snippet viewModal}
+    {if isset($model) && $show === 'view'}
+        <div id="viewFormModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">{_'View Message'}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true" style="color: lightgray">&times;</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+                        <h3>{$model['subject']}</h3>
+
+                        <div class="form-group">
+                            {$model->get('email')->getValue()}
+                        </div>
+                        <div class="form-group">
+                            {$model->get('name')->getValue()}
+                        </div>
+                        <div class="form-group">
+                            {$model->get('phone')->getValue()}
+                        </div>
+
+                        <p>{str_replace("\n", "<br>", $model['message']->getValue())|noescape}</p>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{_'Close'}</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    {/if}
+{/snippet}

@@ -8,7 +8,10 @@ use App\Libs\Kenichi\ORM\Column\Primary\Password;
 use App\Libs\Repository\App\PageRepository;
 use App\Libs\Repository\App\SettingsRepository;
 use App\Libs\Repository\App\UserRepository;
+use App\Libs\Repository\ContactFormRepository;
+use App\Libs\Repository\ProjectRepository;
 use App\Libs\Repository\SliderRepository;
+use App\Libs\Repository\TestimonialRepository;
 use App\Libs\Service\App\UserService;
 use Nette\Security\User;
 
@@ -21,6 +24,9 @@ class InstallService
 		private UserRepository     $userRepository,
 		private User               $user,
 		private SliderRepository   $sliderRepository,
+		private ContactFormRepository $contactFormRepository,
+		private TestimonialRepository $testimonialRepository,
+
 	//	private ClientInstallService $clientInstallService,
 	)
 	{
@@ -180,28 +186,16 @@ class InstallService
 					$id = $this->pageRepository->insert([
 						'parent' => 0,
 						'lang' => $lang,
-						'title' => 'Test',
-						'menuName' => 'Test ' . $lang,
+						'title' => 'Privacy policy ' . $lang,
+						'menuName' => 'Privacy policy',
 						'content' => '',
-						'uri' => 'test',
+						'uri' => 'privacy-policy',
 						'active' => 1,
-						'menu' => 1,
-						'pointer' => 'test',
+						'menu' => 0,
+						'pointer' => 'privacy_policy',
 						'rank' => 3,
 					]);
 
-					$this->pageRepository->insert([
-						'parent' => $id,
-						'lang' => $lang,
-						'title' => 'Test subpage ' . $lang,
-						'menuName' => 'Test subpage',
-						'content' => '<p>Just test</p>',
-						'uri' => 'test',
-						'active' => 1,
-						'menu' => 1,
-						'pointer' => 'testSubPage',
-						'rank' => 1,
-					]);
 					$message .= '&bull; Pages '.$lang.' installed <br>';
 
 				} catch (\Throwable $e) {
@@ -263,13 +257,52 @@ class InstallService
 			$table = $this->sliderRepository->createTable();
 			$this->sliderRepository->getConn()->query($table);
 
-			$meesage = '&bull; HP SLiders installed <br>';
+			$message = '&bull; HP SLiders installed <br>';
 
 		} catch (\Throwable $e) {
 			$message = '&bull; HP SLIDERS ERROR:' . $e->getMessage() . '<br>';
 		}
-		return $meesage;
+		return $message;
 	}
 
+	public function contactForm()
+	{
+		try {
+			$this->contactFormRepository->getConn()->query('DROP TABLE ' . $this->contactFormRepository->getTableRaw());
+		} catch (\Throwable $e) {
+
+		}
+		$message = '';
+		try {
+			$table = $this->contactFormRepository->createTable();
+			$this->sliderRepository->getConn()->query($table);
+
+			$message = '&bull; ContactForm installed <br>';
+
+		} catch (\Throwable $e) {
+			$message = '&bull; CONTACT FORM ERROR:' . $e->getMessage() . '<br>';
+		}
+		return $message;
+	}
+
+	public function testimonials()
+	{
+		try {
+			$this->testimonialRepository->getConn()->query('DROP TABLE ' . $this->testimonialRepository->getTableRaw());
+		} catch (\Throwable $e) {
+
+		}
+		$message = '';
+		try {
+			$table = $this->testimonialRepository->createTable();
+			$this->testimonialRepository->getConn()->query($table);
+
+			$message = '&bull; HP Testimonials installed <br>';
+
+		} catch (\Throwable $e) {
+			$message = '&bull; HP TESTIMONIALS ERROR:' . $e->getMessage() . '<br>';
+		}
+		return $message;
+	}
 
 }

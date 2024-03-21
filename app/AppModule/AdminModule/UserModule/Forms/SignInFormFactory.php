@@ -43,7 +43,7 @@ final class SignInFormFactory
 					? $this->settings['admin_user_expiration_pernament']
 					: $this->settings['admin_user_expiration_default']
 				);
-				$this->user->login($data->username, $data->password);
+				//$this->user->login($data->username, $data->password);
 			} catch (Nette\Security\AuthenticationException $e) {
 				if ($e->getCode() === 400) {
 					$form->addError('Server Error');

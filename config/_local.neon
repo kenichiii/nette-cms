@@ -1,25 +1,26 @@
 parameters:
     appConfig:
 
-        devMode: 1
-        devModePwd: test
+        devMode: 1          #set 0 for not see dev test page with login form for public website
+        devModePwd: test    #password for developer mode
 
-        subdir: nette-cms/www/
-        adminUri: admin123
+        subdir: nette-cms/www/    #subdir of project no / on begining with / on end if there is any subfolder, leave empty if not
 
-        langs: ['cz','en']
-        isoLangs:
+        adminUri: admin123        #secret admin url path
+
+        langs: ['cz','en']        #firt language is default not shown in url
+        isoLangs:                 #used in html tag definition of language for selected short lang name
             cz: cs-CZ
             en: en
 
-        dbPrefix: cms_
+        dbPrefix: cms_            #default database prefix, can be empty
 
         install:
-            adminEmail: test@test.cz
-            adminPassword: '12345'
+            adminEmail: test@test.cz   #installation user login
+            adminPassword: '12345'     #installation user password, can be easily changed in administration later after installation
 
 
-dibi:
+dibi:                                  #databse connection configuration
 	host: localhost
 	username: root
 	password: ''

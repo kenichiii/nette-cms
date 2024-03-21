@@ -21,7 +21,12 @@ class DatabasePresenter extends BasePresenter
 			$this->getTemplate()->message .= $this->installService->pages();
 			$this->getTemplate()->message .= $this->installService->users();
 
+			$this->getTemplate()->message .= $this->installService->contactForm();
+
 			$this->getTemplate()->message .= $this->installService->sliders();
+			$this->getTemplate()->message .= $this->installService->testimonials();
+
+			//$this->getTemplate()->message .= $this->installService->projects();
 
 			$this->getTemplate()->message .= $this->installService->client();
 		} catch (\Throwable $e) {

@@ -43,7 +43,7 @@ final class ContentFormFactory
 			$succ = false;
 			$page->fromForm($data);
 			$page->update();
-			$this->cacheService->removeKey('page-content'.$page->get('id')->getValue());
+			$this->cacheService->removeKey('page-content-'.$page->get('id')->getValue());
 			$succ = true;
 			$onSuccess($succ);
 		};

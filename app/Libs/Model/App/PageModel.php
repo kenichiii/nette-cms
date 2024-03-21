@@ -6,9 +6,11 @@ namespace App\Libs\Model\App;
 
 
 use App\Libs\Kenichi\ORM\Column\Primary\Active;
+use App\Libs\Kenichi\ORM\Column\Primary\Content;
 use App\Libs\Kenichi\ORM\Column\Primary\Created;
 use App\Libs\Kenichi\ORM\Column\Primary\Deleted;
 use App\Libs\Kenichi\ORM\Column\Primary\Id;
+use App\Libs\Kenichi\ORM\Column\Primary\Lang;
 use App\Libs\Kenichi\ORM\Column\Primary\Pointer;
 use App\Libs\Kenichi\ORM\Column\Primary\Rank;
 use App\Libs\Kenichi\ORM\Column\Primitive\Bit;
@@ -27,7 +29,7 @@ class PageModel extends Model
 		$parent->setDefault('0');
 
 		$this->modeladd('parent', $parent);
-		$this->modeladd('lang', new Varchar());
+		$this->modeladd(new Lang());
 
 		$pointer = new Pointer();
 		$pointer->setUniqueWith('lang')
@@ -57,11 +59,7 @@ class PageModel extends Model
 		$loggedUser->setDefault('0');
 		$this->modeladd('loggedUser', $loggedUser);
 
-		$content = new Text();
-		$content->setSanitize(false)
-				->setIsInData(false)
-		;
-		$this->modeladd('content', $content);
+		$this->modeladd(new Content());
 
 		$this->modeladd('description', new Text());
 

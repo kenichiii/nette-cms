@@ -7,8 +7,10 @@ namespace App\Libs\Model;
 use App\Libs\Kenichi\ORM\Column\Primary\Active;
 use App\Libs\Kenichi\ORM\Column\Primary\Deleted;
 use App\Libs\Kenichi\ORM\Column\Primary\Id;
+use App\Libs\Kenichi\ORM\Column\Primary\Lang;
 use App\Libs\Kenichi\ORM\Column\Primary\Photo;
 use App\Libs\Kenichi\ORM\Column\Primary\Rank;
+use App\Libs\Kenichi\ORM\Column\Primary\Section;
 use App\Libs\Kenichi\ORM\Column\Primitive\Text;
 use App\Libs\Kenichi\ORM\Column\Primitive\Varchar;
 use App\Libs\Kenichi\ORM\Model;
@@ -18,8 +20,8 @@ class SliderModel extends Model
 	public function initModel()
 	{
 		$this->modeladd(new Id());
-		$this->modeladd('lang', new Varchar());
-		$this->modeladd('section', new Varchar());
+		$this->modeladd(new Lang());
+		$this->modeladd(new Section());
 		$this->modeladd('title', new Varchar());
 		$this->modeladd('link', new Varchar());
 		$this->modeladd('linkText', new Varchar());

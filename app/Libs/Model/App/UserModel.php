@@ -24,12 +24,9 @@ class UserModel extends Model
 		$this->modeladd(new Photo());
 		$this->modeladd(new Phone());
 		$this->modeladd(new Password());
-		$roles = new Json();
-		//$roles->setDefault('["user"]');
-		$this->modeladd('roles', $roles);
+		$this->modeladd('roles', new Json());
 		$this->modeladd('role', new Varchar());
 		$this->modeladd('forgottenPasswordToken', new Varchar());
 		$this->modeladd('forgottenPasswordTokenExpiration', new Number());
-
 	}
 }

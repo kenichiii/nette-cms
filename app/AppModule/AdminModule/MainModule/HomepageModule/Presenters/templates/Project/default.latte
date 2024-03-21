@@ -1,0 +1,187 @@
+{block scripts}
+    <script src="/{$settingsService->getAppConfig()['subdir']}assets/admin/pages/homepage/projects/control.js"></script>
+{/block}
+
+{block content}
+<div class="row">
+    <div class="col-lg-12 stretch-card">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">{_'Projects'}</h4>
+                <div class="row mb-3">
+                    <div class="col-lg-1 col-sm-2 text-right">
+                        {_'Language'}:
+                    </div>
+                    <div class="col">
+
+                        <select id="selectedLang" class="form-control">
+                            <option n:foreach="$settingsService->getAppConfig()['langs'] as $frontLang"
+                                        {if $frontLang === $selectedLang}selected{/if}
+                                    value="{link 'this', selectedLang: $frontLang}"
+                            >
+                                {$frontLang}
+                            </option>
+                        </select>
+
+                    </div>
+                </div>
+                {snippetArea datagridWrapper}
+                    {snippet datagrid}
+                        {control grid}
+                    {/snippet}
+                {/snippetArea}
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="addFormModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{_'Add New Project'}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: lightgray">&times;</span>
+                </button>
+            </div>
+            {snippet addModal}
+                {form addForm class=>ajax}
+                    <div class="modal-body">
+                        <ul class="error mt-3" n:ifcontent>
+                            <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                        </ul>
+
+                        <div class="form-group">
+                            <label>{_'Title'} *</label>
+                            {input  title  class=>"form-control p_input"}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{_'Uri'} *</label>
+                            {input  uri  class=>"form-control p_input"}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{_'Section'} *</label>
+                            {input  section  class=>"form-control p_input"}
+                        </div>
+
+                        <div class="form-group">
+                            <label>{_'Description'} *</label>
+                            {input  description  class=>"form-control p_input"}
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {input send class => "btn btn-primary"}
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{_'Close'}</button>
+                    </div>
+                {/form}
+            {/snippet}
+        </div>
+    </div>
+</div>
+
+<div id="editFormModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">{_'Edit Project'}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" style="color: lightgray">&times;</span>
+                </button>
+            </div>
+
+
+            {snippet editModal}
+            {if isset($model) && $show === 'edit'}
+            {form editForm class=>ajax}
+            <div class="modal-body">
+                <input type="hidden" name="show" value="edit">
+
+
+                <ul class="error mt-3" n:ifcontent>
+                    <li n:foreach="$form->ownErrors as $error">{$error}</li>
+                </ul>
+
+
+                {if isset($messages)}
+                    <div n:foreach="$messages as $message" n:class="flash, alert, 'alert-success'">{$message}</div>
+                {/if}
+
+            <div class="row">
+              <div class="col-8">
+                <div class="form-group d-flex">
+                    <div class="form-check">
+                        <label class="form-check-label form-check-flat form-check-primary">
+                            <input n:name=active type="checkbox" {$model['active']->getValue() ?'checked':''} class="form-check-input"> {_'Active'}
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>{_'Title'} *</label>
+                    {input  title  class=>"form-control p_input"}
+                </div>
+
+                <div class="form-group">
+                    <label>{_'Uri'} *</label>
+                    {input  uri  class=>"form-control p_input"}
+                </div>
+
+                <div class="form-group">
+                    <label>{_'Section'}</label>
+                    {input  section  class=>"form-control p_input"}
+                </div>
+
+
+                <div class="form-group">
+                    <label>{_'Description'}</label>
+                    {input  description  class=>"form-control p_input"}
+                </div>
+
+
+                <div class="form-group">
+                    <label>{_'Testimonial'}</label>
+                    {input  testimonial  class=>"form-control p_input"}
+                </div>
+              </div>
+                <div class="col-4">
+                    <div class="d-flex">
+                        <div class="justify-content-lg-center d-flex file-upload">
+                            <div class="spinner mt-5" style="display: none">
+                                <div class="loading">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4335 4335" width="100" height="100">
+                                        <path fill="#008DD2" d="M3346 1077c41,0 75,34 75,75 0,41 -34,75 -75,75 -41,0 -75,-34 -75,-75 0,-41 34,-75 75,-75zm-1198 -824c193,0 349,156 349,349 0,193 -156,349 -349,349 -193,0 -349,-156 -349,-349 0,-193 156,-349 349,-349zm-1116 546c151,0 274,123 274,274 0,151 -123,274 -274,274 -151,0 -274,-123 -274,-274 0,-151 123,-274 274,-274zm-500 1189c134,0 243,109 243,243 0,134 -109,243 -243,243 -134,0 -243,-109 -243,-243 0,-134 109,-243 243,-243zm500 1223c121,0 218,98 218,218 0,121 -98,218 -218,218 -121,0 -218,-98 -218,-218 0,-121 98,-218 218,-218zm1116 434c110,0 200,89 200,200 0,110 -89,200 -200,200 -110,0 -200,-89 -200,-200 0,-110 89,-200 200,-200zm1145 -434c81,0 147,66 147,147 0,81 -66,147 -147,147 -81,0 -147,-66 -147,-147 0,-81 66,-147 147,-147zm459 -1098c65,0 119,53 119,119 0,65 -53,119 -119,119 -65,0 -119,-53 -119,-119 0,-65 53,-119 119,-119z"
+                                        />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <img class="img-lg" src="/{$settingsService->getAppConfig()['subdir']}{$model->get('photo')->getValue() ? 'docs/homepage/projects/'.$model->get('id')->getValue() .'/' . $model->get('photo')->getValue() : 'assets/admin/images/empty.jpg'}">
+                            <input type="hidden" id="foto-upload-url" value="{link 'this', id:  $model->get('id')->getValue()}">
+                            <input class="form-control" type="file" name="image_to_upload" id="image_to_upload" accept=".jpg,.png,.gif">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+                <div class="form-group">
+                    <label>{_'Content'}</label>
+                    <textarea id="content">{$model['content']->getValue()}</textarea>
+                    <textarea style="display: none;" n:name=content id="content_hidden">{$model['content']->getValue()}</textarea>
+                </div>
+
+                <div class="modal-footer">
+                    {input send class => "btn btn-primary"}
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{_'Close'}</button>
+                </div>
+
+                  {/form}
+                {/if}
+                {/snippet}
+            </div>
+        </div>
+    </div>
+

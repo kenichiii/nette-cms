@@ -14,7 +14,7 @@ function init_users() {
          $(this).val('');
       })
       $('#addNewUserNewModal').find('input[name="roles"]').each(function(){
-         $(this).val('["user","admin]');
+         $(this).val('["user","admin"]');
       })
       $('#addNewUserNewModal').find('ul.error').each(function(){
          $(this).html('');

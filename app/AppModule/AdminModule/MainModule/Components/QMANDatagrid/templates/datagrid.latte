@@ -1,0 +1,131 @@
+{block content}
+{snippetArea datagrid}
+    {snippet $snippet}
+
+<div class="datagrid" id="{$grid->getId()}">
+
+    <div class="row mb-1">
+        <div class="col-6">
+
+    Celkem záznamů: {$grid->recordsCount}
+    |  <a onclick="refresh({$grid->getId()});" href="#" class="refreshButton"><i class="fa fa-refresh click"></i> Obnovit</a>
+    |  <a onclick="reset({$grid->getId()});" href="#" class="resetButton"><i class="fa fa-window-restore click"></i> Reset</a>
+
+        </div>
+        <div class="col-6">
+            {if $grid->isNewRecordButton()}
+                <a class="btn btn-success newRecordButton" href="{plink $grid->getNewRecordButton()['link'], ...$grid->getNewRecordButton()['args']}">{$grid->getNewRecordButton()['title']}</a>
+            {/if}
+        </div>
+    </div>
+
+    <div class="spinner" style="display: none">
+        <div class="loading">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4335 4335" width="100" height="100">
+                <path fill="#008DD2" d="M3346 1077c41,0 75,34 75,75 0,41 -34,75 -75,75 -41,0 -75,-34 -75,-75 0,-41 34,-75 75,-75zm-1198 -824c193,0 349,156 349,349 0,193 -156,349 -349,349 -193,0 -349,-156 -349,-349 0,-193 156,-349 349,-349zm-1116 546c151,0 274,123 274,274 0,151 -123,274 -274,274 -151,0 -274,-123 -274,-274 0,-151 123,-274 274,-274zm-500 1189c134,0 243,109 243,243 0,134 -109,243 -243,243 -134,0 -243,-109 -243,-243 0,-134 109,-243 243,-243zm500 1223c121,0 218,98 218,218 0,121 -98,218 -218,218 -121,0 -218,-98 -218,-218 0,-121 98,-218 218,-218zm1116 434c110,0 200,89 200,200 0,110 -89,200 -200,200 -110,0 -200,-89 -200,-200 0,-110 89,-200 200,-200zm1145 -434c81,0 147,66 147,147 0,81 -66,147 -147,147 -81,0 -147,-66 -147,-147 0,-81 66,-147 147,-147zm459 -1098c65,0 119,53 119,119 0,65 -53,119 -119,119 -65,0 -119,-53 -119,-119 0,-65 53,-119 119,-119z"
+                />
+            </svg>
+        </div>
+    </div>
+
+    {form filterForm, class => ajax}
+        <input type="hidden" name="sortColumn" value="{$sortingColumn}">
+        <input type="hidden" name="sortSort" value="{$sortingSort}">
+        <input type="hidden" name="page" value="{$grid->actualPage}">
+        <input type="hidden" name="reset" value="">
+
+        <input type="text" name="fulltext" value="{$fulltext}" class="search form-control" placeholder="Vyhledávání">
+        <button n:name="send" class="submit">Vyhledat</button>
+
+        <div class="table-wrapper mt-1 datagrid-table-wrapper">
+            <table class="table table-striped table-hover">
+                <thead class="table-primary">
+                <tr>
+                    <th n:foreach="$grid->getColumns() as $column" class="column-name text-nowrap text-dark fw-semibold">
+                       <div class="type-{$column->getType()} column-{$column->getName()}">
+                        {$column->getTitle()}
+                        {if $column->isSorting()}
+                            <span class="text-nowrap">
+                                <a href="#" onclick='sorting({$column->getName()},"asc",{$grid->getId()})' class="{if $sortingColumn === $column->getName() && $sortingSort === 'asc'}arrowActive{/if} sortArrow"><span class="fa-arrow-up fa click"></span></a>
+                                <a href="#" onclick='sorting({$column->getName()},"desc",{$grid->getId()})' class="{if $sortingColumn === $column->getName() && $sortingSort === 'desc'}arrowActive{/if} sortArrow"><span class="fa-arrow-down fa click"></span></a>
+                            </span>
+                        {/if}
+                       </div>
+                    </th>
+                    {if count($grid->getActions())}
+                        <th class="column-name"></th>
+                    {/if}
+                </tr>
+                <tr>
+                    <th n:foreach="$grid->getColumns() as $column" class="column-filter">
+                        {$grid->renderFilter($column)|noescape}
+                    </th>
+                    {if count($grid->getActions())}
+                        <th class="column-filter"></th>
+                    {/if}
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr n:foreach="$grid->getRecords() as $record">
+                    <td n:foreach="$grid->getColumns() as $column">
+                       {$grid->renderRecordCell($column, $record)|noescape}
+                    </td>
+                    {if count($grid->getActions())}
+                    <td class="actions text-nowrap">
+                        {foreach $grid->getActions() as $name => $action}
+                            {first}<a class="{$name}" href="{plink $action['link'], id: $record->uniqueHash, ...$action['args']}">{$action['title']|noescape}</a>
+                            {else}
+                             | <a class="{$name}" href="{plink $action['link'], id: $record->uniqueHash, ...$action['args']}">{$action['title']|noescape}</a>
+                            {/first}
+                        {/foreach}
+                    </td>
+                    {/if}
+                </tr>
+                </tbody>
+
+            </table>
+
+            {if !count($grid->getRecords())}
+                <p class="emptyRecordsText">V této chvíli zde nejsou žádné záznamy.</p>
+            {/if}
+        </div>
+        <div class="row mt-1">
+            <div class="col">
+                    <ul class="paginator">
+                        {if $grid->minPage > 1}
+                            <li class="{if ($grid->actualPage == 1)}selected{/if}" onclick="paginatorAction(1, {$grid->getId()})">1</li> &nbsp;
+                        {/if}
+                        {for $i = $grid->minPage; $i <= $grid->maxPage; $i++}
+                            <li class="{if ($grid->actualPage==$i)}selected{/if}" onclick="paginatorAction({$i},{$grid->getId()})">{$i}</li>
+                        {/for}
+                        {if $grid->maxPage < $grid->pages}
+                            &nbsp;
+                            <li class="{if ($grid->actualPage == $grid->pages)}selected{/if}" onclick="paginatorAction({$grid->pages}, {$grid->getId()})">
+                                {$grid->pages}
+                            </li>
+                        {/if}
+                    </ul>
+            </div>
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-8 text-end perPageLabel">
+                        Na stránku
+                    </div>
+                    <div class="col-2 perPageSelect">
+                        <select name="perPage" class="paginatorItemsPerPage">
+                            {foreach $grid->getPerPageOptions() as $key => $option}
+                               <option value="{$key}" {if $key == $grid->limit}selected{/if}>{$option}</option>
+                            {/foreach}
+                        </select>
+                    </div>
+            </div>
+         </div>
+        </div>
+
+    {/form}
+
+ </div>
+    {/snippet}
+{/snippetArea}
+

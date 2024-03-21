@@ -156,7 +156,7 @@ class PageService
 		return $this->activePages;
 	}
 
-	public function getPageContent(int $id): string
+	public function getPageContent(int $id): ?string
 	{
 		$key = "page-content-{$id}";
 		return $this->cacheService->getCache()->load($key, function () use ($id) {
@@ -187,7 +187,7 @@ class PageService
 
 		foreach ($this->getActivePages() as $page) {
 
-			if (isset($uris[$level]) && strtolower($uris[$level]) === strtolower($page->get('uri')->getValue())
+			if (isset($uris[$level]) && strtolower(urldecode($uris[$level])) === strtolower($page->get('uri')->getValue())
 				&& $parent_id === $page->get('parent')->getValue()
 			) {
 				if ($parent_id === 0) {
@@ -211,7 +211,7 @@ class PageService
 		return $return;
 	}
 
-	public function getSubdir(): string
+	public function getBaseDir(): string
 	{
 		return $this->appConfig['subdir'] ?: '';
 	}
@@ -223,9 +223,9 @@ class PageService
 
 	public function getPageUrl(PageModel $item, ?array $params = null): string
 	{
-		$prefix =  $this->getSubdir()  . $this->getLangPrefix();
+		$prefix =  $this->getBaseDir()  . $this->getLangPrefix();
 		if ($item->get('parent')->getValue() === 0) {
-			$url = '/'. $prefix . ($item->get('uri')->getValue() ? $item->get('uri')->getValue() . '/' : '');
+			$url = '/'. $prefix . ($item->get('uri')->getValue() ? urlencode($item->get('uri')->getValue()) . '/' : '');
 			if (is_array($params) && isset($params['id'])) {
 				$url .= $params['id'] .'/';
 				unset($params['id']);
@@ -239,7 +239,7 @@ class PageService
 		foreach ($this->getActivePages() as $page) {
 			if ($page->get('id')->getValue() === $item->get('parent')->getValue()) {
 				$tree .= $this->getParentUri($page);
-				$tree .= $page->get('uri')->getValue() . '/';
+				$tree .= urlencode($page->get('uri')->getValue()) . '/';
 			}
 		}
 		$url = '/'. $prefix . $tree . $item->get('uri')->getValue() . '/';
@@ -261,7 +261,7 @@ class PageService
 				if ($page->get('parent')->getValue() !== 0) {
 					$tree .= $this->getParentUri($page);
 				}
-				$tree .= $page->get('uri')->getValue() . '/';
+				$tree .= urlencode($page->get('uri')->getValue()) . '/';
 			}
 		}
 		return $tree;
@@ -279,7 +279,7 @@ class PageService
 		return false;
 	}
 
-	public function getPageUrlByPointer(string $pointer, ?array $params): string
+	public function getPageUrlByPointer(string $pointer, ?array $params = null): string
 	{
 		return $this->getPageUrl($this->getPageByPointer($pointer), $params);
 	}

@@ -1,0 +1,16 @@
+{
+  "Kontakt": "Contact",
+
+  "Vaše zpráva byla v pořádku odeslána": "Your message has been successfully sent",
+  "Prosím vyplňte email": "Please fill in your email",
+  "Prosím vyplňte jméno": "Please fill in your name",
+  "Prosím vyplňte předmět": "Please fill in the subject",
+  "Prosím vyplňte zprávu": "Please fill in your message",
+  "Nepodařilo se odeslat email": "The email could not be sent",
+  "Jméno": "Name",
+  "Email": "Email",
+  "Telefon": "Phone",
+  "Předmět": "Subject",
+  "Zpráva": "Message",
+  "Odeslat": "Send",
+}

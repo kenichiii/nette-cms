@@ -55,16 +55,16 @@ final class SystemFormFactory
 			//try {
 			$succ = false;
 				$page->fromForm($data);
-				$validation = $page->validate(Model::FORM_ACTION_EDIT);
-				if ($validation->isSucc()) {
+				//$validation = $page->validate(Model::FORM_ACTION_EDIT);
+				//if ($validation->isSucc()) {
 					$page->update();
 					$this->cacheService->removeKey('pages-active-'.$page->get('lang')->getValue());
 					$succ = true;
-				} elseif (count($validation->getErrors())) {
-					foreach ($validation->getErrors() as $error) {
-						$form->addError($error['mess']);
-					}
-				}
+				///} elseif (count($validation->getErrors())) {
+					//foreach ($validation->getErrors() as $error) {
+					//	$form->addError($error['mess']);
+					//}
+				//}
 /*
 			} catch (\Throwable $e) {
 				Debugger::log($e);

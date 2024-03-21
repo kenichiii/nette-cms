@@ -1,10 +1,10 @@
 
 
 {if $pageService->hasChildren($item)}
-    <ul class="submenu">
+    <ul class="dropdown-menu">
         {foreach $pageService->getActivePages() as $subItem}
             {if $subItem->get('parent')->getValue() === $item->get('id')->getValue() && $item->get('menu')->getValue()}
-                <li><a href="{$pageService->getPageUrl($subItem)}">{$subItem->get('menuName')}</a>
+                <li><a class="dropdown-item" href="{$pageService->getPageUrl($subItem)}">{$subItem->get('menuName')}</a>
                     {include 'menu.latte', pageService: $pageService, item: $subItem}
                 </li>
             {/if}

@@ -11,7 +11,7 @@ class Pointer extends \App\Libs\Kenichi\ORM\Column\Primitive\Varchar
 {
     
     protected bool $notnull = true;
-
+	protected bool $key = true;
 	/**
 	 * @param string|null $formAction
 	 * @param mixed|null $data

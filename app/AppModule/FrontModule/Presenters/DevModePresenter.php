@@ -22,11 +22,11 @@ class DevModePresenter extends Presenter
 		) {
 			$this->session->getSection('_dev_mode')->set('pwd', true);
 			header(
-				'Location: /' . $this->settingsService->getAppConfig()['subdir'],
+				'Location: /' . $this->settingsService->getAppConfig()['subdir']
+									. '?basic_auth=' . $this->settingsService->getAppConfig()['devModePwd'],
 				true,
 				302
 			);
-			exit;
 		}
 		$this->setLayout('emptyLayout');
 	}

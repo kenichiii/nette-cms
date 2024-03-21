@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\AppModule\FrontModule\Presenters;
 
-use App\Libs\NA\Repository\DailyThoughRepository;
-use App\Libs\Service\App\CacheService;
+use App\AppModule\FrontModule\Forms\ContactFormFactory;
 use App\Libs\Service\App\PageService;
 use App\Libs\Service\App\SettingsService;
 use App\Libs\Service\App\Translator;
-use Nette\Http\Session;
+use Nette\Forms\Form;
+use Nette\DI\Attributes\Inject;
 
 class BasePresenter extends \App\AppModule\BasePresenter
 {
@@ -17,6 +17,9 @@ class BasePresenter extends \App\AppModule\BasePresenter
 	protected SettingsService $settingsService;
 	protected PageService $pageService;
 	protected string $lang;
+
+	#[Inject]
+	public ContactFormFactory $contactFormFactory;
 
 	public function redirectByPointer(string $pointer, ?array $params = null): void
 	{
@@ -69,4 +72,28 @@ class BasePresenter extends \App\AppModule\BasePresenter
 		};
 	}
 
+	public function createComponentContactForm(): Form
+	{
+		$form = $this->contactFormFactory->create(function (bool $succ): void {
+			$this->getTemplate()->contactFormMessage = [[
+				'message' => $this->translator->translate('Vaše zpráva byla v pořádku odeslána'),
+				'type' => 'success',
+			]];
+			$this->getPayload()->show = '#contact';
+			$this->redrawControl('contactFormWrapper');
+			//$this->redirect('this#contact', ['contactForm' => 'success']);
+		}, function (): void {
+			/*
+			$this->getTemplate()->contactFormMessage = [[
+				'message' => $this->translator->translate('Nepodařilo se odeslat zprávu!'),
+				'type' => 'danger',
+			]];
+			*/
+		//	$this->getPayload()->show = '#contact';
+			$this->redrawControl('contactFormWrraper');
+			//$this->redirect('this#contact', ['contactForm' => 'error']);
+		});
+		$form->setAction('#');
+		return $form;
+	}
 }

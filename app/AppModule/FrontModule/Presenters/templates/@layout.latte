@@ -2,29 +2,23 @@
 <html class="no-js" lang="{$pageService->getIsoLang()}">
 <head>
 	<meta charset="utf-8">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
+
 	<meta name="description" content="{$pageService->getCurrentPage()['description']}">
 
 	<title>{ifset title}{include title|stripHtml} | {/ifset}{$settingsService['site_name']}</title>
 
 	<meta name="robots" content="index, follow">
 
-	<meta property="og:url"           content="{$_SERVER['REQUEST_URI']}" />
+	<meta property="og:url"           content="{isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http'}://{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}" />
 	<meta property="og:type"          content="article" />
 	<meta property="og:site_name"     content="{$settingsService['site_name']}" />
-	<meta property="og:title"         content="" />
-	<meta property="og:description"   content="" />
-	<meta property="og:image"         content="" />
+	<meta property="og:title"         content="{$pageService->getCurrentPage()['title']}" />
+	<meta property="og:description"   content="{$pageService->getCurrentPage()['description']}" />
+	<!--meta property="og:image"         content="" /-->
 	<!-- END - Technical SEO Meta tags -->
-
-
 
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link rel="shortcut icon" type="image/png" href="/{$settingsService->getAppConfig()['subdir']}assets/custom/logo.png">
-
-
-	<link rel="stylesheet" href="/{$settingsService->getAppConfig()['subdir']}assets/custom/styles.css">
 
 	{block head}
 
@@ -32,63 +26,95 @@
 </head>
 <body>
 {snippetArea contentWrapper}
-								<ul>
-									<li>{_'Phone'}: <a href="tel: {$settingsService['contact_phone']}">{$settingsService['contact_phone']}</a></li>
-									<li>{_'Email'}: <a href="mailto: {$settingsService['contact_email']}">{$settingsService['contact_email']}</a></li>
-								</ul>
+<header>
 
-									<ul>
-									{foreach $settingsService->getAppConfig()['langs'] as  $item}
-										{first}
-										<li><a href="/{$settingsService->getAppConfig()['subdir']}" class="langSwitcher mr-3">{$item}</a></li>
-										{else}
-										<li><a href="/{$settingsService->getAppConfig()['subdir']}{$item}/" class="langSwitcher mr-3">{$item}</a></li>
-										{/first}
-									{/foreach}
-									</ul>
+		<ul class="lang-switcher d-flex flex-nowrap">
+			{foreach $settingsService->getAppConfig()['langs'] as  $item}
+				{first}
+					<li class="nav-item"><a href="/{$settingsService->getAppConfig()['subdir']}" class="langSwitcher nav-link {$lang === $item ? "active" : '' }">{$item}</a></li>
+				{else}
+					<li class="nav-item"><a href="/{$settingsService->getAppConfig()['subdir']}{$item}/" class="langSwitcher nav-link {$lang === $item ? "active" : '' }">{$item}</a></li>
+				{/first}
+			{/foreach}
+		</ul>
 
-<em>{$settingsService['site_name']}</em>
-
-
-									<nav>
-										<ul id="navigation">
-											{foreach $pageService->getActivePages() as $item}
-												{if $item['pointer']->getValue() === 'homepage'}
-													<li class="{$pageService->getCurrentRootPage()->get('id')->getValue() === $item->get('id')->getValue() ? "menu-active" : '' }">
-														<a href="/{$settingsService->getAppConfig()['subdir']}">{$item->get('menuName')->getValue()}</a>
-													</li>
-												{elseif $item->get('parent')->getValue() === 0 && $item->get('menu')->getValue()}
-													<li class="{$pageService->getCurrentRootPage()->get('id')->getValue() === $item->get('id')->getValue() ? "menu-active" : '' } menu-has-children">
-														<a href="{$pageService->getPageUrl($item)}">{$item->get('menuName')->getValue()}</a>
-														{include './_shared/menu.latte', pageService: $pageService, item: $item}
-													</li>
-												{/if}
-											{/foreach}
-										</ul>
-									</nav>
-
+		<a href="/{$settingsService->getAppConfig()['subdir']}{$pageService->getLangPrefix()}">{$settingsService['site_name']}</a>
+		<nav>
+			<ul>
+				{foreach $pageService->getActivePages() as $item}
+					{if $item['pointer']->getValue() === 'homepage'}
+						<li>
+							<a class="{$pageService->getCurrentRootPage()->get('id')->getValue() === $item->get('id')->getValue() ? "active" : '' }" href="/{$settingsService->getAppConfig()['subdir']}{$pageService->getLangPrefix()}">{$item->get('menuName')->getValue()}</a>
+						</li>
+					{elseif $item->get('parent')->getValue() === 0 && $item->get('menu')->getValue()}
+						<li class="{if $pageService->hasChildren($item)}dropdown{/if}">
+							<a class="{if $pageService->hasChildren($item)}dropdown-toggle{/if} {$pageService->getCurrentRootPage()->get('id')->getValue() === $item->get('id')->getValue() ? "active" : '' }" href="{$pageService->getPageUrl($item)}">{$item->get('menuName')->getValue()}</a>
+							{include './_shared/menu.latte', pageService: $pageService, item: $item}
+						</li>
+					{/if}
+				{/foreach}
+				<li>
+					<a href="#contact">{_'Kontakt'}</a>
+				</li>
+			</ul>
+		</nav>
+</header>
 <main>
-	{snippet flashMessages}
-		<div n:foreach="$flashes as $flash" n:class="flash, alert, 'alert-' . $flash->type">{$flash->message}</div>
-	{/snippet}
-
 	{include content}
 </main>
 
-<p>
-	<!-- Link back to nette-cms can't be removed. CMS is licensed under CC BY 4.0 DEED -->
-	Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Powered by <a href="https://github.com/kenichiii/nette-cms" target="_blank">nette-cms</a>
-	<!-- Link back to nette-cms can't be removed. CMS is licensed under CC BY 4.0 DEED -->
-</p>
+<section>
+
+
+	{snippet contactFormWrapper}
+		{if isset($contactFormMessage)}
+			<div n:foreach="$contactFormMessage as $flash" n:class="flash, alert, 'alert-' . $flash['type']">{$flash['message']}</div>
+		{/if}
+		<!-- Contact Form -->
+		{form contactForm class => ajax}
+			<ul class=error n:ifcontent>
+				<li n:foreach="$form->ownErrors as $error">{$error}</li>
+			</ul>
+			<div class="form-group">
+				<input n:name=name type="text" placeholder="{_'Jméno'}*" required>
+			</div>
+			<div class="form-group">
+				<input n:name=email type="email" placeholder="{_'Email'}*" required>
+			</div>
+			<div class="form-group">
+				<input n:name=phone type="text" placeholder="{_'Telefon'}">
+			</div>
+			<div class="form-group">
+				<input n:name=subject type="text" placeholder="{_'Předmět'}*" required>
+			</div>
+			<div class="form-group">
+				<textarea n:name=message placeholder="{_'Zpráva'}*" required></textarea>
+			</div>
+			<div class="form-group">
+				<button n:name=send type="submit">{_'Odeslat'}</button>
+			</div>
+		{/form}
+		<!-- end of contact form -->
+	{/snippet}
+
+</section>
+
+<footer>
+					<ul class="list-unstyled li-space-lg p-small">
+						<li><a href="{$pageService->getPageUrlByPointer('privacy_policy')}">{$pageService->getPageByPointer('privacy_policy')['menuname']}</a></li>
+					</ul>
+					<p>
+						<!-- Link back to nette-cms can't be removed. CMS is licensed under CC BY 4.0 DEED -->
+						Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | Powered by <a href="https://github.com/kenichiii/nette-cms" target="_blank">nette-cms</a>
+						<!-- Link back to nette-cms can't be removed. CMS is licensed under CC BY 4.0 DEED -->
+					</p>
+</footer>
 
 {/snippetArea}
-
-<!-- JS here -->
 
 <script src="https://unpkg.com/nette-forms@3/src/assets/netteForms.js"></script>
 <script src="https://unpkg.com/naja@3/dist/Naja.min.js"></script>
 
-<script src="/{$settingsService->getAppConfig()['subdir']}assets/custom/control.js"></script>
 {block scripts}
 	{*    Some other scripts*}
 {/block}

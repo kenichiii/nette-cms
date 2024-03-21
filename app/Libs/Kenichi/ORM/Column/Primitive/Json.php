@@ -10,6 +10,7 @@ use App\Libs\Kenichi\ORM\Validation;
 
 class Json extends Text
 {
+	protected bool $sanitize = false;
 	public function getDecoded(): mixed
 	{
 		if ($this->value) {
@@ -17,12 +18,5 @@ class Json extends Text
 		} else {
 			return null;
 		}
-	}
-	public function fromForm(mixed $data): Column
-	{
-		if ($data[$this->getColumn()] !== null) {
-			$this->value = htmlspecialchars_decode($data[$this->getColumn()]);
-		}
-		return $this;
 	}
 }

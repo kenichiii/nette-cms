@@ -38,8 +38,7 @@ final class RouterFactory
 							'id' => null,
 						];
 					} else {
-
-						if ($uri = str_replace((string)$appConfig['subdir'],'', $params['uri'].'/')) {
+						if ($uri = str_replace((string)$appConfig['subdir'],'', $params['uri'])) {
 
 							$pageService->parseUrl($uri);
 
@@ -76,11 +75,11 @@ final class RouterFactory
 			],
 		]);
 
-		if($request->getUrl()->getPath() === '/' && $appConfig['devMode']
+		if($request->getUrl()->getPath() === '/'.$appConfig['subdir'] && $appConfig['devMode']
 			&& !$session->getSection('_dev_mode')->get('pwd')
 		) {
 			$router->withModule('App:Front')->addRoute('<presenter=DevMode>/<action=default>');
-		} elseif ($request->getUrl()->getPath() === '/') {
+		} elseif ($request->getUrl()->getPath() === '/'.$appConfig['subdir']) {
 			$router->withModule('App:Front')->addRoute('<presenter=Homepage>/<action=default>');
 		}
 

@@ -1,95 +1,69 @@
+{block scripts}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+<script>
+
+</script>
+{/block}
 {block content}
 <!-- slider Area Start-->
-<div class="">
-    <div class="">
+    <div style="height:300px">
+
         {foreach $sliders as $slider}
             <!-- Single Slider -->
-            <div class="hp-slider" style="{first}{else}display:none{/first}">
-                <div class="slider-height d-flex align-items-center" style="background-repeat: no-repeat; background-size:100% 100%; background-image: url('/docs/homepage/sliders/{$slider->get('id')}/{$slider->get('photo')}');">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-6 col-lg-6 col-md-8 col-sm-10">
-                            <div class="hero__caption">
+            <div class="hp-slider" style="height:300px;background-repeat: no-repeat; background-size:100% 100%; background-image: url('/docs/homepage/sliders/{$slider->get('id')}/{$slider->get('photo')}');{first}{else}display:none{/first}">
+                <div style="background-repeat: no-repeat; background-size:100% 100%; background-image: url('/docs/homepage/sliders/{$slider->get('id')}/{$slider->get('photo')}');">
                                 {first}
-                                    <h1 data-animation="fadeInUp" data-delay=".6s">{$slider->get('title')}</h1>
+                                    <h1>{$slider->get('title')}</h1>
                                 {else}
-                                    <h2 data-animation="fadeInUp" data-delay=".6s">{$slider->get('title')}</h2>
+                                    <h2>{$slider->get('title')}</h2>
                                 {/first}
-                                <p data-animation="fadeInUp" data-delay=".8s" >{$slider->get('perex')}</p>
+                                <p>{$slider->get('perex')}</p>
                                 <!-- Hero-btn -->
                                 {if $slider['link']->getValue()}
-                                    <div class="hero__btn">
-                                        <a href="{$slider->get('link')}" class="btn hero-btn mb-10"  data-animation="fadeInLeft" data-delay=".8s">{$slider->get('linkText')}</a>
-                                    </div>
+                                    <a href="{$slider->get('link')}">{$slider->get('linkText')}</a>
                                 {/if}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+
                 </div>
             </div>
         {/foreach}
     </div>
 </div>
 <!-- slider Area End-->
-<!--? About Law Start-->
-{foreach $panels as $key => $panel}
-    <section class="about-low-area section-padding2">
-        <div class="container">
-            <div class="row">
-                {if odd($key)}
-                    <div class="col-lg-6 col-md-12">
-                        <!-- about-img -->
-                        <div class="about-img ">
-                            <div class="d-none d-lg-block">
-                                <img src="/docs/homepage/sliders/{$panel->get('id')}/{$panel->get('photo')}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 col-md-10">
-                        <div class="about-caption mb-50">
-                            <!-- Section Tittle -->
-                            <div class="section-tittle mb-35">
-                                <h2>{$panel->get('title')}</h2>
-                            </div>
-                            {str_replace("\n", "<br>", $panel->get('perex')->getValue())|noescape}
-                        </div>
-                        {if $panel['link']->getValue()}
-                            <a href="{$panel->get('link')}" class="btn">{$panel->get('linktext')}</a>
-                        {/if}
-                    </div>
-                {else}
-                    <div class="col-lg-6 col-md-10">
-                        <div class="about-caption mb-50">
-                            <!-- Section Tittle -->
-                            <div class="section-tittle mb-35">
 
-                                <h2>{$panel->get('title')}</h2>
-                            </div>
-                            {$panel->get('perex')}
-                        </div>
-                        {if $panel['link']->getValue()}
-                            <a href="{$panel->get('link')}" class="btn">{$panel->get('linktext')}</a>
-                        {/if}
-                    </div>
-                    <div class="col-lg-6 col-md-12">
-                        <!-- about-img -->
-                        <div class="about-img ">
-                            <div class="d-none d-lg-block">
-                                <img src="/docs/homepage/sliders/{$panel->get('id')}/{$panel->get('photo')}" alt="">
-                            </div>
-                        </div>
-                    </div>
-                {/if}
-            </div>
-        </div>
-    </section>
+
+<!--? Panels Start-->
+{foreach $panels as $key => $panel}
+     <div>
+        <img src="/docs/homepage/sliders/{$panel->get('id')}/{$panel->get('photo')}" alt="" >
+        <h2>{$panel->get('title')}</h2>
+        <p>{str_replace("\n", "<br>", $panel->get('perex')->getValue())|noescape}</p>
+
+        {if $panel['link']->getValue()}
+           <a href="{$panel->get('link')}">{$panel->get('linktext')}</a>
+        {/if}
+
+    </div>
 {/foreach}
-<!-- About Law End-->
+
+
+{if count($testimonials)}
+<!-- Testimonials -->
+    <div class="slider-1">
+
+                            {foreach $testimonials as $testimonial}
+                            <!-- Slide -->
+                            <div class="testimonial-slide">
+                                <img class="testimonial-image" src="{$testimonial['photo']->getValue() ? "/docs/homepage/testimonials/{$testimonial['id']}/{$testimonial['photo']}" : '/assets/admin/images/users/avatar.jpg'}" alt="alternative">
+                                <p class="testimonial-text">“{$testimonial['content']}”</p>
+                                <div class="testimonial-author">{$testimonial['name']}</div>
+                                <div class="testimonial-position">{$testimonial['position']}</div>
+                            </div> <!-- end of swiper-slide -->
+                            <!-- end of slide -->
+                            {/foreach}
+    </div> <!-- end of slider-1 -->
+<!-- end of testimonials -->
+{/if}
+
 {if $content}
-    <section class="section-padding2">
-        <div class="container">
-            {$content|noescape}
-        </div>
-    </section>
+    {$content|noescape}
 {/if}

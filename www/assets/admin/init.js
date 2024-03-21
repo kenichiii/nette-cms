@@ -71,3 +71,27 @@ function niceUrl(str) {
 
     return str;
 }
+
+
+function trim(string) {
+    //var re= /^\s|\s$/g;
+    var re= /^\s*|\s*$/g;
+    return string.replace(re,"");
+}
+
+
+function strtr(s, from, to) {
+    out = new String();
+    // slow but simple :^)
+    top:
+        for(i=0; i < s.length; i++) {
+            for(j=0; j < from.length; j++) {
+                if(s.charAt(i) == from.charAt(j)) {
+                    out += to.charAt(j);
+                    continue top;
+                }
+            }
+            out += s.charAt(i);
+        }
+    return out;
+}

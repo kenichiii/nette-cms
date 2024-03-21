@@ -24,7 +24,11 @@ final class Translator implements NetteTranslator
 
 	public function setSection(string $section): Translator
 	{
-		$this->section = $section;
+		if ($section !== $this->section) {
+			$this->section = $section;
+			$this->repository = null;
+		}
+
 		return $this;
 	}
 

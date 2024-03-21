@@ -210,7 +210,7 @@ function activate_page_listeners() {
     $('#content').tinymce({
         // Location of TinyMCE script
         script_url: '/'+$('#subdir').val()+'assets/admin/vendor/tinymce/tinymce.min.js',
-        width: 800,
+        width: Math.round($('.tab-content').width()),
         height: 250,
         language: $('#lang').val() === 'cz' ? 'cs' : 'en',
         fullpage_default_encoding: "utf-8",
@@ -246,6 +246,10 @@ function activate_page_listeners() {
             }
         }, 100);
     }, 1500);
+
+    $("input[name='title']").unbind('keyup').keyup(function(){
+        $("input[name='uri']").val(niceUrl($(this).val()));
+    })
 }
 
 if ($('#content')) {

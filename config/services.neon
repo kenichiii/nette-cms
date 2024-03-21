@@ -29,6 +29,9 @@ services:
 	- App\Libs\Service\App\UserService
 	- App\Libs\Service\App\TranslationsService
 
+	- App\AppModule\FrontModule\Forms\ContactFormFactory
+	- App\Libs\Repository\ContactFormRepository(%appConfig%)
+
 	- App\Libs\Repository\App\PageRepository(%appConfig%)
 	- App\Libs\Repository\App\SettingsRepository(%appConfig%)
 	- App\Libs\Repository\App\UserRepository(%appConfig%)
@@ -37,3 +40,12 @@ services:
 	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Slider\AddFormFactory
 	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Slider\EditFormFactory
 	- App\Libs\Repository\SliderRepository(%appConfig%)
+
+	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Testimonial\AddFormFactory
+	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Testimonial\EditFormFactory
+	- App\Libs\Repository\TestimonialRepository(%appConfig%)
+
+	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Project\AddFormFactory
+	- App\AppModule\AdminModule\MainModule\HomepageModule\Forms\Project\EditFormFactory
+	- App\Libs\Repository\ProjectRepository(%appConfig%)
+

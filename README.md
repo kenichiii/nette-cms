@@ -74,11 +74,18 @@ Phase 1
   - grid
     - better paging
 - ORM
+  - group by - column must be first in select list
   - allow uppercase in column name
   - repository alter table
-  - relations
+  - relations -> joins nested + addActiveCond etc.
   - model(group) __call -> getters, setters
   - validation function
+  - model invalidate unique -> on delete
+  - model clearRepository -> clear relations
+  - better RepositoryFactory -> model set repository from parent
+  - last update, last login
+  - nested joins -> addColumnCond()
+  - group by
 
 Phase 2 
 -------
@@ -116,3 +123,4 @@ Phase 3
   - create, alter table
   - create model, repository, service, front presenter
   - image editor -> https://github.com/AyushmanSarkar/PocketPainter?tab=readme-ov-file
+  - no code editor -> https://github.com/sanogotech/grapesjs?tab=readme-ov-file#license

@@ -11,7 +11,7 @@ class BasePresenter extends \App\AppModule\AdminModule\BasePresenter
 		parent::startup();
 
 		// Check if user is logged in and redirect to sign-in page if no
-		if (!$this->getUser()->isLoggedIn() || !in_array('admin', $this->getUser()->getRoles())) {
+		if (!$this->getUser()->isLoggedIn() || !$this->getUser()->isInRole('admin')) {
 			$this->redirect(':App:Admin:User:SignIn:', [
 				'backlink' => $this->storeRequest()
 			]);

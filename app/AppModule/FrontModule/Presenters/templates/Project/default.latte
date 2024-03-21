@@ -1,0 +1,74 @@
+{block content}
+
+{if $project}
+<!-- Header -->
+<header class="ex-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-10 offset-xl-1">
+                <h1 class="" n:block=title>{$pageService->getCurrentPage()->get('title')}</h1>
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</header> <!-- end of ex-header -->
+<!-- end of header -->
+
+{snippet flashMessages}
+    <div n:foreach="$flashes as $flash" n:class="flash, alert, 'alert-' . $flash->type">{$flash->message}</div>
+{/snippet}
+
+{if $project['photo']->getValue()}
+<!-- Basic -->
+<div class="ex-basic-1 pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <img class="img-fluid mt-5 mb-3" src="/docs/homepage/projects/{$project['id']}/{$project['photo']}" alt="alternative">
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</div> <!-- end of ex-basic-1 -->
+<!-- end of basic -->
+{/if}
+
+<!-- Basic -->
+<div class="ex-basic-1 pt-5 pb-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                {$project['content']|noescape}
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+</div> <!-- end of ex-basic-1 -->
+<!-- end of basic -->
+
+{if $testimonial}
+   <div class="slider-1">
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+
+
+                                <!-- Slide -->
+                                <div class="swiper-slide">
+                                    <img class="testimonial-image" src="{$testimonial['photo']->getValue() ? "/docs/homepage/testimonials/{$testimonial['id']}/{$testimonial['photo']}" : '/assets/admin/images/users/avatar.jpg'}" alt="alternative">
+                                    <p class="testimonial-text">“{$testimonial['content']}”</p>
+                                    <div class="testimonial-author">{$testimonial['name']}</div>
+                                    <div class="testimonial-position">{$testimonial['position']}</div>
+                                </div> <!-- end of swiper-slide -->
+                                <!-- end of slide -->
+
+
+            </div> <!-- end of col -->
+        </div> <!-- end of row -->
+    </div> <!-- end of container -->
+    </div> <!-- end of slider-1 -->
+{/if}
+{else}
+    <p>Bohužel Vámi požadovaný projekt se na stránkách nenachází nebo byl stažen.</p>
+{/if}

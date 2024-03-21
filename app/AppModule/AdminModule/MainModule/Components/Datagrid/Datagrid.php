@@ -374,7 +374,7 @@ final class Datagrid extends Control
 					: '-';
 				break;
 			case 'datetime':
-				return $record->{$column->getName()}
+				return $record->get($column->getName())->getValue()
 					? date('d.m.y G:i', strtotime($record->get($column->getName())->getValue()))
 					: '-';
 				break;
