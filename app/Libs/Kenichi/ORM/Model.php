@@ -34,8 +34,16 @@ abstract class Model extends ColumnGroup implements  \ArrayAccess
 		?Model $class = null,
 		?Repository $repository = null,
 	) {
-		$this->repository = $repository;
-		$this->parentModel = $class;
+		if ($class && !$repository) {
+			$this->repositoryFactory(
+				$class->getRepository()->getAppConfig(),
+				$class->getRepository()->getConn()
+			);
+		} else {
+			$this->repository = $repository;
+			$this->parentModel = $class;
+		}
+
 		$this->initModel();
 	}
 
